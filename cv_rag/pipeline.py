@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import math
 
 from cv_rag.models import ClipEmbedder
 from cv_rag.store import CvHit, CvVectorStore
@@ -14,7 +15,9 @@ def build_cv_index(workspace: str, db_path: str, device: str = "auto") -> int:
     image_dir = Path(workspace) / "images"
     for incident in incidents:
         image_path = image_dir / incident.image_file
-        vector = embedder.embed_image(str(image_path))
+        image_vector = embedder.embed_image(str(image_path))
+        text_vector = embedder.embed_text(incident.searchable_text)
+        vector = _fuse_vectors(image_vector, text_vector)
         store.upsert(incident, str(image_path), vector)
     return len(load_incidents(str(incidents_path)))
 
@@ -43,3 +46,14 @@ Question:
 
 Write a concise construction incident response. Include top visual match, action steps, escalation condition, and citations."""
 
+
+def _fuse_vectors(image_vector: list[float], text_vector: list[float]) -> list[float]:
+    if len(image_vector) != len(text_vector):
+        raise ValueError(f"Vector dimensions differ: {len(image_vector)} != {len(text_vector)}")
+    # Keep the image vector primary, but add incident text so text queries can
+    # reliably retrieve the matching visual case in small offline packs.
+    fused = [(0.65 * image) + (0.35 * text) for image, text in zip(image_vector, text_vector)]
+    norm = math.sqrt(sum(value * value for value in fused))
+    if norm == 0:
+        return fused
+    return [value / norm for value in fused]
