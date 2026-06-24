@@ -92,6 +92,51 @@ The cloud API intentionally returns a clear error until Azure settings are provi
 - `AZURE_OPENAI_API_KEY`
 - `AZURE_OPENAI_DEPLOYMENT`
 
+## Offline CV-RAG POC
+
+This POC avoids Azure AI Search and cloud inference. It generates synthetic construction incident records and images, embeds the images with local CLIP, stores vectors in SQLite, retrieves visually similar incidents from a text query, and drafts an incident response from local evidence.
+
+```powershell
+pip install -r requirements.txt
+python scripts\run_cv_rag_poc.py --workspace data\cv-rag --device cpu --generator template
+```
+
+On a GPU VM:
+
+```bash
+python scripts/run_cv_rag_poc.py \
+  --workspace data/cv-rag \
+  --device cuda \
+  --generator template \
+  --query "A site photo shows missing edge protection beside scaffold access. What incident response is needed?"
+```
+
+To test a fully offline run after model files are cached:
+
+```bash
+TRANSFORMERS_OFFLINE=1 HF_HUB_OFFLINE=1 \
+python scripts/run_cv_rag_poc.py \
+  --workspace data/cv-rag \
+  --device cuda \
+  --generator template \
+  --offline \
+  --skip-build \
+  --query "A site photo shows concrete honeycombing after formwork removal. What should be done?"
+```
+
+For local SLM answer drafting, use Phi-4-mini after the model is cached on the VM:
+
+```bash
+python scripts/run_cv_rag_poc.py --workspace data/cv-rag --device cuda --generator phi4
+```
+
+The CV-RAG POC uses:
+
+- `openai/clip-vit-base-patch32` for local image/text embeddings.
+- SQLite as the local vector store prototype.
+- `microsoft/Phi-4-mini-instruct` as the optional local answer generator.
+- A template generator as a deterministic fallback for resource-constrained/offline smoke tests.
+
 ## Directory layout
 
 ```text
@@ -108,6 +153,12 @@ cloud_api/
 scripts/
   build_pack.py      Converts JSONL cases into a local pack DB.
   query_offline.py   Runs offline RAG against the local pack.
+  run_cv_rag_poc.py  Runs synthetic offline CV-RAG with image vectorization.
+cv_rag/
+  synthetic_data.py  Generates synthetic construction incidents and images.
+  models.py          CLIP embedder plus optional Phi-4-mini generator.
+  store.py           SQLite image-vector store.
+  pipeline.py        Index and query orchestration.
 sample_cases.jsonl   Small construction-case sample set.
 ```
 
@@ -122,6 +173,8 @@ sample_cases.jsonl   Small construction-case sample set.
 ## Official references used
 
 - Microsoft Phi-4-mini ONNX model card: `microsoft/Phi-4-mini-instruct-onnx`
+- Microsoft Phi-4-mini model card: `microsoft/Phi-4-mini-instruct`
+- OpenAI CLIP model card: `openai/clip-vit-base-patch32`
 - ONNX Runtime GenAI documentation: generate loop, tokenization, KV cache, structured output support.
 - Azure AI Search RAG overview: classic hybrid search and agentic retrieval patterns.
 - Azure AI Search vector search overview: vector, hybrid, multimodal, and multilingual search.
