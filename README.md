@@ -146,16 +146,18 @@ The local image path is handled before Phi-4-mini-instruct:
 
 Phi-4-mini-instruct is not a vision model. If the SLM itself must directly inspect image + text input, use a vision-capable Phi model such as `microsoft/Phi-4-multimodal-instruct`; Microsoft describes it as processing text, image, and audio inputs and generating text outputs. See the official model cards for [`Phi-4-mini-instruct`](https://huggingface.co/microsoft/Phi-4-mini-instruct) and [`Phi-4-multimodal-instruct`](https://huggingface.co/microsoft/Phi-4-multimodal-instruct).
 
-`Local-Offline-RAG.ipynb` records the real local Phi-4-mini ONNX CPU/mobile answer path. `Hybrid-RAG.ipynb` uses deterministic answer generation for the lifecycle comparison so the notebook focuses on offline context, online sync, and later offline enrichment.
+`Local-Offline-RAG.ipynb` records the real local Phi-4-mini ONNX CPU/mobile answer path. `Local-Offline-RAG-tc.ipynb` adds a Traditional Chinese offline-language validation for the same pattern. `Hybrid-RAG.ipynb` uses deterministic answer generation for the lifecycle comparison so the notebook focuses on offline context, online sync, and later offline enrichment.
 
 ### Canonical final demo notebooks
 
 | Notebook | Purpose | Clean report folder |
 | --- | --- | --- |
 | `notebooks/Local-Offline-RAG.ipynb` | Offline-only held-out image queries, BLIP vs Moondream semantic comparison, and Phi-4-mini grounded local answers. | `notebooks/reports/local_offline_rag/` |
+| `notebooks/Local-Offline-RAG-tc.ipynb` | Traditional Chinese full-offline validation: Phi-4-mini normalizes a Traditional Chinese field question plus local image body into an English retrieval query and returns the grounded answer in Traditional Chinese. | `notebooks/reports/local_offline_rag/` |
 | `notebooks/Hybrid-RAG.ipynb` | Initial offline search, search-history-driven AI Search sync, later enriched offline search, and full online comparison. Selects Moondream for the target iOS architecture under a clear Core ML / MLX optimization assumption. | `notebooks/reports/hybrid_rag/` |
 
 The hybrid report folder also includes `moondream_hybrid_validation_report.json`, a two-scenario validation run that uses Moondream captions for query images before online sync and later offline reuse.
+The local offline report folder also includes `traditional_chinese_offline_report.json`, which records the TC query, Phi-4-mini normalized retrieval query, local top hit, Traditional Chinese answer, and timings.
 
 Rebuild the canonical notebooks and normalized report folders:
 

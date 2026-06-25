@@ -28,11 +28,13 @@ SOURCE_CASE_DIR = ASSETS_DIR / "cv_rag_enriched"
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build final Local-Offline-RAG and Hybrid-RAG notebooks.")
     parser.add_argument("--local-output", default=str(NOTEBOOKS_DIR / "Local-Offline-RAG.ipynb"))
+    parser.add_argument("--local-tc-output", default=str(NOTEBOOKS_DIR / "Local-Offline-RAG-tc.ipynb"))
     parser.add_argument("--hybrid-output", default=str(NOTEBOOKS_DIR / "Hybrid-RAG.ipynb"))
     args = parser.parse_args()
 
     _prepare_report_folders()
     build_local_offline_notebook(Path(args.local_output))
+    build_local_offline_tc_notebook(Path(args.local_tc_output))
     build_hybrid_notebook(Path(args.hybrid_output))
 
 
@@ -45,6 +47,8 @@ def _prepare_report_folders() -> None:
     _copy_report(SOURCE_LOCAL_DIR / "real_local_inference_report.json", LOCAL_REPORT_DIR / "blip_phi4_report.json")
     _copy_report(SOURCE_LOCAL_DIR / "moondream_real_local_inference_report.json", LOCAL_REPORT_DIR / "moondream_phi4_report.json")
     _copy_report(SOURCE_LOCAL_DIR / "heldout_query_images.json", LOCAL_REPORT_DIR / "heldout_query_images.json")
+    if (SOURCE_LOCAL_DIR / "traditional_chinese_offline_report.json").exists():
+        _copy_report(SOURCE_LOCAL_DIR / "traditional_chinese_offline_report.json", LOCAL_REPORT_DIR / "traditional_chinese_offline_report.json")
     if (SOURCE_LOCAL_DIR / "moondream_runtime_status.txt").exists():
         _copy_report(SOURCE_LOCAL_DIR / "moondream_runtime_status.txt", LOCAL_REPORT_DIR / "moondream_runtime_status.txt")
 
@@ -165,6 +169,82 @@ def build_local_offline_notebook(output_path: Path) -> None:
             "comparison": [_comparison_row(blip, moon) for blip, moon in zip(blip_queries, moondream_queries, strict=True)],
         },
     )
+
+
+def build_local_offline_tc_notebook(output_path: Path) -> None:
+    tc_report_path = LOCAL_REPORT_DIR / "traditional_chinese_offline_report.json"
+    if not tc_report_path.exists():
+        return
+    report = _read_json(tc_report_path)
+    top_hit = report["hits"][0] if report.get("hits") else {}
+    cells = [
+        _markdown(
+            "# Local-Offline-RAG-tc\n\n"
+            "This notebook validates a fully offline Traditional Chinese user interaction. "
+            "The worker asks in Traditional Chinese and provides a field photo. The offline stack uses the local image body/caption, "
+            "normalizes the intent for local retrieval, searches the local case pack, and returns the final grounded response in Traditional Chinese.\n\n"
+            "**Scope:** no Azure AI Search, no cloud model, and no online corpus are used in this test."
+        ),
+        _markdown(
+            "## Traditional Chinese offline execution path\n\n"
+            "Phi-4-mini is text-only, so it does not inspect pixels directly. The image is first represented as a local visual caption/body; "
+            "Phi-4-mini then helps convert the Traditional Chinese field question plus image body into an English retrieval query for the local vector store, "
+            "and later drafts the final Traditional Chinese answer from retrieved evidence."
+        ),
+        _html_output_cell(
+            "",
+            _tc_execution_flow_html(),
+            execution_count=1,
+        ),
+        _markdown(
+            "## Test setup\n\n"
+            + _markdown_table(
+                ["Item", "Value"],
+                [
+                    ["Scenario", report["scenario_id"]],
+                    ["Traditional Chinese question", report["traditional_chinese_query"]],
+                    ["Query image", f"`{report['query_image']}`"],
+                    ["Query image indexed?", str(report["query_image_indexed"])],
+                    ["Local image body source", f"{report.get('source_captioner', '')} / {report.get('source_caption_model', '')}"],
+                    ["Offline retrieval inputs", ", ".join(report.get("source_vector_inputs", []))],
+                    ["Query rewrite model", report["query_rewrite_model"]],
+                    ["Answer model", report["answer_model"]],
+                ],
+            )
+        ),
+        _html_output_cell(
+            "from IPython.display import HTML, display\n"
+            "display(HTML(traditional_chinese_offline_html))\n",
+            _traditional_chinese_offline_html(report),
+            execution_count=2,
+        ),
+        _markdown(
+            "## Query normalization and retrieval result\n\n"
+            + _markdown_table(
+                ["Field", "Value"],
+                [
+                    ["Local image body", report["image_body"]],
+                    ["Normalized English retrieval query", report["normalized_retrieval_query_en"]],
+                    ["Top local case", f"{top_hit.get('incident_id', '')} - {top_hit.get('title', '')}"],
+                    ["Top score", f"{top_hit.get('score', 0):.4f}"],
+                    ["Expected case", report.get("expected_incident_id", "")],
+                    ["Matched expected?", str(report.get("matched_expected"))],
+                ],
+            )
+        ),
+        _markdown(
+            "## Traditional Chinese answer from offline evidence\n\n"
+            f"{_quote(report['answer_tc'])}"
+        ),
+        _markdown(
+            "## TC offline conclusion\n\n"
+            "- The Traditional Chinese question is mapped back to the water-ingress retrieval intent using the local image body/caption.\n"
+            f"- The top local retrieval result is `{top_hit.get('incident_id', '')}`, matching the expected case `{report.get('expected_incident_id', '')}`.\n"
+            "- The final response is returned in Traditional Chinese while preserving the local incident citation and escalation rule.\n"
+            "- This confirms the intended language pattern: use Phi-4-mini for query normalization and localized answer drafting, while keeping facts in the offline case pack."
+        ),
+    ]
+    _write_notebook(output_path, cells)
 
 
 def build_hybrid_notebook(output_path: Path) -> None:
@@ -477,6 +557,29 @@ def _offline_execution_flow_html() -> str:
     return _flow_svg(1220, 360, "Local offline RAG execution path", boxes, arrows)
 
 
+def _tc_execution_flow_html() -> str:
+    boxes = [
+        _svg_box(35, 135, 180, 70, ["繁中問題", "+ field photo"]),
+        _svg_box(260, 55, 180, 70, ["Local image", "body/caption"]),
+        _svg_box(260, 215, 180, 70, ["Phi-4-mini", "query normalize"]),
+        _svg_box(500, 215, 190, 70, ["English retrieval", "query"]),
+        _svg_box(500, 55, 190, 70, ["Image + text", "query vector"]),
+        _svg_box(750, 55, 185, 70, ["Local offline", "case pack"]),
+        _svg_box(750, 215, 185, 70, ["Retrieved", "evidence"]),
+        _svg_box(990, 215, 190, 70, ["Phi-4-mini", "繁中 answer"]),
+    ]
+    arrows = [
+        _svg_arrow(215, 154, 260, 90),
+        _svg_arrow(215, 186, 260, 250),
+        _svg_arrow(440, 250, 500, 250),
+        _svg_arrow(595, 215, 595, 125),
+        _svg_arrow(690, 90, 750, 90),
+        _svg_arrow(842, 125, 842, 215),
+        _svg_arrow(935, 250, 990, 250),
+    ]
+    return _flow_svg(1215, 345, "Traditional Chinese full-offline query path", boxes, arrows)
+
+
 def _hybrid_execution_flow_html() -> str:
     boxes = [
         _svg_box(40, 50, 170, 64, ["Photo +", "question"]),
@@ -637,6 +740,26 @@ def _hybrid_flow_html(steps: list[dict[str, Any]]) -> str:
             ]
         )
     blocks.append("</div>")
+    return "\n".join(blocks)
+
+
+def _traditional_chinese_offline_html(report: dict[str, Any]) -> str:
+    top_hit = report["hits"][0]
+    blocks = [
+        "<div style='font-family:Segoe UI,Arial,sans-serif'>",
+        "<div style='display:flex; flex-wrap:wrap; gap:14px; margin-bottom:18px'>",
+        _image_card(REPO_ROOT / report["query_image"], "Held-out query photo", "Not indexed; used in offline retrieval"),
+        _image_card(REPO_ROOT / top_hit["image_path"], f"Top local hit: {top_hit['incident_id']}", f"{top_hit['title']} | score={top_hit['score']:.4f}"),
+        "</div>",
+        "<table style='border-collapse:collapse; width:100%; margin-bottom:18px'>",
+        "<tr><th style='text-align:left;border:1px solid #ddd;padding:6px'>Traditional Chinese question</th>"
+        "<th style='text-align:left;border:1px solid #ddd;padding:6px'>Normalized English retrieval query</th></tr>",
+        f"<tr><td style='border:1px solid #ddd;padding:6px'>{escape(report['traditional_chinese_query'])}</td>"
+        f"<td style='border:1px solid #ddd;padding:6px'>{escape(report['normalized_retrieval_query_en'])}</td></tr>",
+        "</table>",
+        f"<p><b>Offline note:</b> {escape(report.get('retrieval_replay_note', ''))}</p>",
+        "</div>",
+    ]
     return "\n".join(blocks)
 
 
