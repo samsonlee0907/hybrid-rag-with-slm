@@ -50,7 +50,8 @@ def build_offline_notebook(report_path: Path, output_path: Path) -> None:
             "The offline pack contains only the six `offline_seed_enriched` records. Each incident image is "
             "cached in the local pack and indexed together with the incident text. The vector stored in SQLite "
             "is the same fused representation used by the runtime: "
-            "`0.65 * image_embedding + 0.35 * incident_text_embedding`.\n\n"
+            "`0.45 * image_embedding + 0.55 * incident_text_embedding`. This POC weighting favors text-only "
+            "field queries while retaining visual grounding from the cached photo.\n\n"
             + _markdown_table(
                 ["ID", "Severity", "Visual clues", "Root-cause hypothesis"],
                 [

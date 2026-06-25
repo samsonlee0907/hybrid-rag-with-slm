@@ -65,9 +65,9 @@ Write a concise construction incident response. Include top visual match, action
 def fuse_vectors(image_vector: list[float], text_vector: list[float]) -> list[float]:
     if len(image_vector) != len(text_vector):
         raise ValueError(f"Vector dimensions differ: {len(image_vector)} != {len(text_vector)}")
-    # Keep the image vector primary, but add incident text so text queries can
-    # reliably retrieve the matching visual case in small offline packs.
-    fused = [(0.65 * image) + (0.35 * text) for image, text in zip(image_vector, text_vector)]
+    # The notebooks use text-only field queries against cached images, so the
+    # prototype gives incident text slightly more weight while retaining visual grounding.
+    fused = [(0.45 * image) + (0.55 * text) for image, text in zip(image_vector, text_vector)]
     norm = math.sqrt(sum(value * value for value in fused))
     if norm == 0:
         return fused
