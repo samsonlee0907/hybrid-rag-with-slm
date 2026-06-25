@@ -1,0 +1,66 @@
+{
+  "indexed_count": 6,
+  "top1_accuracy": 1.0,
+  "queries": [
+    {
+      "scenario": "basement water ingress",
+      "expected": "INC-001",
+      "top_hit": "INC-001",
+      "top3": [
+        "INC-001",
+        "INC-006",
+        "INC-003"
+      ]
+    },
+    {
+      "scenario": "column honeycombing",
+      "expected": "INC-002",
+      "top_hit": "INC-002",
+      "top3": [
+        "INC-002",
+        "INC-006",
+        "INC-003"
+      ]
+    },
+    {
+      "scenario": "rebar congestion",
+      "expected": "INC-003",
+      "top_hit": "INC-003",
+      "top3": [
+        "INC-003",
+        "INC-005",
+        "INC-002"
+      ]
+    },
+    {
+      "scenario": "MEP ceiling clash",
+      "expected": "INC-004",
+      "top_hit": "INC-004",
+      "top3": [
+        "INC-004",
+        "INC-006",
+        "INC-001"
+      ]
+    },
+    {
+      "scenario": "open edge hazard",
+      "expected": "INC-005",
+      "top_hit": "INC-005",
+      "top3": [
+        "INC-005",
+        "INC-006",
+        "INC-003"
+      ]
+    },
+    {
+      "scenario": "lift core crack",
+      "expected": "INC-006",
+      "top_hit": "INC-006",
+      "top3": [
+        "INC-006",
+        "INC-005",
+        "INC-002"
+      ]
+    }
+  ]
+}

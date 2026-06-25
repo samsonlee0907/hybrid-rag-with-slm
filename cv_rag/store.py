@@ -42,6 +42,10 @@ class CvVectorStore:
                 ),
             )
 
+    def clear(self) -> None:
+        with sqlite3.connect(self.db_path) as con:
+            con.execute("DELETE FROM cv_incidents")
+
     def search(self, query_vector: list[float], top_k: int = 3) -> list[CvHit]:
         with sqlite3.connect(self.db_path) as con:
             rows = con.execute("SELECT payload_json, image_path, vector_json FROM cv_incidents").fetchall()
@@ -82,4 +86,3 @@ def _cosine(left: list[float], right: list[float]) -> float:
     if left_norm == 0 or right_norm == 0:
         return 0.0
     return dot / (left_norm * right_norm)
-

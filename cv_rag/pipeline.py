@@ -2,22 +2,31 @@ from __future__ import annotations
 
 from pathlib import Path
 import math
+from typing import Iterable
 
 from cv_rag.models import ClipEmbedder
 from cv_rag.store import CvHit, CvVectorStore
-from cv_rag.synthetic_data import generate_dataset, load_incidents
+from cv_rag.synthetic_data import Incident, generate_dataset, load_incidents
 
 
-def build_cv_index(workspace: str, db_path: str, device: str = "auto") -> int:
-    incidents_path, incidents = generate_dataset(workspace)
+def build_cv_index(
+    workspace: str,
+    db_path: str,
+    device: str = "auto",
+    incidents: Iterable[Incident] | None = None,
+    clean: bool = True,
+) -> int:
+    incidents_path, incidents = generate_dataset(workspace, incidents)
     embedder = ClipEmbedder(device=device)
     store = CvVectorStore(db_path)
+    if clean:
+        store.clear()
     image_dir = Path(workspace) / "images"
     for incident in incidents:
         image_path = image_dir / incident.image_file
         image_vector = embedder.embed_image(str(image_path))
         text_vector = embedder.embed_text(incident.searchable_text)
-        vector = _fuse_vectors(image_vector, text_vector)
+        vector = fuse_vectors(image_vector, text_vector)
         store.upsert(incident, str(image_path), vector)
     return len(load_incidents(str(incidents_path)))
 
@@ -47,7 +56,7 @@ Question:
 Write a concise construction incident response. Include top visual match, action steps, escalation condition, and citations."""
 
 
-def _fuse_vectors(image_vector: list[float], text_vector: list[float]) -> list[float]:
+def fuse_vectors(image_vector: list[float], text_vector: list[float]) -> list[float]:
     if len(image_vector) != len(text_vector):
         raise ValueError(f"Vector dimensions differ: {len(image_vector)} != {len(text_vector)}")
     # Keep the image vector primary, but add incident text so text queries can

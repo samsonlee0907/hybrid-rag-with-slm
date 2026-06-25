@@ -100,6 +100,11 @@ class EvidenceTemplateGenerator:
             "Offline CV-RAG answer from local image vectors and incident records.",
             f"Question: {question}",
             "",
+            "Phi-4-mini role in production:",
+            "1. Read the compact evidence list returned by local vector search.",
+            "2. Turn the top visual matches into a field-ready checklist with citations.",
+            "3. Keep the answer grounded; do not invent policy or override escalation rules.",
+            "",
             "Most relevant visual incidents:",
             *(lines[:3] or ["No incidents retrieved."]),
             "",
@@ -133,4 +138,3 @@ def model_cache_ready(model_names: list[str]) -> bool:
 
 def _normalize(tensor: torch.Tensor) -> torch.Tensor:
     return tensor / tensor.norm(dim=-1, keepdim=True).clamp_min(1e-12)
-

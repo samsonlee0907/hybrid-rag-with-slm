@@ -1,0 +1,83 @@
+{
+  "initial_offline_ids": [
+    "INC-001",
+    "INC-002",
+    "INC-005"
+  ],
+  "synced_ids": [
+    "ONL-007",
+    "ONL-010",
+    "ONL-011"
+  ],
+  "offline_after_sync_count": 6,
+  "rows": [
+    {
+      "scenario": "Known concrete defect already cached",
+      "initial_top": "INC-002",
+      "online_top": "INC-002",
+      "synced_ids": [],
+      "later_top": "INC-002"
+    },
+    {
+      "scenario": "Water ingress becomes electrical safety issue",
+      "initial_top": "INC-001",
+      "online_top": "ONL-007",
+      "synced_ids": [
+        "ONL-007"
+      ],
+      "later_top": "ONL-007"
+    },
+    {
+      "scenario": "Temporary works prop not in local pack",
+      "initial_top": "INC-005",
+      "online_top": "ONL-010",
+      "synced_ids": [
+        "ONL-010"
+      ],
+      "later_top": "ONL-010"
+    },
+    {
+      "scenario": "Confined space gas alarm not in local pack",
+      "initial_top": "INC-005",
+      "online_top": "ONL-011",
+      "synced_ids": [
+        "ONL-011"
+      ],
+      "later_top": "ONL-011"
+    }
+  ],
+  "full_online": [
+    {
+      "query": "water seepage near temporary electrical riser",
+      "top": "ONL-007"
+    },
+    {
+      "query": "falling object exclusion zone breach below overhead works",
+      "top": "ONL-008"
+    },
+    {
+      "query": "concrete spalling at slab edge after formwork striking",
+      "top": "ONL-009"
+    },
+    {
+      "query": "temporary works prop deformation under slab load",
+      "top": "ONL-010"
+    },
+    {
+      "query": "confined space gas detector alarm before manhole entry",
+      "top": "ONL-011"
+    },
+    {
+      "query": "mobile crane boom operating near overhead service line",
+      "top": "ONL-012"
+    },
+    {
+      "query": "MEP duct clashes with ceiling service zone",
+      "top": "INC-004"
+    },
+    {
+      "query": "crack near lift core wall opening after concrete placement",
+      "top": "INC-006"
+    }
+  ]
+}

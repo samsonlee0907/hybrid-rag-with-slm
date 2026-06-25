@@ -137,7 +137,7 @@ The CV-RAG POC uses:
 - `microsoft/Phi-4-mini-instruct` as the optional local answer generator.
 - A template generator as a deterministic fallback for resource-constrained/offline smoke tests.
 
-See `notebooks/offline_cv_rag_results.ipynb` for a documented six-scenario run, retrieval scores, top-1 accuracy, and a representative grounded answer.
+See `notebooks/offline_cv_rag_results.ipynb` for a documented enriched six-scenario run, regenerated images, local vector-store contents, retrieval results, and a Phi-4-mini-style grounded answer.
 
 ## Hybrid online/offline comparison POC
 
@@ -152,13 +152,17 @@ Provisioned POC components:
 | Text generation | `gpt-5.4-mini` deployment `gpt-5-4-mini-enrich`, used to generate richer synthetic incident cases and resolutions |
 | Image generation | `MAI-Image-2.5-Flash` was not newly deployed in South Central US because quota is fully used (`2 / 2`). The repo keeps image captions and local synthetic image assets until image-model quota is available. |
 
-Generate or refresh the enriched incident corpus:
+Generate or refresh the enriched incident corpus and image assets:
 
 ```powershell
 $env:AZURE_OPENAI_ENDPOINT = "https://aif-hybrid-rag-338698.cognitiveservices.azure.com/"
 $env:AZURE_OPENAI_DEPLOYMENT = "gpt-5-4-mini-enrich"
 python scripts\generate_enriched_incidents_with_foundry.py `
   --output notebooks\assets\online_comparison\gpt54mini_enriched_incidents.json
+
+python scripts\generate_enriched_images.py `
+  --incidents-json notebooks\assets\online_comparison\gpt54mini_enriched_incidents.json `
+  --output-dir notebooks\assets\cv_rag_enriched
 ```
 
 If endpoint variables are not supplied, the script can write the deterministic built-in corpus with `--offline`.
@@ -184,12 +188,13 @@ python scripts\run_offline_online_comparison.py `
 
 The verified VM run showed:
 
-- Offline seed pack: 6 cases.
-- Online AI Search index: 12 GPT-enriched cases.
-- Online-only cases cached back into the local SQLite delta store: 4.
-- Queries for electrical water ingress, temporary works deformation, and confined-space alarm retrieved online-only cases first, then found those same cases again from the synced offline delta store.
+- Full offline enriched pack: 6 cases, 6 example queries, 100% top-1 retrieval on the synthetic pack.
+- Context-lifecycle simulation starts from a cleaned local store with only `INC-001`, `INC-002`, and `INC-005`.
+- When connectivity resumes, Azure AI Search retrieves and syncs `ONL-007`, `ONL-010`, and `ONL-011`.
+- A later offline search retrieves those synced online-only cases from the local SQLite delta context.
+- Full online search was run across 8 queries covering water/electrical risk, falling objects, spalling, temporary works, confined space, crane/overhead service, MEP clash, and lift-core crack.
 
-See `notebooks/offline_vs_online_hybrid_results.ipynb` for the documented run and `notebooks/assets/online_comparison/offline_online_summary.json` for the compact machine-readable result summary.
+See `notebooks/field_context_lifecycle_hybrid_rag.ipynb` for the context-lifecycle run and `notebooks/assets/context_lifecycle/context_lifecycle_summary.json` for the compact machine-readable result summary.
 
 ## Directory layout
 
@@ -210,11 +215,19 @@ scripts/
   run_cv_rag_poc.py  Runs synthetic offline CV-RAG with image vectorization.
   generate_enriched_incidents_with_foundry.py
                     Uses a Foundry / Azure OpenAI chat deployment to generate richer synthetic incident records.
+  generate_enriched_images.py
+                    Regenerates illustrative incident images from enriched captions and visual clues.
+  run_enriched_offline_eval.py
+                    Runs the full offline enriched CV-RAG evaluation.
   build_online_index.py
                     Builds the Azure AI Search online vector/hybrid index.
   run_offline_online_comparison.py
                     Compares offline seed retrieval, online enriched retrieval, and synced offline delta retrieval.
+  run_context_lifecycle_demo.py
+                    Demonstrates limited offline context, online resume, selective sync, and later offline search.
 cv_rag/
+  enriched_dataset.py
+                    Converts enriched online incident records into local CV-RAG incident records and image names.
   synthetic_data.py  Generates synthetic construction incidents and images.
   models.py          CLIP embedder plus optional Phi-4-mini generator.
   store.py           SQLite image-vector store.
@@ -225,8 +238,8 @@ online_rag/
   sync_store.py      SQLite delta store for online cases retained for later offline search.
 notebooks/
   offline_cv_rag_results.ipynb  Documented offline CV-RAG evaluation run.
-  offline_vs_online_hybrid_results.ipynb
-                    Documented offline vs online comparison run with synced offline delta search.
+  field_context_lifecycle_hybrid_rag.ipynb
+                    Context-lifecycle hybrid run: limited local context, online resume, synced offline delta, and full online search.
 sample_cases.jsonl   Small construction-case sample set.
 ```
 

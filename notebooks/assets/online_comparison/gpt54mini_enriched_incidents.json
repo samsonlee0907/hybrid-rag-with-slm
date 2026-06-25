@@ -3,277 +3,277 @@
     {
       "id": "INC-001",
       "source_scope": "offline_seed_enriched",
-      "title": "Basement wall water ingress at cold joint",
-      "category": "Waterproofing / Structural Defect",
+      "title": "Basement wall water ingress observed at construction joint",
+      "category": "Waterproofing / Basement Envelope",
       "severity": "high",
-      "image_caption": "Damp staining and active seepage visible along a basement retaining wall joint with localized puddling at the slab edge.",
+      "image_caption": "Damp staining and active seepage visible along a horizontal joint on a basement retaining wall, with minor pooling at the floor-wall junction.",
       "visual_clues": [
-        "Dark moisture trail on wall face",
-        "Efflorescence near construction joint",
-        "Small puddle at wall-to-slab interface",
-        "Sealant line appears discontinuous"
+        "Dark damp streaks on cast wall surface",
+        "Visible drips at construction joint",
+        "Efflorescence near joint line",
+        "Localized puddling at wall base"
       ],
-      "observation": "Active water ingress is visible at a horizontal cold joint in the basement wall. The staining pattern suggests repeated seepage rather than a one-time leak, with moisture tracking down the wall and collecting at the base.",
-      "root_cause_hypothesis": "Likely failed or incomplete waterstop installation, poor joint preparation, or insufficient membrane continuity at the construction joint allowing groundwater ingress.",
+      "observation": "Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.",
+      "root_cause_hypothesis": "Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.",
       "action_checklist": [
-        "Mark and photograph the seepage line and affected area for traceability",
-        "Inspect the joint interface for waterstop continuity and membrane termination detail",
-        "Confirm whether the leak is active under wet-weather conditions or sustained hydrostatic pressure",
-        "Implement temporary water management measures and protect adjacent finishes/electrical items",
-        "Raise a permanent repair proposal including joint injection, local breakout, and waterproofing remediation"
+        "Mark and photograph the full extent of seepage and note elevation/chainage references.",
+        "Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.",
+        "Check adjacent drainage, sump operation, and external water management conditions.",
+        "Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.",
+        "Raise a corrective action for waterproofing specialist review and retesting after repair."
       ],
-      "escalation_rule": "Escalate to structural and waterproofing lead immediately if seepage increases, affects reinforcement, or reaches electrical services/occupied areas.",
-      "offline_cache_reason": "Common basement defect pattern suitable for preloaded visual reference and offline retrieval during site inspections."
+      "escalation_rule": "Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.",
+      "offline_cache_reason": "Retain as an offline seed because basement waterproofing defects are frequent, image-recognizable, and useful for baseline retrieval without internet dependency."
     },
     {
       "id": "INC-002",
       "source_scope": "offline_seed_enriched",
-      "title": "Concrete column honeycombing at lower lift",
-      "category": "Concrete Quality Defect",
-      "severity": "medium",
-      "image_caption": "Rough voided concrete surface with exposed aggregate and minor reinforcement shadowing on a column face.",
+      "title": "Concrete column honeycombing detected after form removal",
+      "category": "Concrete Quality / Structural Defect",
+      "severity": "high",
+      "image_caption": "Rough, voided concrete surface with exposed aggregate and localized cavities at the lower portion of a reinforced concrete column.",
       "visual_clues": [
-        "Surface voids and cavities",
         "Exposed coarse aggregate",
-        "Honeycomb texture at column corner",
-        "Possible grout loss at form tie locations"
+        "Voids and honeycombed surface texture",
+        "Minor grout leakage marks",
+        "Irregular finish at column corner"
       ],
-      "observation": "The column shows localized honeycombing near the lower section, with rough porous concrete and scattered voids. The defect appears superficial in places but may extend deeper at corners and tie locations.",
-      "root_cause_hypothesis": "Probable inadequate compaction, congested reinforcement restricting vibration, or formwork leakage causing grout loss during placement.",
+      "observation": "A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.",
+      "root_cause_hypothesis": "Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.",
       "action_checklist": [
-        "Sound the affected area to determine extent of voiding",
-        "Map defect boundaries and check cover thickness where reinforcement is suspected",
-        "Review pour sequence, vibration records, and formwork tightness for the affected lift",
-        "Patch minor superficial voids only after engineer review and substrate preparation",
-        "If depth or cover loss is significant, prepare a structural repair method statement for approval"
+        "Sound the affected area and carry out a depth assessment by engineer or competent inspector.",
+        "Verify reinforcement cover and determine whether structural repair is required.",
+        "Review pour sequence, vibration records, and formwork tightness for the affected lift.",
+        "Protect the area from impact and restrict loading until disposition is confirmed.",
+        "Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed."
       ],
-      "escalation_rule": "Escalate to the structural engineer if reinforcement is exposed, defect depth exceeds repair limits, or multiple columns show the same pattern.",
-      "offline_cache_reason": "Typical concrete finish defect with clear visual signature, useful as an offline baseline example for defect classification."
+      "escalation_rule": "Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.",
+      "offline_cache_reason": "Retain as an offline seed because concrete quality defects are core CV-RAG examples with stable visual characteristics and common inspection language."
     },
     {
       "id": "INC-003",
       "source_scope": "offline_seed_enriched",
-      "title": "Rebar congestion at beam-column joint",
-      "category": "Reinforcement / Constructability",
-      "severity": "high",
-      "image_caption": "Dense cluster of reinforcing bars and couplers at a beam-column junction with limited concrete flow space.",
+      "title": "Rebar congestion visible at beam-column joint",
+      "category": "Reinforcement / Buildability",
+      "severity": "medium",
+      "image_caption": "Dense reinforcement cluster at a beam-column joint with closely spaced bars, tight tie wire, and limited visible concrete flow path.",
       "visual_clues": [
-        "Bars crossing with minimal clear spacing",
-        "Limited concrete cover clearance",
-        "Tight tie arrangement at joint core",
-        "Difficulty inserting vibrator head"
+        "Closely spaced longitudinal bars",
+        "Crowded stirrups and ties",
+        "Reduced clear space for concrete flow",
+        "Difficulty aligning cover blocks or spacers"
       ],
-      "observation": "The beam-column joint is heavily congested with reinforcement, leaving limited space for concrete placement and vibration. The arrangement increases the risk of voids, honeycombing, and reduced bond performance in the joint zone.",
-      "root_cause_hypothesis": "Likely detailing congestion from overlapping bar schedules, couplers, and embedded items without sufficient constructability review.",
+      "observation": "The beam-column joint appears heavily congested, with limited access for concrete placement and vibration. The reinforcement arrangement may still be within design intent, but the visual buildability risk is elevated due to reduced clear spacing and potential cover noncompliance.",
+      "root_cause_hypothesis": "Likely a combination of design-dense reinforcement at a highly loaded joint and insufficient constructability coordination between structural detailing and placement method.",
       "action_checklist": [
-        "Compare installed reinforcement against approved shop drawings and coordination model",
-        "Verify minimum clear spacing and cover compliance at the joint",
-        "Assess whether coupler repositioning or bar optimization is feasible before pour",
-        "Issue a hold point for concrete placement until vibration access is confirmed",
-        "Document the constructability issue and agree on an approved revised reinforcement detail"
+        "Compare installed reinforcement against approved shop drawings and bar bending schedules.",
+        "Confirm minimum clear spacing, lap locations, and cover compliance before pour.",
+        "Coordinate with structural designer on any permissible bar adjustments or coupler alternatives.",
+        "Plan concrete placement with smaller aggregate, controlled lift heights, and dedicated vibration access.",
+        "Document the joint with pre-pour photos and sign-off before closing forms."
       ],
-      "escalation_rule": "Escalate before casting if code spacing, cover, or vibration access cannot be achieved without design revision.",
-      "offline_cache_reason": "High-value preconstruction defect scenario often reused in QA/QC training and offline decision support."
+      "escalation_rule": "Escalate if required clear spacing cannot be achieved, if cover blocks cannot be installed correctly, or if the pour is proceeding without engineer approval.",
+      "offline_cache_reason": "Retain as an offline seed because reinforcement congestion is a repeatable pre-pour condition that benefits from cached visual exemplars and checklist guidance."
     },
     {
       "id": "INC-004",
       "source_scope": "offline_seed_enriched",
-      "title": "MEP duct clashes with ceiling coordination zone",
-      "category": "MEP Coordination / Installation Defect",
+      "title": "MEP duct coordination clash at ceiling void",
+      "category": "MEP Coordination / Clashes",
       "severity": "medium",
-      "image_caption": "Large ductwork is installed below the intended ceiling plane, overlapping with sprinkler and lighting coordination space.",
+      "image_caption": "A large rectangular duct intersects the planned ceiling service zone, with nearby pipework and cable tray creating a tight coordination conflict.",
       "visual_clues": [
-        "Duct below designed soffit level",
-        "Insufficient clearance to services",
-        "Hanger rods crossing coordination path",
-        "Access panel location appears obstructed"
+        "Duct occupies intended ceiling zone",
+        "Adjacent services have minimal clearance",
+        "Hangers and supports appear tightly packed",
+        "Potential conflict with lighting or access panels"
       ],
-      "observation": "The duct run conflicts with the ceiling service zone and appears to reduce clearance for lights, sprinkler heads, and maintenance access. The installed position suggests a coordination mismatch between trades.",
-      "root_cause_hypothesis": "Likely incomplete coordination review, dimension drift during installation, or unconfirmed reflected ceiling layout before rough-in.",
+      "observation": "The ceiling coordination area shows a clear clash between ductwork and other services, reducing available clearance for ceilings and maintenance access. The condition appears to be a coordination issue rather than an immediate safety hazard, but it may drive rework if unresolved.",
+      "root_cause_hypothesis": "Likely incomplete coordination of MEP trades, late design revisions, or insufficient clash detection before installation.",
       "action_checklist": [
-        "Freeze affected area and verify as-built elevations against coordinated drawings",
-        "Check clearance requirements for adjacent services and access panels",
-        "Identify whether the duct can be rerouted, flattened, or locally adjusted",
-        "Notify affected trades to prevent parallel installation in the clash zone",
-        "Record the clash in the coordination log and obtain approved resolution before ceiling closure"
+        "Verify current coordinated shop drawing against installed service positions.",
+        "Identify the conflicting elements and quantify the clearance shortfall.",
+        "Hold the affected trade install and route the clash to coordination review.",
+        "Confirm access requirements for dampers, valves, and future maintenance before finalizing layout.",
+        "Issue revised setting-out instructions and record any approved deviations."
       ],
-      "escalation_rule": "Escalate to the MEP coordinator if any service clearance, fire protection coverage, or maintenance access is compromised.",
-      "offline_cache_reason": "Representative coordination clash used frequently in BIM/CV-RAG demos for offline visual-to-action retrieval."
+      "escalation_rule": "Escalate to project coordination lead if ceiling closure is imminent, access to critical maintenance components is blocked, or multiple trade clashes are present.",
+      "offline_cache_reason": "Retain as an offline seed because MEP clashes are common in visual QA workflows and useful for training cross-trade reasoning in a disconnected environment."
     },
     {
       "id": "INC-005",
       "source_scope": "offline_seed_enriched",
-      "title": "Unsafe open edge adjacent to scaffold access",
-      "category": "Fall Protection / Site Safety",
+      "title": "Unsafe open edge adjacent to scaffold access point",
+      "category": "Fall Protection / Working at Height",
       "severity": "critical",
-      "image_caption": "Unprotected slab edge with scaffold ladder access nearby and no visible guardrail or toe board.",
+      "image_caption": "Unprotected slab edge with no visible guardrail at the landing area next to scaffold access, exposing a fall hazard.",
       "visual_clues": [
-        "Open edge without guardrail",
-        "Scaffold access point within fall zone",
-        "No toe board at edge",
-        "Loose materials near the perimeter"
+        "Open edge without top rail or mid-rail",
+        "Scaffold access ladder or landing nearby",
+        "No visible toe board at edge",
+        "Exposure to drop zone below"
       ],
-      "observation": "An open slab edge is present directly beside scaffold access, creating a severe fall hazard for workers transitioning between levels. The area also presents struck-by and dropped-object risk due to proximity of loose materials.",
-      "root_cause_hypothesis": "Temporary edge protection was either removed for access and not reinstated, or the scaffold interface was installed without a complete fall protection plan.",
+      "observation": "An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.",
+      "root_cause_hypothesis": "Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.",
       "action_checklist": [
-        "Stop work in the immediate area and restrict access with physical barriers",
-        "Install compliant edge protection or equivalent fall prevention immediately",
-        "Relocate loose materials away from the perimeter and secure tools",
-        "Brief all crews on the revised access route and fall hazard",
-        "Inspect adjacent scaffold ties, ladders, and landing points before reopening"
+        "Stop access to the affected route until edge protection is installed or alternative safe access is provided.",
+        "Install compliant guardrails, toe boards, and controlled access measures at the perimeter.",
+        "Inspect scaffold tie-ins, landing condition, and opening protections for related defects.",
+        "Brief all nearby crews on the exclusion and safe access route.",
+        "Record the hazard in the permit or daily safety log and verify closure before restart."
       ],
-      "escalation_rule": "Escalate to the site safety manager at once if the edge remains unprotected or if workers must pass within the fall zone.",
-      "offline_cache_reason": "Critical safety archetype with clear visual cues, ideal for offline incident recognition and response guidance."
+      "escalation_rule": "Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.",
+      "offline_cache_reason": "Retain as an offline seed because open-edge fall hazards are high-value safety examples and visually obvious for CV-RAG detection even without live connectivity."
     },
     {
       "id": "INC-006",
       "source_scope": "offline_seed_enriched",
-      "title": "Crack observed near lift core wall opening",
-      "category": "Structural Crack / Movement",
-      "severity": "high",
-      "image_caption": "Diagonal cracking visible near a lift core wall opening, with fine branching at the plastered surface.",
+      "title": "Hairline crack observed near lift core wall opening",
+      "category": "Structural Observation / Crack Monitoring",
+      "severity": "medium",
+      "image_caption": "Thin vertical crack line visible near the lift core wall corner, with no obvious displacement or spalling at the surface.",
       "visual_clues": [
-        "Hairline to moderate crack near opening",
-        "Crack follows diagonal path",
-        "Minor surface spall at crack tip",
-        "Adjacent wall finish shows slight discoloration"
+        "Fine line crack near corner",
+        "No visible offset between surfaces",
+        "Localized around opening or stress concentration",
+        "No active leakage or spalling apparent"
       ],
-      "observation": "A crack is visible close to the lift core wall opening. The crack orientation and location suggest potential stress concentration or movement around the opening, requiring verification before finishing proceeds.",
-      "root_cause_hypothesis": "Possible shrinkage, differential movement, insufficient reinforcement around opening, or localized stress from sequencing/loading.",
+      "observation": "A narrow crack is visible near the lift core wall, close to an opening or re-entrant corner. At the moment it appears to be a hairline surface condition, but its location warrants monitoring because core walls can attract stress concentrations and construction-stage movement.",
+      "root_cause_hypothesis": "Possible shrinkage crack, restraint from adjacent pours, temporary load transfer effects, or stress concentration at an opening corner.",
       "action_checklist": [
-        "Measure crack width, length, and orientation and install monitoring markers",
-        "Check whether the crack is active by comparing over time or after load changes",
-        "Review reinforcement detailing and construction sequence around the opening",
-        "Protect the area from further finish works until the cause is assessed",
-        "Arrange engineering review to determine whether repair, strengthening, or monitoring is required"
+        "Measure and mark crack length, width, and orientation using a calibrated gauge.",
+        "Check whether the crack is live by monitoring for seasonal or load-related movement.",
+        "Review recent pours, stripping sequence, and temporary loading around the core wall.",
+        "Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.",
+        "Escalate for structural review if the crack widens, propagates, or appears through-thickness."
       ],
-      "escalation_rule": "Escalate to the structural engineer if the crack widens, propagates, or is accompanied by deflection, spalling, or water ingress.",
-      "offline_cache_reason": "Common structural observation with established inspection workflow, suitable for offline cache enrichment."
+      "escalation_rule": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation.",
+      "offline_cache_reason": "Retain as an offline seed because crack monitoring is a common inspection scenario and supports visual differentiation between benign and potentially structural defects."
     },
     {
       "id": "ONL-007",
       "source_scope": "online_enriched_only",
-      "title": "Water ingress detected near temporary electrical riser",
-      "category": "Electrical Safety / Water Intrusion",
+      "title": "Water ingress approaching temporary electrical riser",
+      "category": "Electrical Safety / Water Ingress",
       "severity": "critical",
-      "image_caption": "Moisture staining and dripping are present on the floor adjacent to a temporary electrical riser and cable routing.",
+      "image_caption": "Moisture staining and seepage are visible on the floor near a temporary electrical riser, with damp routing nearby.",
       "visual_clues": [
-        "Visible water path near electrical equipment",
-        "Temporary cabling routed close to wet area",
-        "Wet floor around riser base",
-        "Potential splash zone at junction boxes"
+        "Water pooled close to temporary cabling",
+        "Damp streaks on adjacent wall or floor",
+        "Temporary electrical riser present",
+        "Potential contact between water path and electrical installation"
       ],
-      "observation": "Water ingress is occurring close to a temporary electrical riser, creating an immediate electrical shock and short-circuit hazard. The proximity of moisture to energized temporary installations makes the condition urgent.",
-      "root_cause_hypothesis": "Likely external water infiltration, failed weather protection, or inadequate segregation between wet work and temporary power distribution.",
+      "observation": "Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.",
+      "root_cause_hypothesis": "Likely failed waterproofing, rainwater intrusion, or uncontrolled surface drainage compounded by insufficient protection and routing of temporary electrical infrastructure.",
       "action_checklist": [
-        "Isolate the affected temporary electrical circuit and verify de-energization",
-        "Restrict access to the wet zone and place warning signage",
-        "Trace the water source and implement temporary diversion or containment",
-        "Inspect all nearby plugs, junctions, and cable insulation for damage",
-        "Only re-energize after a competent electrical inspection and dryness verification"
+        "Isolate the affected temporary electrical circuit and verify de-energization by a competent person.",
+        "Keep personnel away from the wet area and establish a controlled exclusion zone.",
+        "Identify the water source and apply temporary diversion, containment, or pumping as needed.",
+        "Inspect the riser for ingress, damaged insulation, and elevated termination points.",
+        "Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed."
       ],
-      "escalation_rule": "Escalate immediately to electrical supervision and site management if any energized equipment has been exposed to moisture.",
-      "offline_cache_reason": "Online-only incident likely derived from live site conditions where electrical and water hazards require current-state context."
+      "escalation_rule": "Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.",
+      "offline_cache_reason": "Retain as an online-enriched incident because it benefits from live-context examples of temporary power exposure, but it also serves as a high-priority safety retrieval record when connectivity is available."
     },
     {
       "id": "ONL-008",
       "source_scope": "online_enriched_only",
-      "title": "Falling object exclusion-zone breach below overhead works",
-      "category": "Dropped Object / Access Control",
+      "title": "Falling object exclusion zone breached beneath overhead work",
+      "category": "Dropped Object Risk / Site Access Control",
       "severity": "high",
-      "image_caption": "Workers and materials are present inside a taped exclusion zone beneath active overhead work.",
+      "image_caption": "Workers are present inside a taped-off area beneath elevated work, with materials and tools staged above.",
       "visual_clues": [
-        "People inside exclusion zone",
-        "Overhead tools and materials in use",
-        "Barricade line displaced or incomplete",
-        "No visible hard barrier beneath work area"
+        "Exclusion tape displaced or ignored",
+        "Work happening overhead",
+        "Loose materials near platform edge",
+        "Personnel present in drop zone"
       ],
-      "observation": "The exclusion zone beneath active overhead work has been breached. Personnel are present within the drop zone, creating a serious struck-by hazard from loose tools, materials, or debris.",
-      "root_cause_hypothesis": "Likely inadequate access control, poor signage enforcement, or failure to maintain a continuous exclusion boundary during the task.",
+      "observation": "Personnel have entered an exclusion zone established for overhead work, exposing them to falling object hazards. The area control is ineffective or not being enforced, increasing the likelihood of impact injuries from tools, materials, or debris.",
+      "root_cause_hypothesis": "Likely poor access control, weak supervision, unclear signage, or failure to maintain separation during simultaneous operations.",
       "action_checklist": [
-        "Stop the overhead activity until the exclusion zone is re-established",
-        "Remove all nonessential personnel from the drop zone",
-        "Restore barriers using a continuous and clearly visible perimeter",
-        "Secure tools and materials with tethering or containment where applicable",
-        "Conduct a toolbox talk emphasizing dropped-object controls and access discipline"
+        "Stop overhead work until the drop zone is fully re-established and enforced.",
+        "Remove unnecessary materials, tools, and loose items from elevated workfaces.",
+        "Rebrief all affected workers on exclusion limits and access permissions.",
+        "Assign a spotter or marshal to prevent unauthorized entry into the hazard area.",
+        "Review whether overhead work requires additional netting, tool lanyards, or rigid barricades."
       ],
-      "escalation_rule": "Escalate to the supervisor immediately if the zone cannot be kept clear or if overhead work continues without effective exclusion control.",
-      "offline_cache_reason": "Dynamic site safety condition typically captured from current inspection or live vision feed rather than pre-seeded offline examples."
+      "escalation_rule": "Escalate to the area supervisor and HSE lead if repeated breaches occur, if overhead lifting is active, or if hard barricading is not feasible.",
+      "offline_cache_reason": "Retain as an online-enriched record because falling object control often needs updated situational context and is valuable for live incident pattern matching."
     },
     {
       "id": "ONL-009",
       "source_scope": "online_enriched_only",
       "title": "Concrete spalling at slab edge after formwork striking",
-      "category": "Concrete Defect / Temporary Works",
-      "severity": "medium",
-      "image_caption": "Localized broken concrete edge with fresh spall and exposed aggregate after formwork removal.",
+      "category": "Concrete Defect / Post-Pour Damage",
+      "severity": "high",
+      "image_caption": "Chunks of concrete missing from the slab edge with rough fractured surfaces following formwork removal.",
       "visual_clues": [
-        "Fresh spall at slab edge",
-        "Sharp broken corners",
-        "No protective chamfer visible",
-        "Formwork removal marks nearby"
+        "Broken slab edge corners",
+        "Fresh fracture surfaces",
+        "Residual formwork contact marks",
+        "Possible exposed reinforcement cover zone"
       ],
-      "observation": "Localized spalling is visible at the slab edge after striking formwork. The damage appears concentrated at the arris and may indicate insufficient edge protection, premature striking, or weak concrete at the perimeter.",
-      "root_cause_hypothesis": "Possible early formwork removal, inadequate curing, poor compaction near the edge, or absence of chamfer/edge form detail.",
+      "observation": "Spalling is visible at the slab edge after formwork striking, indicating localized damage during stripping or early-age concrete weakness. The defect may be superficial, but edge integrity and reinforcement cover need confirmation before accepting the pour.",
+      "root_cause_hypothesis": "Likely premature striking, excessive prying force, insufficient concrete curing strength, or weak edge detailing at the formwork interface.",
       "action_checklist": [
-        "Isolate and photograph the damaged edge before any repair",
-        "Check concrete age, strength test results, and formwork striking records",
-        "Assess whether the damage is superficial or affects cover and durability",
-        "Repair only after substrate cleaning, engineer review, and approved patch method",
-        "Review edge forming and striking procedures to prevent recurrence"
+        "Suspend further aggressive stripping or edge cleaning until the affected area is assessed.",
+        "Check whether reinforcement cover is exposed and whether repair depth is limited to surface concrete.",
+        "Review striking method, curing duration, and concrete strength test results for the pour.",
+        "Document the defect extent and protect the edge from impact or additional loading.",
+        "Complete approved repair and curing measures before reopening the slab edge for use."
       ],
-      "escalation_rule": "Escalate to the concrete engineer if reinforcement cover is compromised or if similar spalling appears on multiple pours.",
-      "offline_cache_reason": "Best handled with recent imagery and current pour records, so it is appropriate as an online-enriched case."
+      "escalation_rule": "Escalate to the engineer if reinforcement is exposed, if the spall extends beyond a localized patch, or if similar damage is found at multiple edges.",
+      "offline_cache_reason": "Retain as an online-enriched record because post-pour damage patterns benefit from fresh examples and can correlate with operational sequencing data."
     },
     {
       "id": "ONL-010",
       "source_scope": "online_enriched_only",
-      "title": "Temporary works prop deformation observed under load",
+      "title": "Temporary works prop shows visible deformation",
       "category": "Temporary Works / Stability",
       "severity": "critical",
-      "image_caption": "A steel prop beneath a supported deck appears bent out of plumb with visible compression and settlement.",
+      "image_caption": "A support prop beneath a temporary load-bearing arrangement is visibly bowed, with uneven bearing at the head and base plates.",
       "visual_clues": [
-        "Prop leaning out of alignment",
-        "Localized buckling or bending",
-        "Base plate settlement signs",
-        "Timber bearer showing distress"
+        "Bent or bowed prop member",
+        "Unseated base or head plate",
+        "Signs of overload or misalignment",
+        "Temporary support under structural element"
       ],
-      "observation": "One or more temporary works props show visible deformation while supporting a load-bearing element. The condition indicates instability and a potential partial collapse risk if loading continues.",
-      "root_cause_hypothesis": "Possible overloading, incorrect prop spacing, inadequate bracing, settlement at the base, or unauthorized removal of adjacent supports.",
+      "observation": "A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.",
+      "root_cause_hypothesis": "Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.",
       "action_checklist": [
-        "Immediately stop loading and clear the area beneath the supported element",
-        "Install secondary support or stabilization only under approved temporary works design",
-        "Inspect all adjacent props, braces, and base conditions for distress",
-        "Compare the installation against the approved temporary works sequence and load rating",
-        "Do not resume work until the temporary works engineer signs off the condition"
+        "Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.",
+        "Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.",
+        "Verify the approved temporary works design against actual loading and geometry.",
+        "Install additional supports only under the direction of the temporary works coordinator or engineer.",
+        "Record the defect and do not reinstate use until the system is recertified safe."
       ],
-      "escalation_rule": "Escalate immediately to the temporary works engineer and site manager if any prop is deformed, displaced, or audibly creaking under load.",
-      "offline_cache_reason": "Requires up-to-date site state and recent installation context, making it suitable for online enrichment only."
+      "escalation_rule": "Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.",
+      "offline_cache_reason": "Retain as an online-enriched record because temporary works deformation is a high-consequence event where current site conditions and recent load history materially affect interpretation."
     },
     {
       "id": "ONL-011",
       "source_scope": "online_enriched_only",
-      "title": "Confined-space gas detector alarm during drainage inspection",
-      "category": "Confined Space / Atmosphere Hazard",
+      "title": "Confined-space gas detector alarm triggered during drainage inspection",
+      "category": "Confined Space / Atmospheric Hazard",
       "severity": "critical",
-      "image_caption": "A worker is at a drainage inspection opening with a portable gas detector indicating alarm conditions.",
+      "image_caption": "A worker is positioned near a manhole opening with a handheld gas detector displaying an alarm state.",
       "visual_clues": [
-        "Detector alarm indication",
-        "Confined opening with limited ventilation",
-        "Inspection cover removed",
-        "Worker positioned near entry point"
+        "Open manhole or access chamber",
+        "Gas detector alarm indication",
+        "Drainage inspection activity",
+        "Potential confined-space entry setup"
       ],
-      "observation": "A gas detector alarm occurred during a drainage inspection in a confined-space environment. The alarm suggests a potentially hazardous atmosphere, requiring immediate withdrawal and control of entry.",
-      "root_cause_hypothesis": "Possible oxygen deficiency, buildup of toxic gas, or inadequate purge/ventilation before inspection.",
+      "observation": "A gas detector alarm activated during drainage inspection, indicating an unsafe atmosphere in or near the confined space. The condition may involve oxygen deficiency, toxic gas, or flammable gas, and no further entry should continue until the atmosphere is proven safe.",
+      "root_cause_hypothesis": "Likely accumulation of sewer gas, inadequate ventilation, residual biological decay, or disturbed sediment releasing hazardous vapors.",
       "action_checklist": [
-        "Abort entry and remove personnel from the confined space area",
-        "Maintain isolation and prevent re-entry until atmospheric testing is cleared",
-        "Verify detector calibration, battery status, and sensor function",
-        "Introduce forced ventilation and retest atmosphere from outside the space",
-        "Resume only under an approved confined-space permit with rescue provisions in place"
+        "Withdraw all personnel from the confined space area and prevent re-entry.",
+        "Test atmosphere from outside the space using calibrated equipment at multiple levels.",
+        "Implement forced ventilation only if approved and appropriate for the hazard identified.",
+        "Confirm rescue arrangements, permit status, and competent supervision before any re-entry.",
+        "Investigate source conditions and revise the confined-space entry controls accordingly."
       ],
-      "escalation_rule": "Escalate immediately to confined-space supervision and emergency response if any person has entered the space after the alarm or feels unwell.",
-      "offline_cache_reason": "Live atmospheric condition with strong dependence on current readings, making it an online-only incident."
+      "escalation_rule": "Escalate immediately to confined-space rescue resources and site management if anyone is inside the space, if gas readings are unstable, or if there is any sign of distress.",
+      "offline_cache_reason": "Retain as an online-enriched record because gas alarm events benefit from current contextual cues, permit status, and sensor-driven interpretation in a hybrid CV-RAG workflow."
     },
     {
       "id": "ONL-012",
@@ -281,24 +281,24 @@
       "title": "Mobile crane lift conducted near overhead service line",
       "category": "Lifting Operations / Electrical Proximity",
       "severity": "critical",
-      "image_caption": "A mobile crane boom is positioned close to an overhead service line during a material lift operation.",
+      "image_caption": "A mobile crane boom is extended near an overhead utility line, with the lifting area active below.",
       "visual_clues": [
-        "Boom near overhead line",
-        "Load suspended in proximity to service",
-        "No visible spotter control line",
-        "Restricted clearance above lift path"
+        "Extended crane boom near overhead line",
+        "Lift underway with suspended load",
+        "Insufficient visible clearance",
+        "Potential service line interaction zone"
       ],
-      "observation": "A mobile crane is operating near an overhead service line with limited clearance. The lift presents an electrocution and equipment contact hazard if boom movement or load swing occurs.",
-      "root_cause_hypothesis": "Likely inadequate lift planning, poor route control, misjudged service location, or failure to establish an exclusion distance and spotter arrangement.",
+      "observation": "A mobile crane is operating within close proximity to an overhead service line, creating a life-threatening electrocution and equipment contact hazard. The lift path appears to intersect or approach the line envelope, requiring immediate control.",
+      "root_cause_hypothesis": "Likely poor lift planning, incorrect identification of service line location, inadequate exclusion distances, or failure to coordinate with utility controls.",
       "action_checklist": [
-        "Stop the lift and lower the load to a safe position",
-        "Confirm the exact location and voltage classification of the overhead service line",
-        "Re-plan the lift route to maintain required clearance and exclusion controls",
-        "Assign a trained spotter and establish a clearly marked no-go zone",
-        "Resume only after a documented lift plan and permit are approved"
+        "Stop the lift and hold all crane movements until the hazard is verified and cleared.",
+        "Establish the exact location, type, and minimum approach distance of the overhead service line.",
+        "Reposition the crane, landing area, or load path to maintain compliant clearance.",
+        "Brief the lifting team and appoint a dedicated spotter for line awareness if operations resume.",
+        "Obtain utility or competent authority coordination where required before any further lifting."
       ],
-      "escalation_rule": "Escalate immediately to lifting supervision and utility coordination if the crane or load cannot maintain safe clearance from the overhead service.",
-      "offline_cache_reason": "Current proximity hazard requiring up-to-date field confirmation, best handled through online-only enrichment."
+      "escalation_rule": "Escalate immediately to lifting supervisor and site emergency response if contact occurs, if clearance cannot be confirmed, or if the line is energized and uncontrolled proximity persists.",
+      "offline_cache_reason": "Retain as an online-enriched record because lift proximity hazards depend heavily on current site logistics and active utility coordination, making online updates especially useful."
     }
   ],
   "generator": {

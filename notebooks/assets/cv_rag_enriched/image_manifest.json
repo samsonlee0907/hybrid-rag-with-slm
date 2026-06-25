@@ -1,0 +1,92 @@
+{
+  "source": "notebooks\\assets\\online_comparison\\gpt54mini_enriched_incidents.json",
+  "output_dir": "notebooks\\assets\\cv_rag_enriched",
+  "incident_count": 12,
+  "incidents_jsonl": "notebooks/assets/cv_rag_enriched/incidents.jsonl",
+  "images": [
+    {
+      "incident_id": "INC-001",
+      "title": "Basement wall water ingress observed at construction joint",
+      "source_scope": "offline_seed_enriched",
+      "image": "images/inc_001_basement_wall_water_ingress_observed_at_cons.png",
+      "caption": "Damp staining and active seepage visible along a horizontal joint on a basement retaining wall, with minor pooling at the floor-wall junction."
+    },
+    {
+      "incident_id": "INC-002",
+      "title": "Concrete column honeycombing detected after form removal",
+      "source_scope": "offline_seed_enriched",
+      "image": "images/inc_002_concrete_column_honeycombing_detected_after_.png",
+      "caption": "Rough, voided concrete surface with exposed aggregate and localized cavities at the lower portion of a reinforced concrete column."
+    },
+    {
+      "incident_id": "INC-003",
+      "title": "Rebar congestion visible at beam-column joint",
+      "source_scope": "offline_seed_enriched",
+      "image": "images/inc_003_rebar_congestion_visible_at_beam_column_join.png",
+      "caption": "Dense reinforcement cluster at a beam-column joint with closely spaced bars, tight tie wire, and limited visible concrete flow path."
+    },
+    {
+      "incident_id": "INC-004",
+      "title": "MEP duct coordination clash at ceiling void",
+      "source_scope": "offline_seed_enriched",
+      "image": "images/inc_004_mep_duct_coordination_clash_at_ceiling_void.png",
+      "caption": "A large rectangular duct intersects the planned ceiling service zone, with nearby pipework and cable tray creating a tight coordination conflict."
+    },
+    {
+      "incident_id": "INC-005",
+      "title": "Unsafe open edge adjacent to scaffold access point",
+      "source_scope": "offline_seed_enriched",
+      "image": "images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png",
+      "caption": "Unprotected slab edge with no visible guardrail at the landing area next to scaffold access, exposing a fall hazard."
+    },
+    {
+      "incident_id": "INC-006",
+      "title": "Hairline crack observed near lift core wall opening",
+      "source_scope": "offline_seed_enriched",
+      "image": "images/inc_006_hairline_crack_observed_near_lift_core_wall_.png",
+      "caption": "Thin vertical crack line visible near the lift core wall corner, with no obvious displacement or spalling at the surface."
+    },
+    {
+      "incident_id": "ONL-007",
+      "title": "Water ingress approaching temporary electrical riser",
+      "source_scope": "online_enriched_only",
+      "image": "images/onl_007_water_ingress_approaching_temporary_electric.png",
+      "caption": "Moisture staining and seepage are visible on the floor near a temporary electrical riser, with damp routing nearby."
+    },
+    {
+      "incident_id": "ONL-008",
+      "title": "Falling object exclusion zone breached beneath overhead work",
+      "source_scope": "online_enriched_only",
+      "image": "images/onl_008_falling_object_exclusion_zone_breached_benea.png",
+      "caption": "Workers are present inside a taped-off area beneath elevated work, with materials and tools staged above."
+    },
+    {
+      "incident_id": "ONL-009",
+      "title": "Concrete spalling at slab edge after formwork striking",
+      "source_scope": "online_enriched_only",
+      "image": "images/onl_009_concrete_spalling_at_slab_edge_after_formwor.png",
+      "caption": "Chunks of concrete missing from the slab edge with rough fractured surfaces following formwork removal."
+    },
+    {
+      "incident_id": "ONL-010",
+      "title": "Temporary works prop shows visible deformation",
+      "source_scope": "online_enriched_only",
+      "image": "images/onl_010_temporary_works_prop_shows_visible_deformati.png",
+      "caption": "A support prop beneath a temporary load-bearing arrangement is visibly bowed, with uneven bearing at the head and base plates."
+    },
+    {
+      "incident_id": "ONL-011",
+      "title": "Confined-space gas detector alarm triggered during drainage inspection",
+      "source_scope": "online_enriched_only",
+      "image": "images/onl_011_confined_space_gas_detector_alarm_triggered_.png",
+      "caption": "A worker is positioned near a manhole opening with a handheld gas detector displaying an alarm state."
+    },
+    {
+      "incident_id": "ONL-012",
+      "title": "Mobile crane lift conducted near overhead service line",
+      "source_scope": "online_enriched_only",
+      "image": "images/onl_012_mobile_crane_lift_conducted_near_overhead_se.png",
+      "caption": "A mobile crane boom is extended near an overhead utility line, with the lifting area active below."
+    }
+  ]
+}

@@ -56,6 +56,7 @@ class AzureSearchClient:
                     "category",
                     "severity",
                     "image_caption",
+                    "visual_clues",
                     "observation",
                     "root_cause_hypothesis",
                     "action_checklist",
@@ -113,4 +114,3 @@ def _index_schema(index_name: str) -> dict:
             ],
         },
     }
-
