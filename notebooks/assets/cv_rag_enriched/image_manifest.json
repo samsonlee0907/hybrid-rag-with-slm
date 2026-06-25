@@ -3,6 +3,16 @@
   "output_dir": "notebooks\\assets\\cv_rag_enriched",
   "incident_count": 12,
   "incidents_jsonl": "notebooks/assets/cv_rag_enriched/incidents.jsonl",
+  "generation": {
+    "mode": "azure-openai",
+    "endpoint": "https://proj-samsonlee-swedence-resource.cognitiveservices.azure.com/",
+    "deployment": "gpt-image-1.5",
+    "api_version": "2025-04-01-preview",
+    "size": "1024x1024",
+    "quality": "medium",
+    "generated_at": "2026-06-25T01:54:03.761817+00:00",
+    "prompt_style": "photorealistic construction-site inspection photo"
+  },
   "images": [
     {
       "incident_id": "INC-001",

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -64,6 +65,8 @@ def main() -> None:
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda"])
     parser.add_argument("--generator", choices=["template", "phi4"], default="template")
     parser.add_argument("--output", default="notebooks/assets/context_lifecycle/context_lifecycle_report.json")
+    parser.add_argument("--summary-output", default="notebooks/assets/context_lifecycle/context_lifecycle_summary.json")
+    parser.add_argument("--image-source-dir", default="notebooks/assets/cv_rag_enriched/images")
     args = parser.parse_args()
 
     workspace = Path(args.workspace)
@@ -71,7 +74,8 @@ def main() -> None:
     enriched = get_enriched_incidents(args.incidents_json)
     enriched_by_id = {incident.id: incident for incident in enriched}
     all_incidents = convert_enriched_incidents(enriched)
-    generate_dataset(str(workspace), all_incidents)
+    generate_dataset(str(workspace), all_incidents, render_images=False)
+    _copy_image_pack(Path(args.image_source_dir), workspace / "images", all_incidents)
 
     embedder = ClipEmbedder(device=args.device)
     store = CvVectorStore(db_path)
@@ -84,8 +88,10 @@ def main() -> None:
     generator = load_generator(args.generator, device=args.device)
 
     initial_results = []
+    initial_hits_by_query = {}
     for item in SEARCH_HISTORY:
         offline_hits = store.search(embedder.embed_text(item["query"]), top_k=3)
+        initial_hits_by_query[item["query"]] = offline_hits
         initial_results.append(
             {
                 **item,
@@ -113,8 +119,10 @@ def main() -> None:
         )
 
     later_offline_results = []
+    later_hits_by_query = {}
     for item in SEARCH_HISTORY:
         later_hits = store.search(embedder.embed_text(item["query"]), top_k=3)
+        later_hits_by_query[item["query"]] = later_hits
         later_offline_results.append(
             {
                 **item,
@@ -127,11 +135,42 @@ def main() -> None:
         hits = search_client.search(query, embedder.embed_text(query), top=3)
         full_online_results.append({"query": query, "online_top3": [_summarize_online_hit(hit, rank) for rank, hit in enumerate(hits, start=1)]})
 
-    phi4_examples = []
-    for item in SEARCH_HISTORY[1:3]:
-        hits = store.search(embedder.embed_text(item["query"]), top_k=3)
-        prompt = build_prompt(item["query"], hits)
-        phi4_examples.append({"scenario": item["scenario"], "query": item["query"], "evidence_prompt": prompt, "answer": generator.generate(prompt)})
+    sequence_steps = []
+    for item, initial_result, online_result, later_result in zip(
+        SEARCH_HISTORY, initial_results, online_resume_results, later_offline_results, strict=True
+    ):
+        initial_prompt = build_prompt(item["query"], initial_hits_by_query[item["query"]])
+        later_prompt = build_prompt(item["query"], later_hits_by_query[item["query"]])
+        sequence_steps.append(
+            {
+                "scenario": item["scenario"],
+                "query": item["query"],
+                "initial_offline": {
+                    "top3": initial_result["offline_top3"],
+                    "phi4_evidence_prompt": initial_prompt,
+                    "answer": generator.generate(initial_prompt),
+                },
+                "enriched_offline_after_sync": {
+                    "top3": later_result["offline_after_sync_top3"],
+                    "phi4_evidence_prompt": later_prompt,
+                    "answer": generator.generate(later_prompt),
+                },
+                "online_resume": {
+                    "top3": online_result["online_top3"],
+                    "synced_ids": online_result["synced_ids"],
+                },
+            }
+        )
+
+    phi4_examples = [
+        {
+            "scenario": item["scenario"],
+            "query": item["query"],
+            "evidence_prompt": step["enriched_offline_after_sync"]["phi4_evidence_prompt"],
+            "answer": step["enriched_offline_after_sync"]["answer"],
+        }
+        for item, step in zip(SEARCH_HISTORY[1:3], sequence_steps[1:3], strict=True)
+    ]
 
     report = {
         "mode": "context-lifecycle-hybrid-rag",
@@ -145,6 +184,7 @@ def main() -> None:
         "online_resume_results": online_resume_results,
         "later_offline_results": later_offline_results,
         "full_online_results": full_online_results,
+        "sequence_steps": sequence_steps,
         "phi4_role": [
             "Phi-4-mini is not the vector database; it is the local reasoning layer after retrieval.",
             "Before sync it can only answer from the limited local evidence, so it should expose uncertainty and escalation.",
@@ -155,7 +195,20 @@ def main() -> None:
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    summary = _build_summary(report)
+    summary_path = Path(args.summary_output)
+    summary_path.parent.mkdir(parents=True, exist_ok=True)
+    summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({"output": str(output_path), "synced_ids": synced_ids, "offline_after_sync_count": store.count()}, indent=2))
+
+
+def _copy_image_pack(source_dir: Path, image_dir: Path, incidents) -> None:
+    image_dir.mkdir(parents=True, exist_ok=True)
+    for incident in incidents:
+        source_path = source_dir / incident.image_file
+        if not source_path.exists():
+            raise FileNotFoundError(f"Missing source image for {incident.incident_id}: {source_path}")
+        shutil.copyfile(source_path, image_dir / incident.image_file)
 
 
 def _index_incidents(store: CvVectorStore, embedder: ClipEmbedder, image_dir: Path, incidents) -> None:
@@ -196,6 +249,46 @@ def _summarize_online_hit(hit: dict, rank: int) -> dict:
         "score": round(hit.get("@search.score", 0.0), 4),
         "action_checklist": hit.get("action_checklist", []),
         "escalation_rule": hit.get("escalation_rule"),
+    }
+
+
+def _build_summary(report: dict) -> dict:
+    return {
+        "initial_offline_ids": report["initial_offline_ids"],
+        "synced_ids": report["synced_ids"],
+        "offline_after_sync_count": report["offline_after_sync_count"],
+        "rows": [
+            {
+                "scenario": initial["scenario"],
+                "initial_top": initial["offline_top3"][0]["id"],
+                "online_top": online["online_top3"][0]["id"],
+                "synced_ids": online["synced_ids"],
+                "later_top": later["offline_after_sync_top3"][0]["id"],
+            }
+            for initial, online, later in zip(
+                report["initial_offline_results"],
+                report["online_resume_results"],
+                report["later_offline_results"],
+                strict=True,
+            )
+        ],
+        "full_online": [
+            {
+                "query": item["query"],
+                "top": item["online_top3"][0]["id"],
+            }
+            for item in report["full_online_results"]
+        ],
+        "sequence": [
+            {
+                "scenario": item["scenario"],
+                "initial_top": item["initial_offline"]["top3"][0]["id"],
+                "enriched_offline_top": item["enriched_offline_after_sync"]["top3"][0]["id"],
+                "online_top": item["online_resume"]["top3"][0]["id"],
+                "synced_ids": item["online_resume"]["synced_ids"],
+            }
+            for item in report["sequence_steps"]
+        ],
     }
 
 

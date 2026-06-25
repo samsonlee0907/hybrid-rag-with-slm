@@ -15,8 +15,9 @@ def build_cv_index(
     device: str = "auto",
     incidents: Iterable[Incident] | None = None,
     clean: bool = True,
+    render_images: bool = True,
 ) -> int:
-    incidents_path, incidents = generate_dataset(workspace, incidents)
+    incidents_path, incidents = generate_dataset(workspace, incidents, render_images=render_images)
     embedder = ClipEmbedder(device=device)
     store = CvVectorStore(db_path)
     if clean:
@@ -24,6 +25,11 @@ def build_cv_index(
     image_dir = Path(workspace) / "images"
     for incident in incidents:
         image_path = image_dir / incident.image_file
+        if not image_path.exists():
+            raise FileNotFoundError(
+                f"Image asset not found for {incident.incident_id}: {image_path}. "
+                "Generate images first or call build_cv_index with render_images=True."
+            )
         image_vector = embedder.embed_image(str(image_path))
         text_vector = embedder.embed_text(incident.searchable_text)
         vector = fuse_vectors(image_vector, text_vector)

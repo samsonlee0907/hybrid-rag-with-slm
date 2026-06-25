@@ -56,6 +56,13 @@ def main() -> None:
     parser.add_argument("--generator", choices=["template", "phi4"], default="template")
     parser.add_argument("--offline", action="store_true")
     parser.add_argument("--output", default="notebooks/assets/cv_rag_enriched/offline_eval_report.json")
+    parser.add_argument("--summary-output", default="notebooks/assets/cv_rag_enriched/offline_eval_report_summary.json")
+    parser.add_argument(
+        "--preserve-images",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Use already generated image assets instead of redrawing fallback diagrams.",
+    )
     args = parser.parse_args()
 
     if args.offline:
@@ -64,7 +71,14 @@ def main() -> None:
     enriched = get_enriched_incidents(args.incidents_json)
     incidents = convert_enriched_incidents(enriched, source_scope="offline_seed_enriched")
     db_path = args.db or str(Path(args.workspace) / "offline_cv_rag.sqlite")
-    count = build_cv_index(args.workspace, db_path, device=args.device, incidents=incidents, clean=True)
+    count = build_cv_index(
+        args.workspace,
+        db_path,
+        device=args.device,
+        incidents=incidents,
+        clean=True,
+        render_images=not args.preserve_images,
+    )
     generator = load_generator(args.generator, device=args.device)
 
     query_results = []
@@ -109,6 +123,22 @@ def main() -> None:
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    summary = {
+        "indexed_count": report["indexed_count"],
+        "top1_accuracy": report["top1_accuracy"],
+        "queries": [
+            {
+                "scenario": item["scenario"],
+                "expected": item["expected"],
+                "top_hit": item["top_hit"],
+                "top3": [hit["incident_id"] for hit in item["hits"]],
+            }
+            for item in report["queries"]
+        ],
+    }
+    summary_path = Path(args.summary_output)
+    summary_path.parent.mkdir(parents=True, exist_ok=True)
+    summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({"output": str(output_path), "indexed": count, "top1_accuracy": report["top1_accuracy"]}, indent=2))
 
 

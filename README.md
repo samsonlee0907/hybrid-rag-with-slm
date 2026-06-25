@@ -150,7 +150,7 @@ Provisioned POC components:
 | Azure AI Search | `srch-hybrid-rag-887070`, index `construction-incidents-online`, 12 enriched incident documents |
 | Foundry / AI Services | `aif-hybrid-rag-338698` in `rg-hybrid-rag-slm-poc` |
 | Text generation | `gpt-5.4-mini` deployment `gpt-5-4-mini-enrich`, used to generate richer synthetic incident cases and resolutions |
-| Image generation | `MAI-Image-2.5-Flash` was not newly deployed in South Central US because quota is fully used (`2 / 2`). The repo keeps image captions and local synthetic image assets until image-model quota is available. |
+| Image generation | South Central US `MAI-Image-2.5-Flash` quota is fully used (`2 / 2`), so the notebook image pack uses an existing Azure OpenAI `gpt-image-1.5` deployment to create photorealistic construction-site incident images. The deterministic diagram generator remains available as a fallback. |
 
 Generate or refresh the enriched incident corpus and image assets:
 
@@ -160,12 +160,30 @@ $env:AZURE_OPENAI_DEPLOYMENT = "gpt-5-4-mini-enrich"
 python scripts\generate_enriched_incidents_with_foundry.py `
   --output notebooks\assets\online_comparison\gpt54mini_enriched_incidents.json
 
+$env:AZURE_IMAGE_ENDPOINT = "https://proj-samsonlee-swedence-resource.cognitiveservices.azure.com/"
+$env:AZURE_IMAGE_DEPLOYMENT = "gpt-image-1.5"
+$env:AZURE_IMAGE_BEARER_TOKEN = az account get-access-token `
+  --resource https://cognitiveservices.azure.com/ `
+  --query accessToken `
+  -o tsv
+
 python scripts\generate_enriched_images.py `
+  --mode azure-openai `
   --incidents-json notebooks\assets\online_comparison\gpt54mini_enriched_incidents.json `
   --output-dir notebooks\assets\cv_rag_enriched
 ```
 
-If endpoint variables are not supplied, the script can write the deterministic built-in corpus with `--offline`.
+If image endpoint variables are not supplied, `scripts\generate_enriched_images.py --mode diagram` writes deterministic fallback diagrams instead. The offline and hybrid notebooks should be rebuilt after retrieval reports are refreshed:
+
+```powershell
+python scripts\run_enriched_offline_eval.py `
+  --workspace notebooks\assets\cv_rag_enriched `
+  --device cuda `
+  --generator template `
+  --preserve-images
+
+python scripts\build_notebooks.py
+```
 
 Build the Azure AI Search index and run the comparison:
 

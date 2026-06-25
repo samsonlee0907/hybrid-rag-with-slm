@@ -107,15 +107,21 @@ SCENARIOS: list[Incident] = [
 ]
 
 
-def generate_dataset(output_dir: str, incidents: Iterable[Incident] | None = None) -> tuple[Path, list[Incident]]:
+def generate_dataset(
+    output_dir: str,
+    incidents: Iterable[Incident] | None = None,
+    *,
+    render_images: bool = True,
+) -> tuple[Path, list[Incident]]:
     root = Path(output_dir)
     image_dir = root / "images"
     image_dir.mkdir(parents=True, exist_ok=True)
     incidents_path = root / "incidents.jsonl"
     records = list(incidents or SCENARIOS)
 
-    for incident in records:
-        _draw_incident_image(image_dir / incident.image_file, incident)
+    if render_images:
+        for incident in records:
+            _draw_incident_image(image_dir / incident.image_file, incident)
 
     with incidents_path.open("w", encoding="utf-8") as handle:
         for incident in records:
