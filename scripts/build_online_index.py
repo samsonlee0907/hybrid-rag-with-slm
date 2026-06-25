@@ -18,10 +18,11 @@ def main() -> None:
     parser.add_argument("--key", required=True)
     parser.add_argument("--index", default="construction-incidents-online")
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda"])
+    parser.add_argument("--incidents-json", default=None, help="Optional generated enriched incident JSON file.")
     args = parser.parse_args()
 
     embedder = ClipEmbedder(device=args.device)
-    incidents = get_enriched_incidents()
+    incidents = get_enriched_incidents(args.incidents_json)
     docs = [incident.to_search_doc(embedder.embed_text(incident.content)) for incident in incidents]
 
     client = AzureSearchClient(SearchConfig(endpoint=args.endpoint, api_key=args.key, index_name=args.index))
@@ -33,4 +34,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

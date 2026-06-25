@@ -54,6 +54,7 @@ def main() -> None:
     parser.add_argument("--workspace", default="data\\hybrid-comparison")
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda"])
     parser.add_argument("--output", default=None)
+    parser.add_argument("--incidents-json", default=None, help="Optional generated enriched incident JSON file used to interpret online hits.")
     args = parser.parse_args()
 
     workspace = Path(args.workspace)
@@ -66,7 +67,7 @@ def main() -> None:
     build_cv_index(str(workspace / "offline"), offline_db, device=args.device)
     embedder = ClipEmbedder(device=args.device)
     search_client = AzureSearchClient(SearchConfig(args.endpoint, args.key, args.index))
-    enriched_by_id = {incident.id: incident for incident in get_enriched_incidents()}
+    enriched_by_id = {incident.id: incident for incident in get_enriched_incidents(args.incidents_json)}
     enriched_vectors = {incident.id: embedder.embed_text(incident.content) for incident in enriched_by_id.values()}
     delta_store = SyncedCaseStore(delta_db)
 
@@ -76,9 +77,12 @@ def main() -> None:
         offline_hits = search_cv_index(item["query"], offline_db, device=args.device, top_k=3)
         online_hits = search_client.search(item["query"], query_vector, top=3)
 
-        for hit in online_hits[:2]:
-            incident = enriched_by_id[hit["id"]]
-            delta_store.upsert(incident.to_search_doc(enriched_vectors[incident.id]), enriched_vectors[incident.id])
+        if item["online_expected"] != item["offline_expected"]:
+            for hit in online_hits[:2]:
+                if hit.get("source_scope") != "online_enriched_only":
+                    continue
+                incident = enriched_by_id[hit["id"]]
+                delta_store.upsert(incident.to_search_doc(enriched_vectors[incident.id]), enriched_vectors[incident.id])
 
         synced_hits = delta_store.search(query_vector, top_k=3)
         comparisons.append(
@@ -134,4 +138,3 @@ def _summarize_synced(hit) -> dict:
 
 if __name__ == "__main__":
     main()
-

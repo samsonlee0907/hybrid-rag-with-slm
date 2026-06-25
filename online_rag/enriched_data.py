@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 from dataclasses import asdict, dataclass
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -40,6 +42,12 @@ class EnrichedIncident:
         doc["content"] = self.content
         doc["content_vector"] = vector
         return doc
+
+    @classmethod
+    def from_dict(cls, payload: dict) -> "EnrichedIncident":
+        allowed = {field for field in cls.__dataclass_fields__}
+        filtered = {key: value for key, value in payload.items() if key in allowed}
+        return cls(**filtered)
 
 
 ENRICHED_INCIDENTS: list[EnrichedIncident] = [
@@ -274,6 +282,9 @@ ENRICHED_INCIDENTS: list[EnrichedIncident] = [
 ]
 
 
-def get_enriched_incidents() -> list[EnrichedIncident]:
+def get_enriched_incidents(incidents_json: str | Path | None = None) -> list[EnrichedIncident]:
+    if incidents_json:
+        payload = json.loads(Path(incidents_json).read_text(encoding="utf-8"))
+        records = payload["incidents"] if isinstance(payload, dict) and "incidents" in payload else payload
+        return [EnrichedIncident.from_dict(record) for record in records]
     return list(ENRICHED_INCIDENTS)
-

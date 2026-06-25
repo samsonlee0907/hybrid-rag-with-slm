@@ -1,0 +1,68 @@
+{
+  "resource_group": "rg-hybrid-rag-slm-poc",
+  "gpu_vm": {
+    "name": "vm-cvrag-a10-poc",
+    "region": "southcentralus",
+    "sku": "Standard_NV6ads_A10_v5",
+    "gpu_observed": "NVIDIA A10-4Q, 4 GB framebuffer"
+  },
+  "azure_ai_search": {
+    "service": "srch-hybrid-rag-887070",
+    "endpoint": "https://srch-hybrid-rag-887070.search.windows.net",
+    "index": "construction-incidents-online",
+    "documents_indexed": 12,
+    "vector_dimensions": 512,
+    "vector_profile": "HNSW cosine over CLIP text embeddings plus keyword search"
+  },
+  "foundry_models": {
+    "ai_services_account": "aif-hybrid-rag-338698",
+    "endpoint": "https://aif-hybrid-rag-338698.cognitiveservices.azure.com/",
+    "text_generation_deployment": "gpt-5-4-mini-enrich",
+    "text_generation_model": "gpt-5.4-mini, version 2026-03-17, GlobalStandard capacity 10",
+    "image_generation_status": "MAI-Image-2.5-Flash was not newly deployed in South Central US because quota is fully used: current 2, limit 2."
+  },
+  "dataset": {
+    "offline_seed_cases": 6,
+    "online_enriched_cases": 12,
+    "gpt_generated_asset": "assets/online_comparison/gpt54mini_enriched_incidents.json"
+  },
+  "vm_run": {
+    "comparison_queries": 4,
+    "offline_delta_count": 4,
+    "result": "Online-only cases retrieved from Azure AI Search were synced into a local SQLite delta store and then found again from offline search."
+  },
+  "rows": [
+    {
+      "scenario": "Known offline concrete defect",
+      "query": "A site photo shows concrete honeycombing and exposed aggregate after column formwork removal.",
+      "offline_top": "INC-002",
+      "online_top": "INC-002",
+      "synced_offline_top": "n/a",
+      "interpretation": "The local seed pack is sufficient; no online-only delta is required."
+    },
+    {
+      "scenario": "Water ingress upgraded by electrical risk",
+      "query": "Water seepage is close to a temporary electrical riser in the basement after heavy rain.",
+      "offline_top": "INC-001",
+      "online_top": "ONL-007",
+      "synced_offline_top": "ONL-007",
+      "interpretation": "Online retrieval upgrades a generic waterproofing case into a critical electrical-safety case and caches it offline."
+    },
+    {
+      "scenario": "Temporary works case missing offline",
+      "query": "A temporary works prop is bowed and the base plate appears displaced after slab loading.",
+      "offline_top": "INC-005",
+      "online_top": "ONL-010",
+      "synced_offline_top": "ONL-010",
+      "interpretation": "The offline seed pack has no temporary-works case; AI Search finds the enriched online case and the delta store retains it."
+    },
+    {
+      "scenario": "Confined space safety case missing offline",
+      "query": "A gas detector alarms during manhole drainage inspection before confined space entry.",
+      "offline_top": "INC-005",
+      "online_top": "ONL-011",
+      "synced_offline_top": "ONL-011",
+      "interpretation": "Online retrieval fills a confined-space safety gap and preserves the case for future disconnected searches."
+    }
+  ]
+}

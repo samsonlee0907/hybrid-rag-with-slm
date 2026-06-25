@@ -139,6 +139,58 @@ The CV-RAG POC uses:
 
 See `notebooks/offline_cv_rag_results.ipynb` for a documented six-scenario run, retrieval scores, top-1 accuracy, and a representative grounded answer.
 
+## Hybrid online/offline comparison POC
+
+The online comparison adds Azure AI Search and an optional Foundry / Azure OpenAI data-enrichment step while keeping the edge runtime offline-first.
+
+Provisioned POC components:
+
+| Component | POC configuration |
+| --- | --- |
+| Azure AI Search | `srch-hybrid-rag-887070`, index `construction-incidents-online`, 12 enriched incident documents |
+| Foundry / AI Services | `aif-hybrid-rag-338698` in `rg-hybrid-rag-slm-poc` |
+| Text generation | `gpt-5.4-mini` deployment `gpt-5-4-mini-enrich`, used to generate richer synthetic incident cases and resolutions |
+| Image generation | `MAI-Image-2.5-Flash` was not newly deployed in South Central US because quota is fully used (`2 / 2`). The repo keeps image captions and local synthetic image assets until image-model quota is available. |
+
+Generate or refresh the enriched incident corpus:
+
+```powershell
+$env:AZURE_OPENAI_ENDPOINT = "https://aif-hybrid-rag-338698.cognitiveservices.azure.com/"
+$env:AZURE_OPENAI_DEPLOYMENT = "gpt-5-4-mini-enrich"
+python scripts\generate_enriched_incidents_with_foundry.py `
+  --output notebooks\assets\online_comparison\gpt54mini_enriched_incidents.json
+```
+
+If endpoint variables are not supplied, the script can write the deterministic built-in corpus with `--offline`.
+
+Build the Azure AI Search index and run the comparison:
+
+```powershell
+python scripts\build_online_index.py `
+  --endpoint $env:SEARCH_ENDPOINT `
+  --key $env:SEARCH_KEY `
+  --index construction-incidents-online `
+  --device cuda `
+  --incidents-json notebooks\assets\online_comparison\gpt54mini_enriched_incidents.json
+
+python scripts\run_offline_online_comparison.py `
+  --endpoint $env:SEARCH_ENDPOINT `
+  --key $env:SEARCH_KEY `
+  --index construction-incidents-online `
+  --workspace data\hybrid-comparison `
+  --device cuda `
+  --incidents-json notebooks\assets\online_comparison\gpt54mini_enriched_incidents.json
+```
+
+The verified VM run showed:
+
+- Offline seed pack: 6 cases.
+- Online AI Search index: 12 GPT-enriched cases.
+- Online-only cases cached back into the local SQLite delta store: 4.
+- Queries for electrical water ingress, temporary works deformation, and confined-space alarm retrieved online-only cases first, then found those same cases again from the synced offline delta store.
+
+See `notebooks/offline_vs_online_hybrid_results.ipynb` for the documented run and `notebooks/assets/online_comparison/offline_online_summary.json` for the compact machine-readable result summary.
+
 ## Directory layout
 
 ```text
@@ -156,13 +208,25 @@ scripts/
   build_pack.py      Converts JSONL cases into a local pack DB.
   query_offline.py   Runs offline RAG against the local pack.
   run_cv_rag_poc.py  Runs synthetic offline CV-RAG with image vectorization.
+  generate_enriched_incidents_with_foundry.py
+                    Uses a Foundry / Azure OpenAI chat deployment to generate richer synthetic incident records.
+  build_online_index.py
+                    Builds the Azure AI Search online vector/hybrid index.
+  run_offline_online_comparison.py
+                    Compares offline seed retrieval, online enriched retrieval, and synced offline delta retrieval.
 cv_rag/
   synthetic_data.py  Generates synthetic construction incidents and images.
   models.py          CLIP embedder plus optional Phi-4-mini generator.
   store.py           SQLite image-vector store.
   pipeline.py        Index and query orchestration.
+online_rag/
+  enriched_data.py   Built-in enriched incident corpus plus generated JSON loader.
+  azure_search.py    Azure AI Search vector index schema and query client.
+  sync_store.py      SQLite delta store for online cases retained for later offline search.
 notebooks/
   offline_cv_rag_results.ipynb  Documented offline CV-RAG evaluation run.
+  offline_vs_online_hybrid_results.ipynb
+                    Documented offline vs online comparison run with synced offline delta search.
 sample_cases.jsonl   Small construction-case sample set.
 ```
 
