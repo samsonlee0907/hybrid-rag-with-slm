@@ -137,6 +137,8 @@ The CV-RAG POC uses:
 - `microsoft/Phi-4-mini-instruct` as the optional local answer generator.
 - A template generator as a deterministic fallback for resource-constrained/offline smoke tests.
 
+See `notebooks/offline_cv_rag_results.ipynb` for a documented six-scenario run, retrieval scores, top-1 accuracy, and a representative grounded answer.
+
 ## Directory layout
 
 ```text
@@ -159,6 +161,8 @@ cv_rag/
   models.py          CLIP embedder plus optional Phi-4-mini generator.
   store.py           SQLite image-vector store.
   pipeline.py        Index and query orchestration.
+notebooks/
+  offline_cv_rag_results.ipynb  Documented offline CV-RAG evaluation run.
 sample_cases.jsonl   Small construction-case sample set.
 ```
 
