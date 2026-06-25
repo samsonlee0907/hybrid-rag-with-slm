@@ -155,7 +155,7 @@ Canonical demo notebooks:
 | Notebook | Purpose | Clean report folder |
 | --- | --- | --- |
 | `notebooks/Local-Offline-RAG.ipynb` | Offline-only held-out image queries, BLIP vs Moondream semantic comparison, and Phi-4-mini grounded local answers. | `notebooks/reports/local_offline_rag/` |
-| `notebooks/Hybrid-RAG.ipynb` | Initial offline search, search-history-driven AI Search sync, later enriched offline search, and full online comparison. | `notebooks/reports/hybrid_rag/` |
+| `notebooks/Hybrid-RAG.ipynb` | Initial offline search, search-history-driven AI Search sync, later enriched offline search, and full online comparison. Selects Moondream for the target iOS architecture under a clear Core ML / MLX optimization assumption. | `notebooks/reports/hybrid_rag/` |
 
 Rebuild the canonical notebooks and normalized report folders:
 

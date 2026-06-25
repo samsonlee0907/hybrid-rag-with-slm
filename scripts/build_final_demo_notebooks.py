@@ -172,7 +172,7 @@ def build_local_offline_notebook(output_path: Path) -> None:
 def build_hybrid_notebook(output_path: Path) -> None:
     report = _read_json(HYBRID_REPORT_DIR / "hybrid_lifecycle_report.json")
     summary = _read_json(HYBRID_REPORT_DIR / "hybrid_lifecycle_summary.json")
-    selected_captioner = "BLIP"
+    selected_captioner = "Moondream"
 
     cells = [
         _markdown(
@@ -180,7 +180,10 @@ def build_hybrid_notebook(output_path: Path) -> None:
             "This notebook demonstrates the connected/disconnected lifecycle. It starts with a deliberately limited offline vector store, "
             "uses search history and Azure AI Search during connectivity resume to identify useful online cases, stages those cases back "
             "into the offline vector store, and compares retrieval across initial offline, enriched offline, and full online search.\n\n"
-            f"**Captioner selected from Local-Offline-RAG:** {selected_captioner}. BLIP is selected for this A10 VM flow because it matched the held-out cases with much lower local latency than Moondream2."
+            f"**Captioner selected for the target iOS architecture:** {selected_captioner}. "
+            "This is an explicit iOS/Core ML / MLX assumption, not an A10 VM throughput result. "
+            "The A10 run showed BLIP is the fast VM baseline, while Moondream2 produced richer semantic captions but fell back to CPU on the 4 GB A10-4Q profile. "
+            "For an iPhone-targeted design, Moondream is selected because the field copilot benefits more from richer visual understanding and VQA-style prompting, pending validation on an optimized iOS runtime."
         ),
         _markdown(
             "## Hybrid execution path\n\n"
@@ -198,6 +201,30 @@ def build_hybrid_notebook(output_path: Path) -> None:
             "```\n\n"
             "In the current report, the staging decision is reproducible: stage the top Azure AI Search result when it is an online-only case that is not already in the local pack. "
             "This is the deterministic policy view of the same role Phi-4-mini should play in production: read search history, summarize the missing intent, and decide which online evidence is worth caching."
+        ),
+        _markdown(
+            "## iOS target assumptions for Moondream selection\n\n"
+            + _markdown_table(
+                ["Assumption", "Implication"],
+                [
+                    [
+                        "Target runtime is a recent iPhone with an optimized Core ML / MLX Moondream package.",
+                        "Moondream is selected for richer image understanding and VQA-style prompting, not because the A10 VM proved fast Moondream inference.",
+                    ],
+                    [
+                        "The A10 VM has only a 4 GB A10-4Q framebuffer.",
+                        "Moondream2 did not fit on CUDA there and ran on CPU, so the VM latency should not be treated as an iPhone latency estimate.",
+                    ],
+                    [
+                        "CLIP/MobileCLIP-style embeddings still perform local vector retrieval.",
+                        "Moondream supplies semantic visual context to improve query understanding and answer grounding; it does not replace the vector store.",
+                    ],
+                    [
+                        "Phi-4-mini ONNX remains text-only.",
+                        "Phi-4-mini receives retrieved evidence plus Moondream visual context as text and drafts the grounded response.",
+                    ],
+                ],
+            )
         ),
         _markdown(
             "## Clean report locations\n\n"
@@ -324,6 +351,10 @@ def build_hybrid_notebook(output_path: Path) -> None:
         {
             "notebook": output_path.as_posix(),
             "selected_captioner": selected_captioner,
+            "selection_assumption": (
+                "Moondream is selected for the iOS target architecture under an assumed Core ML / MLX optimized runtime. "
+                "The A10 VM result is not an iPhone benchmark; it only shows Moondream CPU fallback semantics and BLIP VM-speed baseline."
+            ),
             "initial_offline_ids": report["initial_offline_ids"],
             "synced_ids": report["synced_ids"],
             "comparison": summary["sequence"],

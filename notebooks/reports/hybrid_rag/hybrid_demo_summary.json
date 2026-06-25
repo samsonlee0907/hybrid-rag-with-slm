@@ -1,6 +1,7 @@
 {
   "notebook": "C:/Users/samsonlee/.copilot/chats/322e2b6f-6b83-4c84-9e31-d4e317f2689f/smartxr-hybrid-rag-starter/notebooks/Hybrid-RAG.ipynb",
-  "selected_captioner": "BLIP",
+  "selected_captioner": "Moondream",
+  "selection_assumption": "Moondream is selected for the iOS target architecture under an assumed Core ML / MLX optimized runtime. The A10 VM result is not an iPhone benchmark; it only shows Moondream CPU fallback semantics and BLIP VM-speed baseline.",
   "initial_offline_ids": [
     "INC-001",
     "INC-002",
