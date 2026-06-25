@@ -1,0 +1,52 @@
+{
+  "notebook": "C:/Users/samsonlee/.copilot/chats/322e2b6f-6b83-4c84-9e31-d4e317f2689f/smartxr-hybrid-rag-starter/notebooks/Local-Offline-RAG.ipynb",
+  "query_images_indexed": false,
+  "indexed_offline_count": 6,
+  "captioner_decision_for_hybrid": "Use BLIP for the A10 VM hybrid flow; keep Moondream as the richer semantic comparator/future mobile-optimized candidate.",
+  "comparison": [
+    {
+      "id": "qry_001_water_ingress",
+      "scenario": "Held-out basement water ingress field photo",
+      "blip_top": "INC-001",
+      "blip_score": 0.8561,
+      "blip_caption_seconds": 0.249,
+      "moondream_top": "INC-001",
+      "moondream_score": 0.8604,
+      "moondream_caption_seconds": 221.787,
+      "moondream_caption": "A construction-site issue visible is a large puddle of water on the ground near a concrete wall.  The water appears to be leaking from the wall, potentially due to structural damage or water intrusion. The field condition appears to be damp and possibly wet."
+    },
+    {
+      "id": "qry_002_column_honeycombing",
+      "scenario": "Held-out concrete column honeycombing field photo",
+      "blip_top": "INC-002",
+      "blip_score": 0.8443,
+      "blip_caption_seconds": 0.137,
+      "moondream_top": "INC-002",
+      "moondream_score": 0.8531,
+      "moondream_caption_seconds": 220.777,
+      "moondream_caption": "A damaged concrete pillar reveals a crack and exposed rebar, indicative of ongoing construction or repair work. The site appears dusty and unfinished, suggesting poor workmanship or inadequate maintenance."
+    },
+    {
+      "id": "qry_003_scaffold_edge_protection",
+      "scenario": "Held-out scaffold edge protection field photo",
+      "blip_top": "INC-005",
+      "blip_score": 0.8299,
+      "blip_caption_seconds": 0.125,
+      "moondream_top": "INC-005",
+      "moondream_score": 0.8029,
+      "moondream_caption_seconds": 219.986,
+      "moondream_caption": "A hole in the concrete surface is visible, likely caused by excavation work.  The site appears unfinished and under construction, with exposed metal scaffolding and exposed concrete."
+    },
+    {
+      "id": "qry_004_rebar_congestion",
+      "scenario": "Held-out rebar congestion field photo",
+      "blip_top": "INC-003",
+      "blip_score": 0.826,
+      "blip_caption_seconds": 0.162,
+      "moondream_top": "INC-003",
+      "moondream_score": 0.8531,
+      "moondream_caption_seconds": 224.41,
+      "moondream_caption": "A construction-site issue visible in the image is the exposed rebar, which appears rusted and corroded. This defect poses a safety hazard, as rusted rebar can weaken the structure or cause it to collapse. Considering the site's wooden frame and wooden planks, the field condition appears to be relatively new or recently constructed."
+    }
+  ]
+}

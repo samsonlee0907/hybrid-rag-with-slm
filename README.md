@@ -150,6 +150,19 @@ The offline and hybrid comparison notebooks use `--generator template` for deter
 
 ### Real local inference experiment
 
+Canonical demo notebooks:
+
+| Notebook | Purpose | Clean report folder |
+| --- | --- | --- |
+| `notebooks/Local-Offline-RAG.ipynb` | Offline-only held-out image queries, BLIP vs Moondream semantic comparison, and Phi-4-mini grounded local answers. | `notebooks/reports/local_offline_rag/` |
+| `notebooks/Hybrid-RAG.ipynb` | Initial offline search, search-history-driven AI Search sync, later enriched offline search, and full online comparison. | `notebooks/reports/hybrid_rag/` |
+
+Rebuild the canonical notebooks and normalized report folders:
+
+```bash
+python scripts/build_final_demo_notebooks.py
+```
+
 For a non-deterministic local run on the A10 VM, use:
 
 - BLIP (`Salesforce/blip-image-captioning-base`) to produce a short local caption from the query photo.

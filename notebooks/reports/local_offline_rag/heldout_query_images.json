@@ -1,0 +1,46 @@
+{
+  "purpose": "held-out query-only images for real local CV-RAG retrieval; these images are not indexed",
+  "generated_at": "2026-06-25T03:04:43.479945+00:00",
+  "generation": {
+    "endpoint": "https://proj-samsonlee-swedence-resource.cognitiveservices.azure.com/",
+    "deployment": "gpt-image-1.5",
+    "api_version": "2025-04-01-preview",
+    "size": "1024x1024",
+    "quality": "medium",
+    "prompt_style": "photorealistic smartphone construction-site field photo"
+  },
+  "queries": [
+    {
+      "id": "qry_001_water_ingress",
+      "scenario": "Held-out basement water ingress field photo",
+      "expected_incident_id": "INC-001",
+      "query": "A new site photo shows active water seepage and damp staining along a basement retaining wall construction joint. What previous case is most relevant and what should we do next?",
+      "query_image": "notebooks/assets/real_local_inference/query_images/qry_001_water_ingress_heldout.png",
+      "image_generation_prompt": "Photorealistic smartphone photo taken by a site engineer in a basement plantroom corridor. Show active water seepage and damp staining along a concrete retaining wall construction joint, with puddling at the wall base, temporary lighting, dust, and construction materials nearby. The scene should look like a real inspection photo, not a diagram. No readable text, arrows, labels, logos, UI overlays, injuries, or dramatic flooding."
+    },
+    {
+      "id": "qry_002_column_honeycombing",
+      "scenario": "Held-out concrete column honeycombing field photo",
+      "expected_incident_id": "INC-002",
+      "query": "A newly stripped concrete column face has honeycombing, exposed aggregate, and rough voids near the lower lift. Which previous case matches and what action is required?",
+      "query_image": "notebooks/assets/real_local_inference/query_images/qry_002_column_honeycombing_heldout.png",
+      "image_generation_prompt": "Photorealistic handheld construction inspection photo of a reinforced concrete column after formwork removal. Show honeycombing, rough voids, exposed aggregate, and uneven concrete texture near the lower lift, with formwork debris and a dusty slab in the background. Realistic lighting and slight smartphone perspective. No labels, annotations, readable text, logos, cartoons, or injuries."
+    },
+    {
+      "id": "qry_003_scaffold_edge_protection",
+      "scenario": "Held-out scaffold edge protection field photo",
+      "expected_incident_id": "INC-005",
+      "query": "A field photo shows an open slab edge beside scaffold access with incomplete guardrails and a fall exposure. What similar case should we use and what immediate controls are needed?",
+      "query_image": "notebooks/assets/real_local_inference/query_images/qry_003_scaffold_edge_protection_heldout.png",
+      "image_generation_prompt": "Photorealistic construction-site smartphone photo from a site safety walk. Show an open slab edge beside scaffold access where guardrails or toe boards are incomplete, with temporary barriers nearby, scaffold stairs or access platform visible, and a clear fall hazard. Workers may appear far away in PPE with non-identifiable faces. No readable signs, text, arrows, labels, logos, gore, or active accident."
+    },
+    {
+      "id": "qry_004_rebar_congestion",
+      "scenario": "Held-out rebar congestion field photo",
+      "expected_incident_id": "INC-003",
+      "query": "The photo shows congested reinforcement at a beam-column joint before concrete pour, with tight bar spacing and limited access for vibration. What previous case applies and what should be checked?",
+      "query_image": "notebooks/assets/real_local_inference/query_images/qry_004_rebar_congestion_heldout.png",
+      "image_generation_prompt": "Photorealistic close smartphone inspection photo of a beam-column joint before concrete pouring. Show dense congested reinforcement bars, tight spacing, couplers or links, formwork edges, and limited room for concrete placement and vibration. Make it look like a real construction-site quality inspection image with dust and natural site lighting. No diagrams, labels, readable text, arrows, logos, or UI overlays."
+    }
+  ]
+}

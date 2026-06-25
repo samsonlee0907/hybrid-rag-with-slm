@@ -1,0 +1,50 @@
+{
+  "notebook": "C:/Users/samsonlee/.copilot/chats/322e2b6f-6b83-4c84-9e31-d4e317f2689f/smartxr-hybrid-rag-starter/notebooks/Hybrid-RAG.ipynb",
+  "selected_captioner": "BLIP",
+  "initial_offline_ids": [
+    "INC-001",
+    "INC-002",
+    "INC-005"
+  ],
+  "synced_ids": [
+    "ONL-007",
+    "ONL-010",
+    "ONL-011"
+  ],
+  "comparison": [
+    {
+      "scenario": "Known concrete defect already cached",
+      "initial_top": "INC-002",
+      "enriched_offline_top": "INC-002",
+      "online_top": "INC-002",
+      "synced_ids": []
+    },
+    {
+      "scenario": "Water ingress becomes electrical safety issue",
+      "initial_top": "INC-001",
+      "enriched_offline_top": "ONL-007",
+      "online_top": "ONL-007",
+      "synced_ids": [
+        "ONL-007"
+      ]
+    },
+    {
+      "scenario": "Temporary works prop not in local pack",
+      "initial_top": "INC-005",
+      "enriched_offline_top": "ONL-010",
+      "online_top": "ONL-010",
+      "synced_ids": [
+        "ONL-010"
+      ]
+    },
+    {
+      "scenario": "Confined space gas alarm not in local pack",
+      "initial_top": "INC-005",
+      "enriched_offline_top": "ONL-011",
+      "online_top": "ONL-011",
+      "synced_ids": [
+        "ONL-011"
+      ]
+    }
+  ]
+}
