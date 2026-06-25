@@ -12,7 +12,7 @@ import torch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from cv_rag.enriched_dataset import convert_enriched_incidents
-from cv_rag.models import BlipImageCaptioner, Phi4MiniOnnxGenerator, set_offline_mode
+from cv_rag.models import Phi4MiniOnnxGenerator, load_image_captioner, set_offline_mode
 from cv_rag.pipeline import build_cv_index, build_prompt, search_cv_index
 from online_rag.enriched_data import get_enriched_incidents
 
@@ -26,6 +26,7 @@ def main() -> None:
     parser.add_argument("--workspace", default="notebooks/assets/cv_rag_enriched")
     parser.add_argument("--db", default=None)
     parser.add_argument("--device", default="cuda", choices=["auto", "cpu", "cuda"])
+    parser.add_argument("--caption-device", default=None, choices=["auto", "cpu", "cuda"])
     parser.add_argument("--query", default=DEFAULT_QUERY)
     parser.add_argument(
         "--query-set",
@@ -36,7 +37,13 @@ def main() -> None:
         "--query-image",
         default="notebooks/assets/cv_rag_enriched/images/inc_001_basement_wall_water_ingress_observed_at_cons.png",
     )
-    parser.add_argument("--caption-model", default="Salesforce/blip-image-captioning-base")
+    parser.add_argument("--captioner", choices=["blip", "moondream"], default="blip")
+    parser.add_argument("--caption-model", default=None)
+    parser.add_argument("--moondream-revision", default="2025-06-21")
+    parser.add_argument(
+        "--caption-prompt",
+        default=None,
+    )
     parser.add_argument("--phi4-onnx-model-dir", required=True)
     parser.add_argument("--phi4-execution-provider", default="cuda", choices=["cuda", "cpu", "follow_config"])
     parser.add_argument("--top-k", type=int, default=3)
@@ -61,18 +68,34 @@ def main() -> None:
     enriched = get_enriched_incidents(args.incidents_json)
     incidents = convert_enriched_incidents(enriched, source_scope="offline_seed_enriched")
     indexed_count = build_cv_index(str(workspace), db_path, device=args.device, incidents=incidents, clean=True, render_images=False)
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
-    captioner = BlipImageCaptioner(args.caption_model, device=args.device)
+    caption_device = args.caption_device or args.device
+    caption_model = args.caption_model or _default_caption_model(args.captioner)
+    captioner = load_image_captioner(
+        args.captioner,
+        model_name=caption_model,
+        revision=args.moondream_revision,
+        device=caption_device,
+    )
     query_results = []
     for item in query_items:
         query_image = Path(item["query_image"])
         caption_started = time.perf_counter()
-        image_caption = captioner.caption(str(query_image))
+        if args.caption_prompt is None:
+            image_caption = captioner.caption(str(query_image))
+        else:
+            image_caption = captioner.caption(str(query_image), prompt=args.caption_prompt)
         caption_duration = time.perf_counter() - caption_started
         query_results.append(
             {
                 **item,
-                "query_image_caption_model": args.caption_model,
+                "query_image_captioner": args.captioner,
+                "query_image_caption_model": caption_model,
+                "query_image_caption_revision": args.moondream_revision if args.captioner == "moondream" else None,
+                "query_image_caption_device": caption_device,
                 "query_image_caption": image_caption,
                 "timings_seconds": {"caption": round(caption_duration, 3)},
             }
@@ -109,6 +132,10 @@ def main() -> None:
         "indexed_count": indexed_count,
         "query_set": args.query_set,
         "query_images_indexed": False,
+        "query_image_captioner": args.captioner,
+        "query_image_caption_model": caption_model,
+        "query_image_caption_revision": args.moondream_revision if args.captioner == "moondream" else None,
+        "query_image_caption_device": caption_device,
         "query_embedding_model": "openai/clip-vit-base-patch32",
         "query_vector_inputs": ["text", "image", "caption"],
         "vector_store": "SQLite brute-force cosine similarity",
@@ -154,6 +181,14 @@ def _load_query_items(args: argparse.Namespace) -> list[dict]:
             }
         )
     return queries
+
+
+def _default_caption_model(captioner: str) -> str:
+    if captioner == "blip":
+        return "Salesforce/blip-image-captioning-base"
+    if captioner == "moondream":
+        return "vikhyatk/moondream2"
+    raise ValueError(f"Unsupported captioner kind: {captioner}")
 
 
 def _single_query_compat_fields(item: dict) -> dict:

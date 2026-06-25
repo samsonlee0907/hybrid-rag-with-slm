@@ -24,6 +24,7 @@ def main() -> None:
     parser.add_argument("--offline-report", default=str(OFFLINE_ASSETS / "offline_eval_report.json"))
     parser.add_argument("--context-report", default=str(CONTEXT_ASSETS / "context_lifecycle_report.json"))
     parser.add_argument("--real-local-report", default=str(REAL_LOCAL_ASSETS / "real_local_inference_report.json"))
+    parser.add_argument("--moondream-report", default=str(REAL_LOCAL_ASSETS / "moondream_real_local_inference_report.json"))
     parser.add_argument("--offline-output", default=str(NOTEBOOKS_DIR / "offline_cv_rag_results.ipynb"))
     parser.add_argument("--context-output", default=str(NOTEBOOKS_DIR / "field_context_lifecycle_hybrid_rag.ipynb"))
     parser.add_argument("--real-local-output", default=str(NOTEBOOKS_DIR / "real_local_inference_cv_rag.ipynb"))
@@ -32,7 +33,12 @@ def main() -> None:
     build_offline_notebook(Path(args.offline_report), Path(args.offline_output))
     build_context_notebook(Path(args.context_report), Path(args.context_output))
     if Path(args.real_local_report).exists():
-        build_real_local_notebook(Path(args.real_local_report), Path(args.real_local_output))
+        comparison_report = Path(args.moondream_report)
+        build_real_local_notebook(
+            Path(args.real_local_report),
+            Path(args.real_local_output),
+            comparison_report if comparison_report.exists() else None,
+        )
 
 
 def build_offline_notebook(report_path: Path, output_path: Path) -> None:
@@ -290,9 +296,11 @@ def build_context_notebook(report_path: Path, output_path: Path) -> None:
     _write_notebook(output_path, cells)
 
 
-def build_real_local_notebook(report_path: Path, output_path: Path) -> None:
+def build_real_local_notebook(report_path: Path, output_path: Path, comparison_report_path: Path | None = None) -> None:
     report = _read_json(report_path)
     queries = report.get("queries") or [_single_real_local_query(report)]
+    comparison_report = _read_json(comparison_report_path) if comparison_report_path else None
+    comparison_queries = comparison_report.get("queries", []) if comparison_report else []
 
     cells = [
         _markdown(
@@ -339,6 +347,18 @@ def build_real_local_notebook(report_path: Path, output_path: Path) -> None:
             _real_local_queries_html(queries),
             execution_count=1,
         ),
+    ]
+    if comparison_report:
+        cells.append(
+            _markdown(
+                "## BLIP vs Moondream caption comparison\n\n"
+                "Both runs use the same held-out query-only photos and the same local CLIP + SQLite retrieval path. "
+                "The difference is the image caption/VQA model whose output is appended to the worker query before retrieval.\n\n"
+                + _real_local_comparison_table(queries, comparison_queries)
+            )
+        )
+    cells.extend(
+        [
         _markdown(
             "## Retrieval summary\n\n"
             + _markdown_table(
@@ -372,7 +392,15 @@ def build_real_local_notebook(report_path: Path, output_path: Path) -> None:
                 ],
             )
         ),
-    ]
+        ]
+    )
+    if comparison_report:
+        cells.append(
+            _markdown(
+                "## Moondream-generated responses\n\n"
+                + "\n\n".join(_real_local_answer_md(item) for item in comparison_queries)
+            )
+        )
 
     _write_notebook(output_path, cells)
 
@@ -563,6 +591,33 @@ def _real_local_queries_html(queries: list[dict[str, Any]]) -> str:
         blocks.append("</div>")
     blocks.append("</div>")
     return "\n".join(blocks)
+
+
+def _real_local_comparison_table(base_queries: list[dict[str, Any]], comparison_queries: list[dict[str, Any]]) -> str:
+    comparison_by_id = {item.get("id"): item for item in comparison_queries}
+    rows = []
+    for base in base_queries:
+        comparison = comparison_by_id.get(base.get("id"))
+        if not comparison:
+            continue
+        base_hit = base["hits"][0]
+        comparison_hit = comparison["hits"][0]
+        rows.append(
+            [
+                base["scenario"],
+                _compact_answer(base["query_image_caption"], limit=220),
+                _compact_answer(comparison["query_image_caption"], limit=220),
+                f"{base_hit['incident_id']} (`{base_hit['score']:.4f}`)",
+                f"{comparison_hit['incident_id']} (`{comparison_hit['score']:.4f}`)",
+                "yes" if comparison.get("matched_expected") else "no",
+            ]
+        )
+    if not rows:
+        return "_No comparable Moondream results were available._"
+    return _markdown_table(
+        ["Scenario", "BLIP caption", "Moondream caption/VQA", "BLIP top hit", "Moondream top hit", "Moondream matched"],
+        rows,
+    )
 
 
 def _thumbnail_data_uri(path: Path, max_size: tuple[int, int] = (420, 280)) -> str:

@@ -188,6 +188,17 @@ The recorded VM result is in `notebooks/real_local_inference_cv_rag.ipynb` and `
 | Scaffold edge protection | `INC-005` | `INC-005` | `0.8299` |
 | Rebar congestion | `INC-003` | `INC-003` | `0.8260` |
 
+Moondream2 was also tested as a richer image caption/VQA layer using the official `vikhyatk/moondream2` model at revision `2025-06-21`. On the 4 GB `NVIDIA A10-4Q` profile, Moondream2 did not fit on CUDA and fell back to CPU captioning. It still produced richer construction-site descriptions and kept top-1 retrieval correct for all four held-out queries, but CPU caption latency was about 220 seconds per image in this VM profile.
+
+| Held-out query | BLIP top score | Moondream top score | Moondream caption device |
+| --- | --- | --- | --- |
+| Basement water ingress | `0.8561` | `0.8604` | CPU |
+| Column honeycombing | `0.8443` | `0.8531` | CPU |
+| Scaffold edge protection | `0.8299` | `0.8029` | CPU |
+| Rebar congestion | `0.8260` | `0.8531` | CPU |
+
+Interpretation: Moondream is a better semantic image-understanding candidate than BLIP, but this VM is too memory-limited for a practical CUDA Moondream2 run. For mobile production, evaluate an Apple-optimized Core ML / MLX Moondream package or a smaller official Moondream release if available; for this A10 POC, BLIP remains the fast caption baseline and Moondream is documented as a quality-oriented CPU comparison.
+
 To regenerate the held-out query-only image pack:
 
 ```bash
@@ -195,6 +206,20 @@ python scripts/generate_heldout_query_images.py \
   --endpoint "$AZURE_IMAGE_ENDPOINT" \
   --deployment "$AZURE_IMAGE_DEPLOYMENT" \
   --bearer-token "$AZURE_IMAGE_BEARER_TOKEN"
+```
+
+To rerun the Moondream comparison:
+
+```bash
+python3 scripts/run_real_local_inference_demo.py \
+  --workspace notebooks/assets/cv_rag_enriched \
+  --device cuda \
+  --captioner moondream \
+  --caption-device cpu \
+  --query-set notebooks/assets/real_local_inference/heldout_query_images.json \
+  --phi4-onnx-model-dir /opt/models/Phi-4-mini-instruct-onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4 \
+  --phi4-execution-provider follow_config \
+  --output notebooks/assets/real_local_inference/moondream_real_local_inference_report.json
 ```
 
 Example image + text retrieval query:

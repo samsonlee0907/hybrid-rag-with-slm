@@ -179,6 +179,59 @@ class BlipImageCaptioner:
         return self.processor.decode(outputs[0], skip_special_tokens=True).strip()
 
 
+class MoondreamImageCaptioner:
+    def __init__(
+        self,
+        model_name: str = "vikhyatk/moondream2",
+        revision: str = "2025-06-21",
+        device: str = "auto",
+    ) -> None:
+        self.info = resolve_device(device)
+        self.model_name = model_name
+        self.revision = revision
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+        )
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            torch_dtype=self.info.torch_dtype,
+            device_map={"": self.info.device},
+        )
+        self.model.eval()
+
+    @torch.inference_mode()
+    def caption(
+        self,
+        image_path: str,
+        prompt: str = (
+            "Describe the construction-site issue in this image. Mention the visible defect or hazard, "
+            "where it appears, and the likely field condition in one or two sentences."
+        ),
+    ) -> str:
+        image = Image.open(image_path).convert("RGB")
+        if prompt:
+            return self.model.query(image, prompt)["answer"].strip()
+        return self.model.caption(image, length="normal")["caption"].strip()
+
+
+def load_image_captioner(
+    kind: str,
+    *,
+    model_name: str | None = None,
+    revision: str = "2025-06-21",
+    device: str = "auto",
+):
+    if kind == "blip":
+        return BlipImageCaptioner(model_name or "Salesforce/blip-image-captioning-base", device=device)
+    if kind == "moondream":
+        return MoondreamImageCaptioner(model_name or "vikhyatk/moondream2", revision=revision, device=device)
+    raise ValueError(f"Unsupported captioner kind: {kind}")
+
+
 class EvidenceTemplateGenerator:
     def generate(self, prompt: str, max_new_tokens: int = 320) -> str:
         evidence = _section_between(prompt, "Retrieved evidence:", "Worker question:")

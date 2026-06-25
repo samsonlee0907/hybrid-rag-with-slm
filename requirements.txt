@@ -9,3 +9,5 @@ accelerate>=0.33.0,<2
 # Optional for Phi-4 ONNX local generation:
 # onnxruntime-genai --pre            # CPU/mobile package
 # onnxruntime-genai-cuda --pre       # CUDA package
+# Optional for Moondream2 caption/VQA comparison:
+# einops
