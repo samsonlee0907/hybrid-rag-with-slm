@@ -2,18 +2,19 @@
 
 This starter kit shows how to realize a hybrid field-copilot stack with:
 
-- **Offline-first mobile edge**: local case pack, local vector search, Phi-4-mini answer drafting.
-- **Hybrid online path**: Azure AI Search + Foundry / Azure OpenAI when connectivity is available.
+- **Offline-first mobile edge**: held-out photo query, local visual caption, local vector search, and Phi-4-mini grounded answer drafting.
+- **Hybrid online path**: Azure AI Search plus Foundry / Azure OpenAI when connectivity is available.
 - **Pack update path**: cloud ingestion builds signed delta packs that the device can cache for disconnected use.
 
-The code is intentionally split into an **edge runtime prototype** and a **cloud API skeleton** so the team can validate behavior on a laptop first, then port the same interfaces to iOS/Swift.
+The code is intentionally split into an **edge runtime prototype**, **real local inference scripts**, and a **cloud API skeleton** so the team can validate behavior on an A10 VM first, then port the same interfaces to iOS/Swift.
 
 ## Recommended implementation stack
 
-| Layer | MVP recommendation | Production notes |
+| Layer | Current recommendation | Production notes |
 | --- | --- | --- |
-| On-device SLM | `microsoft/Phi-4-mini-instruct-onnx` int4 CPU/mobile with ONNX Runtime GenAI | Use 2K-4K context on phone to control memory and thermals. Keep long-context or VLM reasoning in cloud. |
-| Local text embedding | `intfloat/multilingual-e5-small` converted to ONNX | This prototype uses a deterministic hashing embedder so it runs without model downloads; replace with ONNX Runtime inference for real retrieval quality. |
+| Local visual caption / VQA | Moondream2 for the target iOS architecture, assuming an optimized Core ML / MLX package | The A10 VM could not run Moondream2 on CUDA and fell back to CPU. That is a semantic-quality test, not an iPhone benchmark. BLIP remains the fast A10 VM baseline. |
+| Local image/text embedding | `openai/clip-vit-base-patch32` in the POC; evaluate MobileCLIP or a Core ML / ONNX CLIP variant for iOS | CLIP/MobileCLIP performs retrieval vectorization. Moondream improves query understanding but does not replace vector search. |
+| On-device SLM | `microsoft/Phi-4-mini-instruct-onnx` CPU/mobile int4 with ONNX Runtime GenAI | Phi-4-mini is text-only. It receives retrieved evidence plus the local image caption as text and drafts cited guidance. |
 | Local vector store | SQLite case pack; production can use `sqlite-vec` or USearch | `sqlite-vec` is pure C and runs anywhere SQLite runs. USearch has Swift/iOS bindings and HNSW ANN for larger packs. |
 | Encrypted storage | SQLCipher + GRDB.swift / SQLite.swift on iOS | Python prototype uses normal SQLite; iOS app should use SQLCipher. |
 | Cloud retrieval | Azure AI Search vector/hybrid search | Use classic RAG GA path first; pilot agentic retrieval when latency/preview status is acceptable. |
@@ -23,25 +24,25 @@ The code is intentionally split into an **edge runtime prototype** and a **cloud
 ## Information flow
 
 ```mermaid
-flowchart LR
-  Worker[Field worker photo + text query] --> Router[Connectivity-aware query router]
-  Router -->|offline| Embed[Local embedding model]
-  Embed --> LocalIndex[Local vector store in encrypted case pack]
-  LocalIndex --> Evidence[Evidence builder with citations + policy rules]
-  Evidence --> Phi[Phi-4-mini ONNX int4 via ONNX Runtime GenAI]
-  Phi --> Action[Action card: steps, caveats, escalation]
-
-  Router -->|online if reachable| BFF[Azure API Management + Mobile BFF]
-  BFF --> Search[Azure AI Search hybrid/vector retrieval]
-  Search --> CloudLLM[Foundry / Azure OpenAI GPT or VLM]
-  CloudLLM --> Evidence
-
-  Action --> Outbox[Offline outbox: feedback/photos/case draft]
-  Outbox -->|sync when online| Ingestion[Blob/Data Lake + Content Understanding + Vision embeddings]
-  Ingestion --> PackBuilder[Pack builder]
-  PackBuilder --> SignedPack[Signed delta pack manifest]
-  SignedPack --> LocalIndex
+flowchart TD
+  A["Worker photo and text question"] --> B["Moondream or BLIP visual caption"]
+  A --> C["CLIP or MobileCLIP image embedding"]
+  B --> D["Text and caption embedding"]
+  C --> E["Fused query vector"]
+  D --> E
+  E --> F["Connectivity available"]
+  F -->|No or weak| G["Local SQLite vector store"]
+  G --> H["Evidence with citations"]
+  H --> I["Phi-4-mini text answer"]
+  F -->|Yes| J["Mobile BFF"]
+  J --> K["Azure AI Search full index"]
+  K --> L["Cloud GPT or VLM optional"]
+  K --> M["Delta cases selected for cache"]
+  M --> N["Signed offline pack update"]
+  N --> G
 ```
+
+The Mermaid block uses quoted node labels and simple edge labels so it can be pasted directly into a GitHub issue without the rendering failures caused by punctuation-heavy unquoted labels.
 
 ## Quick start: offline prototype
 
@@ -94,7 +95,7 @@ The cloud API intentionally returns a clear error until Azure settings are provi
 
 ## Offline CV-RAG POC
 
-This POC avoids Azure AI Search and cloud inference. It generates synthetic construction incident records and images, embeds the images with local CLIP, stores vectors in SQLite, retrieves visually similar incidents from a text query, and drafts an incident response from local evidence.
+This path avoids Azure AI Search and cloud inference at query time. The final offline notebook uses held-out query photos that are not indexed, local image captioning, local CLIP image/text/caption embeddings, SQLite vector search, and Phi-4-mini ONNX CPU/mobile answer drafting from retrieved evidence.
 
 ```powershell
 pip install -r requirements.txt
@@ -130,27 +131,26 @@ For local SLM answer drafting, use Phi-4-mini after the model is cached on the V
 python scripts/run_cv_rag_poc.py --workspace data/cv-rag --device cuda --generator phi4
 ```
 
-The CV-RAG POC uses:
+The offline CV-RAG path uses:
 
 - `openai/clip-vit-base-patch32` for local image/text embeddings.
+- BLIP or Moondream2 for local visual captions. BLIP is the fast A10 VM baseline; Moondream2 is the target iOS visual-understanding assumption.
 - SQLite as the local vector store prototype.
-- `microsoft/Phi-4-mini-instruct` as the optional local text answer generator.
+- `microsoft/Phi-4-mini-instruct-onnx` CPU/mobile int4 as the local text answer generator in the real local report.
 - A template generator as a deterministic fallback for resource-constrained/offline smoke tests.
 
-The local image path is handled by CLIP, not by Phi-4-mini-instruct:
+The local image path is handled before Phi-4-mini-instruct:
 
-1. A worker text query is embedded locally with CLIP.
-2. If `--query-image` is provided, the query photo is also embedded locally with CLIP and fused with the text vector.
-3. SQLite returns the closest cached incident evidence.
-4. Phi-4-mini-instruct receives the retrieved evidence as text and drafts the response.
+1. The query photo is captioned locally by BLIP or Moondream2.
+2. CLIP embeds the worker text, local image caption, and query image.
+3. SQLite returns the closest cached incident evidence from the local case pack.
+4. Phi-4-mini-instruct receives the retrieved evidence plus caption as text and drafts the response.
 
 Phi-4-mini-instruct is not a vision model. If the SLM itself must directly inspect image + text input, use a vision-capable Phi model such as `microsoft/Phi-4-multimodal-instruct`; Microsoft describes it as processing text, image, and audio inputs and generating text outputs. See the official model cards for [`Phi-4-mini-instruct`](https://huggingface.co/microsoft/Phi-4-mini-instruct) and [`Phi-4-multimodal-instruct`](https://huggingface.co/microsoft/Phi-4-multimodal-instruct).
 
-The offline and hybrid comparison notebooks use `--generator template` for deterministic, resource-safe validation on the 4 GB A10 vGPU VM. The real local inference notebook below records an actual Phi-4-mini ONNX run.
+`Local-Offline-RAG.ipynb` records the real local Phi-4-mini ONNX CPU/mobile answer path. `Hybrid-RAG.ipynb` uses deterministic answer generation for the lifecycle comparison so the notebook focuses on offline context, online sync, and later offline enrichment.
 
-### Real local inference experiment
-
-Canonical demo notebooks:
+### Canonical final demo notebooks
 
 | Notebook | Purpose | Clean report folder |
 | --- | --- | --- |
@@ -194,7 +194,7 @@ python3 scripts/run_real_local_inference_demo.py \
   --phi4-execution-provider follow_config
 ```
 
-The recorded VM result is in `notebooks/real_local_inference_cv_rag.ipynb` and `notebooks/assets/real_local_inference/real_local_inference_report.json`. The successful run indexed six local enriched incidents and used four separate held-out query photos that were not indexed. Each held-out photo retrieved the expected historical case as the top-1 match:
+The recorded VM results are normalized into `notebooks/reports/local_offline_rag/` and rendered by `notebooks/Local-Offline-RAG.ipynb`. The successful run indexed six local enriched incidents and used four separate held-out query photos that were not indexed. Each held-out photo retrieved the expected historical case as the top-1 match:
 
 | Held-out query | Expected case | Top retrieved case | Score |
 | --- | --- | --- | --- |
@@ -212,7 +212,7 @@ Moondream2 was also tested as a richer image caption/VQA layer using the officia
 | Scaffold edge protection | `0.8299` | `0.8029` | CPU |
 | Rebar congestion | `0.8260` | `0.8531` | CPU |
 
-Interpretation: Moondream is a better semantic image-understanding candidate than BLIP, but this VM is too memory-limited for a practical CUDA Moondream2 run. For mobile production, evaluate an Apple-optimized Core ML / MLX Moondream package or a smaller official Moondream release if available; for this A10 POC, BLIP remains the fast caption baseline and Moondream is documented as a quality-oriented CPU comparison.
+Interpretation: Moondream is the recommended visual-understanding layer for the target iOS architecture, assuming an optimized Core ML / MLX package. This A10 VM is too memory-limited for a practical CUDA Moondream2 run, so its CPU timing is not an iPhone estimate. For this A10 POC, BLIP remains the fast caption baseline and Moondream is documented as the quality-oriented semantic comparison.
 
 To regenerate the held-out query-only image pack:
 
@@ -247,7 +247,7 @@ python scripts/run_cv_rag_poc.py \
   --query-image data/cv-rag/images/inc_002_honeycombing.png
 ```
 
-See `notebooks/offline_cv_rag_results.ipynb` for a documented enriched six-scenario run, regenerated images, local vector-store contents, retrieval results, and clean grounded answer examples.
+See `notebooks/Local-Offline-RAG.ipynb` for the documented offline-only run, held-out image query comparison, BLIP vs Moondream captions, local vector-store contents, retrieval results, and clean grounded answer examples.
 
 ## Hybrid online/offline comparison POC
 
@@ -283,7 +283,7 @@ python scripts\generate_enriched_images.py `
   --output-dir notebooks\assets\cv_rag_enriched
 ```
 
-If image endpoint variables are not supplied, `scripts\generate_enriched_images.py --mode diagram` writes deterministic fallback diagrams instead. The offline and hybrid notebooks should be rebuilt after retrieval reports are refreshed:
+If image endpoint variables are not supplied, `scripts\generate_enriched_images.py --mode diagram` writes deterministic fallback diagrams instead. The canonical notebooks should be rebuilt after retrieval reports are refreshed:
 
 ```powershell
 python scripts\run_enriched_offline_eval.py `
@@ -293,7 +293,7 @@ python scripts\run_enriched_offline_eval.py `
   --query-mode image-text `
   --preserve-images
 
-python scripts\build_notebooks.py
+python scripts\build_final_demo_notebooks.py
 ```
 
 Build the Azure AI Search index and run the comparison:
@@ -315,6 +315,22 @@ python scripts\run_offline_online_comparison.py `
   --incidents-json notebooks\assets\online_comparison\gpt54mini_enriched_incidents.json
 ```
 
+Run the context-lifecycle hybrid flow with Moondream visual captions. The two-scenario smoke run is the practical A10 VM validation path because Moondream falls back to CPU on this 4 GB vGPU profile:
+
+```powershell
+python scripts\run_context_lifecycle_demo.py `
+  --endpoint $env:SEARCH_ENDPOINT `
+  --key $env:SEARCH_KEY `
+  --index construction-incidents-online `
+  --device cuda `
+  --generator template `
+  --captioner moondream `
+  --caption-device cpu `
+  --scenario-ids water-ingress-electrical temporary-works-prop `
+  --output notebooks\assets\context_lifecycle\context_lifecycle_moondream_smoke_report.json `
+  --summary-output notebooks\assets\context_lifecycle\context_lifecycle_moondream_smoke_summary.json
+```
+
 The verified VM run showed:
 
 - Full offline enriched pack: 6 cases, 6 example queries, 100% top-1 retrieval on the synthetic pack.
@@ -322,8 +338,9 @@ The verified VM run showed:
 - When connectivity resumes, Azure AI Search retrieves and syncs `ONL-007`, `ONL-010`, and `ONL-011`.
 - A later offline search retrieves those synced online-only cases from the local SQLite delta context.
 - Full online search was run across 8 queries covering water/electrical risk, falling objects, spalling, temporary works, confined space, crane/overhead service, MEP clash, and lift-core crack.
+- The Moondream two-scenario smoke run uses local image captions before online sync and stages `ONL-007` and `ONL-010`.
 
-See `notebooks/field_context_lifecycle_hybrid_rag.ipynb` for the context-lifecycle run and `notebooks/assets/context_lifecycle/context_lifecycle_summary.json` for the compact machine-readable result summary.
+See `notebooks/Hybrid-RAG.ipynb` for the context-lifecycle run and `notebooks/reports/hybrid_rag/` for normalized machine-readable result summaries, including `moondream_hybrid_smoke_report.json`.
 
 ## Directory layout
 
@@ -342,10 +359,14 @@ scripts/
   build_pack.py      Converts JSONL cases into a local pack DB.
   query_offline.py   Runs offline RAG against the local pack.
   run_cv_rag_poc.py  Runs synthetic offline CV-RAG with image vectorization.
+  run_real_local_inference_demo.py
+                    Runs held-out query photos through BLIP or Moondream captions, CLIP retrieval, and Phi-4-mini ONNX.
   generate_enriched_incidents_with_foundry.py
                     Uses a Foundry / Azure OpenAI chat deployment to generate richer synthetic incident records.
   generate_enriched_images.py
                     Regenerates illustrative incident images from enriched captions and visual clues.
+  generate_heldout_query_images.py
+                    Generates query-only photorealistic field photos that are not indexed.
   run_enriched_offline_eval.py
                     Runs the full offline enriched CV-RAG evaluation.
   build_online_index.py
@@ -353,12 +374,14 @@ scripts/
   run_offline_online_comparison.py
                     Compares offline seed retrieval, online enriched retrieval, and synced offline delta retrieval.
   run_context_lifecycle_demo.py
-                    Demonstrates limited offline context, online resume, selective sync, and later offline search.
+                    Demonstrates limited offline context, Moondream-caption smoke runs, online resume, selective sync, and later offline search.
+  build_final_demo_notebooks.py
+                    Builds the two canonical notebooks and normalized report folders.
 cv_rag/
   enriched_dataset.py
                     Converts enriched online incident records into local CV-RAG incident records and image names.
   synthetic_data.py  Generates synthetic construction incidents and images.
-  models.py          CLIP embedder plus optional Phi-4-mini generator.
+  models.py          CLIP embedder plus BLIP, Moondream, and Phi-4-mini generator adapters.
   store.py           SQLite image-vector store.
   pipeline.py        Index and query orchestration.
 online_rag/
@@ -366,25 +389,31 @@ online_rag/
   azure_search.py    Azure AI Search vector index schema and query client.
   sync_store.py      SQLite delta store for online cases retained for later offline search.
 notebooks/
-  offline_cv_rag_results.ipynb  Documented offline CV-RAG evaluation run.
-  field_context_lifecycle_hybrid_rag.ipynb
-                    Context-lifecycle hybrid run: limited local context, online resume, synced offline delta, and full online search.
+  Local-Offline-RAG.ipynb
+                    Offline-only held-out photo queries, BLIP vs Moondream comparison, and Phi-4-mini grounded answers.
+  Hybrid-RAG.ipynb
+                    Hybrid lifecycle: initial offline, online sync, enriched offline, full online comparison, and Moondream smoke run.
+  reports/
+                    Normalized report folders for the final notebooks.
 sample_cases.jsonl   Small construction-case sample set.
 ```
 
 ## Porting notes for iPhone implementation
 
-1. Keep the Python interfaces: `Embedder`, `VectorStore`, `Generator`, `QueryRouter`.
-2. Replace `SQLiteVectorStore` with SQLCipher + `sqlite-vec` or USearch.
-3. Replace `DevelopmentHashingEmbedder` with ONNX Runtime Mobile running `multilingual-e5-small`, or precompute vectors in cloud packs if MVP scope is tight.
-4. Use ONNX Runtime GenAI for Phi-4-mini answer drafting; cap context and answer length.
-5. Treat the device answer as **evidence-grounded guidance**, not autonomous approval. Escalate high-risk safety/compliance cases to cloud or human supervisor.
+1. Keep the Python interfaces: `Captioner`, `Embedder`, `VectorStore`, `Generator`, `QueryRouter`.
+2. Use Moondream as the target iOS visual-context layer if an optimized Core ML / MLX package meets latency and thermal targets; keep BLIP or a smaller captioner as fallback.
+3. Replace the prototype SQLite store with SQLCipher plus `sqlite-vec` or USearch.
+4. Replace the POC CLIP runtime with MobileCLIP, Core ML CLIP, or ONNX Runtime Mobile depending on measured iPhone performance.
+5. Use ONNX Runtime GenAI for Phi-4-mini answer drafting; cap context and answer length because Phi-4-mini is text-only and should only receive retrieved evidence plus local captions.
+6. Treat the device answer as **evidence-grounded guidance**, not autonomous approval. Escalate high-risk safety/compliance cases to cloud or human supervisor.
 
 ## Official references used
 
 - Microsoft Phi-4-mini ONNX model card: `microsoft/Phi-4-mini-instruct-onnx`
 - Microsoft Phi-4-mini model card: `microsoft/Phi-4-mini-instruct`
 - OpenAI CLIP model card: `openai/clip-vit-base-patch32`
+- Moondream2 model card: `vikhyatk/moondream2`
+- BLIP image captioning model card: `Salesforce/blip-image-captioning-base`
 - ONNX Runtime GenAI documentation: generate loop, tokenization, KV cache, structured output support.
 - Azure AI Search RAG overview: classic hybrid search and agentic retrieval patterns.
 - Azure AI Search vector search overview: vector, hybrid, multimodal, and multilingual search.

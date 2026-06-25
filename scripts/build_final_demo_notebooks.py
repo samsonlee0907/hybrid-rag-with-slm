@@ -85,17 +85,17 @@ def build_local_offline_notebook(output_path: Path) -> None:
         _markdown(
             "## Offline execution path\n\n"
             "```mermaid\n"
-            "flowchart LR\n"
-            "  Q[Held-out worker photo + question] --> C[BLIP or Moondream local caption]\n"
-            "  Q --> E[CLIP image embedding]\n"
-            "  C --> T[CLIP text/caption embedding]\n"
-            "  E --> F[Fused query vector]\n"
+            "flowchart TD\n"
+            "  Q[\"Held-out worker photo and question\"] --> C[\"Local visual caption\"]\n"
+            "  Q --> E[\"CLIP image embedding\"]\n"
+            "  C --> T[\"CLIP text and caption embedding\"]\n"
+            "  E --> F[\"Fused query vector\"]\n"
             "  T --> F\n"
-            "  F --> S[SQLite local vector store]\n"
-            "  S --> R[Top cited historical cases]\n"
-            "  R --> P[Evidence prompt]\n"
-            "  P --> Phi[Phi-4-mini ONNX CPU/mobile]\n"
-            "  Phi --> A[Grounded field response]\n"
+            "  F --> S[\"SQLite local vector store\"]\n"
+            "  S --> R[\"Top cited historical cases\"]\n"
+            "  R --> P[\"Evidence prompt\"]\n"
+            "  P --> Phi[\"Phi-4-mini ONNX CPU mobile\"]\n"
+            "  Phi --> A[\"Grounded field response\"]\n"
             "```\n"
         ),
         _markdown(
@@ -156,7 +156,7 @@ def build_local_offline_notebook(output_path: Path) -> None:
             "- Both BLIP and Moondream achieved top-1 matches for all four held-out query images.\n"
             "- Moondream captions are more semantic and field-readable, especially for water ingress and rebar scenes.\n"
             "- On this A10 VM profile, BLIP is the practical caption choice because Moondream ran on CPU at roughly 220 seconds per image.\n"
-            "- For iPhone/mobile, Moondream remains worth evaluating through Core ML / MLX; the A10 CPU fallback is not representative of an Apple-optimized package.\n"
+            "- For the target iOS architecture, Hybrid-RAG selects Moondream under a Core ML / MLX optimization assumption; the A10 CPU fallback is not representative of an Apple-optimized package.\n"
         ),
     ]
 
@@ -193,16 +193,19 @@ def build_hybrid_notebook(output_path: Path) -> None:
         _markdown(
             "## Hybrid execution path\n\n"
             "```mermaid\n"
-            "flowchart LR\n"
-            "  Q[Worker photo + text query] --> L1[Initial offline SQLite pack]\n"
-            "  L1 --> A1[Phi-4-mini answer from limited evidence]\n"
-            "  A1 --> H[Search history: misses, low-specificity matches, escalations]\n"
-            "  H --> Planner[Phi-4-mini staging planner]\n"
-            "  Planner --> Online[Azure AI Search full index]\n"
-            "  Online --> Delta[Relevant online-only cases selected]\n"
-            "  Delta --> L2[Offline vector store enriched]\n"
-            "  L2 --> A2[Later offline answer from richer evidence]\n"
-            "  Online --> Full[Full online search comparison]\n"
+            "flowchart TD\n"
+            "  Q[\"Worker photo and text query\"] --> Caption[\"Moondream visual caption\"]\n"
+            "  Q --> Embed[\"CLIP image and text embedding\"]\n"
+            "  Caption --> Embed\n"
+            "  Embed --> L1[\"Initial offline SQLite pack\"]\n"
+            "  L1 --> A1[\"Phi-4-mini answer from limited evidence\"]\n"
+            "  A1 --> H[\"Search history and missing intent\"]\n"
+            "  H --> Planner[\"Phi-4-mini staging planner\"]\n"
+            "  Planner --> Online[\"Azure AI Search full index\"]\n"
+            "  Online --> Delta[\"Relevant online-only cases\"]\n"
+            "  Delta --> L2[\"Enriched offline vector store\"]\n"
+            "  L2 --> A2[\"Later offline answer from richer evidence\"]\n"
+            "  Online --> Full[\"Full online search comparison\"]\n"
             "```\n\n"
             "In the current report, the staging decision is reproducible: stage the top Azure AI Search result when it is an online-only case that is not already in the local pack. "
             "This is the deterministic policy view of the same role Phi-4-mini should play in production: read search history, summarize the missing intent, and decide which online evidence is worth caching."
@@ -376,7 +379,7 @@ def _captioner_decision(blip_queries: list[dict[str, Any]], moondream_queries: l
     blip_avg = sum(item["timings_seconds"]["caption"] for item in blip_queries) / len(blip_queries)
     moondream_avg = sum(item["timings_seconds"]["caption"] for item in moondream_queries) / len(moondream_queries)
     if blip_all_matched and moondream_all_matched and blip_avg < moondream_avg:
-        return "Use BLIP for the A10 VM hybrid flow; keep Moondream as the richer semantic comparator/future mobile-optimized candidate."
+        return "Use BLIP as the fast A10 VM baseline, but select Moondream for the target iOS Hybrid-RAG architecture under the Core ML / MLX optimization assumption."
     if moondream_all_matched:
         return "Use Moondream for richer semantic captions."
     return "Use BLIP as the more stable baseline for this A10 VM flow."
