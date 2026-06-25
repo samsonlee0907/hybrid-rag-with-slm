@@ -174,12 +174,28 @@ Run the real local demo:
 python3 scripts/run_real_local_inference_demo.py \
   --workspace notebooks/assets/cv_rag_enriched \
   --device cuda \
+  --query-set notebooks/assets/real_local_inference/heldout_query_images.json \
   --phi4-onnx-model-dir /opt/models/Phi-4-mini-instruct-onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4 \
-  --phi4-execution-provider follow_config \
-  --query-image notebooks/assets/cv_rag_enriched/images/inc_001_basement_wall_water_ingress_observed_at_cons.png
+  --phi4-execution-provider follow_config
 ```
 
-The recorded VM result is in `notebooks/real_local_inference_cv_rag.ipynb` and `notebooks/assets/real_local_inference/real_local_inference_report.json`. The successful run indexed six local enriched incidents, captioned the query photo as `a construction site photo of a concrete wall`, retrieved `INC-001` as the top visual/text match with score `0.8833`, and generated a grounded Phi-4-mini response in about 49 seconds including model load.
+The recorded VM result is in `notebooks/real_local_inference_cv_rag.ipynb` and `notebooks/assets/real_local_inference/real_local_inference_report.json`. The successful run indexed six local enriched incidents and used four separate held-out query photos that were not indexed. Each held-out photo retrieved the expected historical case as the top-1 match:
+
+| Held-out query | Expected case | Top retrieved case | Score |
+| --- | --- | --- | --- |
+| Basement water ingress | `INC-001` | `INC-001` | `0.8561` |
+| Column honeycombing | `INC-002` | `INC-002` | `0.8443` |
+| Scaffold edge protection | `INC-005` | `INC-005` | `0.8299` |
+| Rebar congestion | `INC-003` | `INC-003` | `0.8260` |
+
+To regenerate the held-out query-only image pack:
+
+```bash
+python scripts/generate_heldout_query_images.py \
+  --endpoint "$AZURE_IMAGE_ENDPOINT" \
+  --deployment "$AZURE_IMAGE_DEPLOYMENT" \
+  --bearer-token "$AZURE_IMAGE_BEARER_TOKEN"
+```
 
 Example image + text retrieval query:
 

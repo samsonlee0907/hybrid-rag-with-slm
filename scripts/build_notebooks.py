@@ -292,15 +292,17 @@ def build_context_notebook(report_path: Path, output_path: Path) -> None:
 
 def build_real_local_notebook(report_path: Path, output_path: Path) -> None:
     report = _read_json(report_path)
-    top_hit = report["hits"][0]
+    queries = report.get("queries") or [_single_real_local_query(report)]
 
     cells = [
         _markdown(
-            "# Real Local CV-RAG Inference on the A10 VM\n\n"
+            "# Real Local CV-RAG Inference on Held-Out Field Photos\n\n"
             "This notebook captures a non-deterministic local inference run on `vm-cvrag-a10-poc`. "
             "The result is not the template fallback: BLIP captioned the query photo locally, CLIP embedded the "
             "text + image + caption for SQLite vector search, and Phi-4-mini ONNX generated the final answer from "
-            "retrieved evidence."
+            "retrieved evidence.\n\n"
+            "The query photos are held-out field images stored under `notebooks/assets/real_local_inference/query_images`. "
+            "They are not part of the indexed historical case image pack."
         ),
         _markdown(
             "## What ran locally\n\n"
@@ -309,8 +311,8 @@ def build_real_local_notebook(report_path: Path, output_path: Path) -> None:
                 [
                     [
                         "Photo understanding",
-                        f"`{report['query_image_caption_model']}`",
-                        f"Caption: `{report['query_image_caption']}`",
+                        f"`{queries[0]['query_image_caption_model']}`",
+                        f"{len(queries)} held-out query photos captioned locally.",
                     ],
                     [
                         "Vector retrieval",
@@ -334,32 +336,60 @@ def build_real_local_notebook(report_path: Path, output_path: Path) -> None:
             "from IPython.display import HTML, display\n"
             "# Executed output below embeds the query photo and retrieval thumbnails.\n"
             "display(HTML(real_local_result_html))\n",
-            _real_local_result_html(report),
+            _real_local_queries_html(queries),
             execution_count=1,
         ),
         _markdown(
-            "## User question and Phi-4-mini response\n\n"
-            f"**User question:** {report['query']}\n\n"
-            f"**Top retrieved case:** `{top_hit['incident_id']}` - {top_hit['title']} "
-            f"(`score={top_hit['score']:.4f}`, severity `{top_hit['severity']}`)\n\n"
-            "**Model response:**\n\n"
-            f"{_quote_block(report['answer'])}"
+            "## Retrieval summary\n\n"
+            + _markdown_table(
+                ["Scenario", "Expected case", "Top retrieved case", "Top score", "Expected matched"],
+                [
+                    [
+                        item["scenario"],
+                        item.get("expected_incident_id") or "not specified",
+                        item["hits"][0]["incident_id"],
+                        f"{item['hits'][0]['score']:.4f}",
+                        "yes" if item.get("matched_expected") else "no",
+                    ]
+                    for item in queries
+                ],
+            )
         ),
+        _markdown("## User questions and Phi-4-mini responses\n\n" + "\n\n".join(_real_local_answer_md(item) for item in queries)),
         _markdown(
             "## Timing from the VM run\n\n"
             + _markdown_table(
-                ["Step", "Seconds"],
+                ["Scenario", "BLIP caption", "CLIP retrieval", "Phi-4-mini load/generation", "Decode loop only"],
                 [
-                    ["BLIP image caption", report["timings_seconds"]["caption"]],
-                    ["CLIP retrieval over SQLite", report["timings_seconds"]["retrieval"]],
-                    ["Phi-4-mini load + generation", report["timings_seconds"]["generation"]],
-                    ["Phi-4-mini decode loop only", report["timings_seconds"]["model_decode_loop"]],
+                    [
+                        item["scenario"],
+                        item["timings_seconds"]["caption"],
+                        item["timings_seconds"]["retrieval"],
+                        item["timings_seconds"]["generation"],
+                        item["timings_seconds"]["model_decode_loop"],
+                    ]
+                    for item in queries
                 ],
             )
         ),
     ]
 
     _write_notebook(output_path, cells)
+
+
+def _single_real_local_query(report: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "scenario": "Single query",
+        "query": report["query"],
+        "query_image": report["query_image"],
+        "query_image_caption_model": report["query_image_caption_model"],
+        "query_image_caption": report["query_image_caption"],
+        "expected_incident_id": None,
+        "matched_expected": False,
+        "hits": report["hits"],
+        "answer": report["answer"],
+        "timings_seconds": report["timings_seconds"],
+    }
 
 
 def _read_json(path: Path) -> Any:
@@ -503,6 +533,38 @@ def _real_local_result_html(report: dict[str, Any]) -> str:
     return "\n".join(blocks)
 
 
+def _real_local_queries_html(queries: list[dict[str, Any]]) -> str:
+    blocks = ["<div style='font-family:Segoe UI,Arial,sans-serif'>"]
+    for item in queries:
+        blocks.extend(
+            [
+                f"<h2>{escape(item['scenario'])}</h2>",
+                f"<p><b>BLIP caption:</b> {escape(item['query_image_caption'])}</p>",
+                "<div style='display:flex; gap:14px; flex-wrap:wrap; margin-bottom:18px'>",
+                "<div style='width:285px; border:2px solid #555; padding:10px; border-radius:8px'>"
+                f"<img src='{_thumbnail_data_uri(REPO_ROOT / item['query_image'])}' style='width:100%; height:185px; object-fit:cover; border-radius:4px'>"
+                "<div style='font-weight:600; margin-top:6px'>Held-out query photo, not indexed</div>"
+                f"<div><b>Expected case:</b> {escape(item.get('expected_incident_id') or 'not specified')}</div>"
+                "</div>",
+                "</div>",
+                "<div style='display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:22px'>",
+            ]
+        )
+        for hit in item["hits"]:
+            blocks.append(
+                "<div style='border:1px solid #ddd; padding:10px; border-radius:8px'>"
+                f"<img src='{_thumbnail_data_uri(REPO_ROOT / hit['image_path'])}' style='width:100%; height:150px; object-fit:cover; border-radius:4px'>"
+                f"<div style='font-weight:600; margin-top:6px'>#{hit['rank']} {escape(hit['incident_id'])}</div>"
+                f"<div>{escape(hit['title'])}</div>"
+                f"<div><b>Score:</b> {hit['score']:.4f}</div>"
+                f"<div><b>Severity:</b> {escape(hit['severity'])}</div>"
+                "</div>"
+            )
+        blocks.append("</div>")
+    blocks.append("</div>")
+    return "\n".join(blocks)
+
+
 def _thumbnail_data_uri(path: Path, max_size: tuple[int, int] = (420, 280)) -> str:
     if not path.exists():
         raise FileNotFoundError(f"Image not found for notebook embedding: {path}")
@@ -524,6 +586,19 @@ def _answer_example_md(item: dict[str, Any]) -> str:
         f"{image_line}\n\n"
         "**Model response:**\n\n"
         f"{_quote_block(_compact_answer(item['answer'], limit=1400))}"
+    )
+
+
+def _real_local_answer_md(item: dict[str, Any]) -> str:
+    top_hit = item["hits"][0]
+    return (
+        f"### {item['scenario']}\n\n"
+        f"**User question:** {item['query']}\n\n"
+        f"**Held-out query image:** `{Path(item['query_image']).name}`\n\n"
+        f"**Top retrieved case:** `{top_hit['incident_id']}` - {top_hit['title']} "
+        f"(`score={top_hit['score']:.4f}`, severity `{top_hit['severity']}`)\n\n"
+        "**Model response:**\n\n"
+        f"{_quote_block(_compact_answer(item['answer'], limit=1600))}"
     )
 
 
