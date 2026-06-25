@@ -1,25 +1,22 @@
 {
-  "resource_group": "rg-hybrid-rag-slm-poc",
-  "gpu_vm": {
-    "name": "vm-cvrag-a10-poc",
-    "region": "southcentralus",
-    "sku": "Standard_NV6ads_A10_v5",
-    "gpu_observed": "NVIDIA A10-4Q, 4 GB framebuffer"
+  "test_environment": {
+    "runtime": "GPU VM used for local retrieval experiments",
+    "gpu_observed": "4 GB vGPU profile"
   },
   "azure_ai_search": {
-    "service": "srch-hybrid-rag-887070",
-    "endpoint": "https://srch-hybrid-rag-887070.search.windows.net",
+    "service": "<azure-ai-search-service>",
+    "endpoint": "https://<azure-ai-search-service>.search.windows.net",
     "index": "construction-incidents-online",
     "documents_indexed": 12,
     "vector_dimensions": 512,
     "vector_profile": "HNSW cosine over CLIP text embeddings plus keyword search"
   },
   "foundry_models": {
-    "ai_services_account": "aif-hybrid-rag-338698",
-    "endpoint": "https://aif-hybrid-rag-338698.cognitiveservices.azure.com/",
-    "text_generation_deployment": "gpt-5-4-mini-enrich",
-    "text_generation_model": "gpt-5.4-mini, version 2026-03-17, GlobalStandard capacity 10",
-    "image_generation_status": "MAI-Image-2.5-Flash was not newly deployed in South Central US because quota is fully used: current 2, limit 2."
+    "ai_services_account": "<azure-ai-services-resource>",
+    "endpoint": "https://<azure-ai-services-resource>.cognitiveservices.azure.com/",
+    "text_generation_deployment": "<text-generation-deployment>",
+    "text_generation_model": "text model used for synthetic incident enrichment",
+    "image_generation_status": "Azure OpenAI image generation was used for photorealistic construction-site image assets; deterministic diagrams remain available as a fallback."
   },
   "dataset": {
     "offline_seed_cases": 6,

@@ -40,7 +40,7 @@ class Phi4OnnxGenerator(Generator):
 
 
 class ExtractiveFallbackGenerator(Generator):
-    """Grounded non-LLM fallback for development and offline smoke tests."""
+    """Grounded non-LLM fallback for development and offline validation runs."""
 
     def generate(self, prompt: str, *, max_tokens: int = 512) -> str:
         evidence = _section(prompt, "EVIDENCE", "USER QUESTION")

@@ -50,10 +50,10 @@ def _prepare_report_folders() -> None:
 
     _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_report.json", HYBRID_REPORT_DIR / "hybrid_lifecycle_report.json")
     _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_summary.json", HYBRID_REPORT_DIR / "hybrid_lifecycle_summary.json")
-    if (SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_smoke_report.json").exists():
-        _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_smoke_report.json", HYBRID_REPORT_DIR / "moondream_hybrid_smoke_report.json")
-    if (SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_smoke_summary.json").exists():
-        _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_smoke_summary.json", HYBRID_REPORT_DIR / "moondream_hybrid_smoke_summary.json")
+    if (SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_validation_report.json").exists():
+        _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_validation_report.json", HYBRID_REPORT_DIR / "moondream_hybrid_validation_report.json")
+    if (SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_validation_summary.json").exists():
+        _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_validation_summary.json", HYBRID_REPORT_DIR / "moondream_hybrid_validation_summary.json")
 
 
 def _copy_report(source: Path, destination: Path) -> None:
@@ -84,19 +84,13 @@ def build_local_offline_notebook(output_path: Path) -> None:
         ),
         _markdown(
             "## Offline execution path\n\n"
-            "```mermaid\n"
-            "flowchart TD\n"
-            "  Q[\"Held-out worker photo and question\"] --> C[\"Local visual caption\"]\n"
-            "  Q --> E[\"CLIP image embedding\"]\n"
-            "  C --> T[\"CLIP text and caption embedding\"]\n"
-            "  E --> F[\"Fused query vector\"]\n"
-            "  T --> F\n"
-            "  F --> S[\"SQLite local vector store\"]\n"
-            "  S --> R[\"Top cited historical cases\"]\n"
-            "  R --> P[\"Evidence prompt\"]\n"
-            "  P --> Phi[\"Phi-4-mini ONNX CPU mobile\"]\n"
-            "  Phi --> A[\"Grounded field response\"]\n"
-            "```\n"
+            "The disconnected flow keeps image understanding, retrieval, and answer drafting on the local device. "
+            "Phi-4-mini is text-only, so it receives a compact evidence prompt built from the local caption and retrieved cases."
+        ),
+        _html_output_cell(
+            "",
+            _offline_execution_flow_html(),
+            execution_count=1,
         ),
         _markdown(
             "## Clean report locations\n\n"
@@ -131,19 +125,19 @@ def build_local_offline_notebook(output_path: Path) -> None:
             "from IPython.display import HTML, display\n"
             "display(HTML(indexed_offline_cases_html))\n",
             _case_gallery_html(offline_cases, title="Indexed offline case pack"),
-            execution_count=1,
+            execution_count=2,
         ),
         _markdown(
             "## BLIP vs Moondream: semantic and retrieval comparison\n\n"
-            "Both captioners were evaluated against the same four held-out field photos. BLIP is the fast operational baseline "
-            "on the A10 VM. Moondream2 provides richer semantics, but it did not fit on the 4 GB A10-4Q CUDA profile and used CPU.\n\n"
+            "Both captioners were evaluated against the same four held-out field photos. BLIP is the fast operational baseline. "
+            "Moondream2 provides richer visual semantics and is the preferred iOS-target option when an optimized runtime is available.\n\n"
             + _captioner_comparison_table(blip_queries, moondream_queries)
         ),
         _html_output_cell(
             "from IPython.display import HTML, display\n"
             "display(HTML(offline_query_comparison_html))\n",
             _offline_query_comparison_html(blip_queries, moondream_queries),
-            execution_count=2,
+            execution_count=3,
         ),
         _markdown(
             "## Phi-4-mini grounded answers\n\n"
@@ -155,8 +149,8 @@ def build_local_offline_notebook(output_path: Path) -> None:
             "## Offline conclusion\n\n"
             "- Both BLIP and Moondream achieved top-1 matches for all four held-out query images.\n"
             "- Moondream captions are more semantic and field-readable, especially for water ingress and rebar scenes.\n"
-            "- On this A10 VM profile, BLIP is the practical caption choice because Moondream ran on CPU at roughly 220 seconds per image.\n"
-            "- For the target iOS architecture, Hybrid-RAG selects Moondream under a Core ML / MLX optimization assumption; the A10 CPU fallback is not representative of an Apple-optimized package.\n"
+            "- BLIP remains a practical fast baseline for resource-constrained validation runs.\n"
+            "- For the target iOS architecture, Hybrid-RAG selects Moondream under a Core ML / MLX optimization assumption; CPU fallback timings from a VM should not be treated as iPhone benchmarks.\n"
         ),
     ]
 
@@ -176,7 +170,7 @@ def build_local_offline_notebook(output_path: Path) -> None:
 def build_hybrid_notebook(output_path: Path) -> None:
     report = _read_json(HYBRID_REPORT_DIR / "hybrid_lifecycle_report.json")
     summary = _read_json(HYBRID_REPORT_DIR / "hybrid_lifecycle_summary.json")
-    moondream_smoke = _read_json_optional(HYBRID_REPORT_DIR / "moondream_hybrid_smoke_report.json")
+    moondream_validation = _read_json_optional(HYBRID_REPORT_DIR / "moondream_hybrid_validation_report.json")
     selected_captioner = "Moondream"
 
     cells = [
@@ -186,29 +180,22 @@ def build_hybrid_notebook(output_path: Path) -> None:
             "uses search history and Azure AI Search during connectivity resume to identify useful online cases, stages those cases back "
             "into the offline vector store, and compares retrieval across initial offline, enriched offline, and full online search.\n\n"
             f"**Captioner selected for the target iOS architecture:** {selected_captioner}. "
-            "This is an explicit iOS/Core ML / MLX assumption, not an A10 VM throughput result. "
-            "The A10 run showed BLIP is the fast VM baseline, while Moondream2 produced richer semantic captions but fell back to CPU on the 4 GB A10-4Q profile. "
-            "For an iPhone-targeted design, Moondream is selected because the field copilot benefits more from richer visual understanding and VQA-style prompting, pending validation on an optimized iOS runtime."
+            "This is an explicit iOS/Core ML / MLX assumption, not a generic VM throughput claim. "
+            "BLIP remains the fast baseline, while Moondream2 is selected for the target design because the field copilot benefits from richer visual understanding and VQA-style prompting. "
+            "Validate latency, thermals, and model package size on the target iPhone runtime before production rollout."
         ),
         _markdown(
             "## Hybrid execution path\n\n"
-            "```mermaid\n"
-            "flowchart TD\n"
-            "  Q[\"Worker photo and text query\"] --> Caption[\"Moondream visual caption\"]\n"
-            "  Q --> Embed[\"CLIP image and text embedding\"]\n"
-            "  Caption --> Embed\n"
-            "  Embed --> L1[\"Initial offline SQLite pack\"]\n"
-            "  L1 --> A1[\"Phi-4-mini answer from limited evidence\"]\n"
-            "  A1 --> H[\"Search history and missing intent\"]\n"
-            "  H --> Planner[\"Phi-4-mini staging planner\"]\n"
-            "  Planner --> Online[\"Azure AI Search full index\"]\n"
-            "  Online --> Delta[\"Relevant online-only cases\"]\n"
-            "  Delta --> L2[\"Enriched offline vector store\"]\n"
-            "  L2 --> A2[\"Later offline answer from richer evidence\"]\n"
-            "  Online --> Full[\"Full online search comparison\"]\n"
-            "```\n\n"
-            "In the current report, the staging decision is reproducible: stage the top Azure AI Search result when it is an online-only case that is not already in the local pack. "
-            "This is the deterministic policy view of the same role Phi-4-mini should play in production: read search history, summarize the missing intent, and decide which online evidence is worth caching."
+            "The hybrid flow starts offline, uses connectivity to discover missing specialist evidence, and stages only useful online cases back into the local pack."
+        ),
+        _html_output_cell(
+            "",
+            _hybrid_execution_flow_html(),
+            execution_count=1,
+        ),
+        _markdown(
+            "The staging policy is reproducible in this notebook: cache the top Azure AI Search result only when it is an online-only case that is not already present locally. "
+            "In production, Phi-4-mini can help summarize search history and explain which online evidence should be staged, while the final cache decision remains policy-controlled and auditable."
         ),
         _markdown(
             "## iOS target assumptions for Moondream selection\n\n"
@@ -217,11 +204,11 @@ def build_hybrid_notebook(output_path: Path) -> None:
                 [
                     [
                         "Target runtime is a recent iPhone with an optimized Core ML / MLX Moondream package.",
-                        "Moondream is selected for richer image understanding and VQA-style prompting, not because the A10 VM proved fast Moondream inference.",
+                        "Moondream is selected for richer image understanding and VQA-style prompting, subject to target-device validation.",
                     ],
                     [
-                        "The A10 VM has only a 4 GB A10-4Q framebuffer.",
-                        "Moondream2 did not fit on CUDA there and ran on CPU, so the VM latency should not be treated as an iPhone latency estimate.",
+                        "Recorded VM CPU fallback is not an iPhone benchmark.",
+                        "Use the VM result as semantic evidence only; measure speed and thermals on the optimized mobile runtime.",
                     ],
                     [
                         "CLIP/MobileCLIP-style embeddings still perform local vector retrieval.",
@@ -241,13 +228,13 @@ def build_hybrid_notebook(output_path: Path) -> None:
                 [
                     ["Hybrid lifecycle report", "`notebooks/reports/hybrid_rag/hybrid_lifecycle_report.json`"],
                     ["Hybrid summary", "`notebooks/reports/hybrid_rag/hybrid_lifecycle_summary.json`"],
-                    ["Moondream smoke report", "`notebooks/reports/hybrid_rag/moondream_hybrid_smoke_report.json`" if moondream_smoke else "Not generated in this build"],
+                    ["Moondream validation report", "`notebooks/reports/hybrid_rag/moondream_hybrid_validation_report.json`" if moondream_validation else "Not generated in this build"],
                     ["Notebook", "`notebooks/Hybrid-RAG.ipynb`"],
                     ["Images", "`notebooks/assets/cv_rag_enriched/images/`"],
                 ],
             )
         ),
-        *_moondream_smoke_cells(moondream_smoke),
+        *_moondream_validation_cells(moondream_validation),
         _markdown(
             "## Context states\n\n"
             + _markdown_table(
@@ -363,12 +350,12 @@ def build_hybrid_notebook(output_path: Path) -> None:
             "selected_captioner": selected_captioner,
             "selection_assumption": (
                 "Moondream is selected for the iOS target architecture under an assumed Core ML / MLX optimized runtime. "
-                "The A10 VM result is not an iPhone benchmark; it only shows Moondream CPU fallback semantics and BLIP VM-speed baseline."
+                "The recorded VM result is not an iPhone benchmark; it only shows Moondream semantic behavior and the BLIP speed baseline."
             ),
             "initial_offline_ids": report["initial_offline_ids"],
             "synced_ids": report["synced_ids"],
             "comparison": summary["sequence"],
-            "moondream_smoke": _moondream_smoke_summary(moondream_smoke),
+            "moondream_validation": _moondream_validation_summary(moondream_validation),
         },
     )
 
@@ -379,10 +366,10 @@ def _captioner_decision(blip_queries: list[dict[str, Any]], moondream_queries: l
     blip_avg = sum(item["timings_seconds"]["caption"] for item in blip_queries) / len(blip_queries)
     moondream_avg = sum(item["timings_seconds"]["caption"] for item in moondream_queries) / len(moondream_queries)
     if blip_all_matched and moondream_all_matched and blip_avg < moondream_avg:
-        return "Use BLIP as the fast A10 VM baseline, but select Moondream for the target iOS Hybrid-RAG architecture under the Core ML / MLX optimization assumption."
+        return "Use BLIP as the fast baseline, but select Moondream for the target iOS Hybrid-RAG architecture under the Core ML / MLX optimization assumption."
     if moondream_all_matched:
         return "Use Moondream for richer semantic captions."
-    return "Use BLIP as the more stable baseline for this A10 VM flow."
+    return "Use BLIP as the more stable baseline for this flow."
 
 
 def _comparison_row(blip: dict[str, Any], moon: dict[str, Any]) -> dict[str, Any]:
@@ -399,7 +386,7 @@ def _comparison_row(blip: dict[str, Any], moon: dict[str, Any]) -> dict[str, Any
     }
 
 
-def _moondream_smoke_cells(report: dict[str, Any] | None) -> list[dict[str, Any]]:
+def _moondream_validation_cells(report: dict[str, Any] | None) -> list[dict[str, Any]]:
     if not report:
         return []
     caption_seconds = [
@@ -410,14 +397,14 @@ def _moondream_smoke_cells(report: dict[str, Any] | None) -> list[dict[str, Any]
     avg_caption_seconds = sum(caption_seconds) / len(caption_seconds) if caption_seconds else 0.0
     return [
         _markdown(
-            "## Moondream 2-scenario hybrid smoke run\n\n"
-            "This smaller run validates the Hybrid-RAG flow with Moondream visual context before paying the full CPU-captioning cost. "
+            "## Moondream 2-scenario hybrid validation run\n\n"
+            "This smaller run validates the Hybrid-RAG flow with Moondream visual context before running every scenario. "
             "It uses two online-enrichment scenarios, captions each query image once, appends that local visual caption to the worker's text query, "
             "then compares initial offline, Azure AI Search resume, and later enriched-offline retrieval.\n\n"
             f"**Captioner:** {report.get('caption_model')} ({report.get('captioner')}, revision {report.get('moondream_revision')})  \n"
-            f"**Caption device on the A10 VM run:** {report.get('caption_device')}  \n"
+            f"**Caption device in the recorded run:** {report.get('caption_device')}  \n"
             f"**Average caption time:** {avg_caption_seconds:.1f}s/image  \n"
-            f"**Answer generator in this smoke run:** {report.get('answer_generator')}\n\n"
+            f"**Answer generator in this validation run:** {report.get('answer_generator')}\n\n"
             + _markdown_table(
                 ["Scenario", "Moondream caption", "Initial offline top", "Online top", "Enriched offline top", "Staged", "Caption time"],
                 [
@@ -436,14 +423,14 @@ def _moondream_smoke_cells(report: dict[str, Any] | None) -> list[dict[str, Any]
         ),
         _html_output_cell(
             "from IPython.display import HTML, display\n"
-            "display(HTML(moondream_hybrid_smoke_html))\n",
+            "display(HTML(moondream_hybrid_validation_html))\n",
             _hybrid_flow_html(report["sequence_steps"]),
             execution_count=2,
         ),
     ]
 
 
-def _moondream_smoke_summary(report: dict[str, Any] | None) -> dict[str, Any] | None:
+def _moondream_validation_summary(report: dict[str, Any] | None) -> dict[str, Any] | None:
     if not report:
         return None
     return {
@@ -462,6 +449,104 @@ def _moondream_smoke_summary(report: dict[str, Any] | None) -> dict[str, Any] | 
             for step in report["sequence_steps"]
         ],
     }
+
+
+def _offline_execution_flow_html() -> str:
+    boxes = [
+        _svg_box(40, 150, 190, 70, ["Worker photo", "and question"]),
+        _svg_box(280, 70, 190, 70, ["Visual caption", "BLIP or Moondream"]),
+        _svg_box(280, 230, 190, 70, ["Image embedding", "CLIP"]),
+        _svg_box(520, 70, 190, 70, ["Text embedding", "Query + caption"]),
+        _svg_box(520, 230, 190, 70, ["Fused query", "vector"]),
+        _svg_box(760, 230, 190, 70, ["Local vector", "store"]),
+        _svg_box(760, 70, 190, 70, ["Retrieved cases", "with citations"]),
+        _svg_box(990, 70, 190, 70, ["Evidence prompt", "for Phi-4-mini"]),
+        _svg_box(990, 230, 190, 70, ["Grounded field", "response"]),
+    ]
+    arrows = [
+        _svg_arrow(230, 168, 280, 105),
+        _svg_arrow(230, 190, 280, 265),
+        _svg_arrow(470, 105, 520, 105),
+        _svg_arrow(615, 140, 615, 230),
+        _svg_arrow(470, 265, 520, 265),
+        _svg_arrow(710, 265, 760, 265),
+        _svg_arrow(855, 230, 855, 140),
+        _svg_arrow(950, 105, 990, 105),
+        _svg_arrow(1085, 140, 1085, 230),
+    ]
+    return _flow_svg(1220, 360, "Local offline RAG execution path", boxes, arrows)
+
+
+def _hybrid_execution_flow_html() -> str:
+    boxes = [
+        _svg_box(40, 50, 170, 64, ["Photo +", "question"]),
+        _svg_box(260, 35, 180, 64, ["Moondream", "caption"]),
+        _svg_box(260, 125, 180, 64, ["CLIP", "embeddings"]),
+        _svg_box(500, 80, 190, 64, ["Initial", "offline pack"]),
+        _svg_box(740, 80, 190, 64, ["Limited", "answer"]),
+        _svg_box(980, 80, 190, 64, ["Search", "history"]),
+        _svg_box(980, 220, 190, 64, ["Staging", "planner"]),
+        _svg_box(740, 220, 190, 64, ["Azure AI", "Search"]),
+        _svg_box(500, 220, 190, 64, ["Delta cases", "selected"]),
+        _svg_box(260, 220, 180, 64, ["Enriched", "offline pack"]),
+        _svg_box(40, 220, 170, 64, ["Later offline", "answer"]),
+        _svg_box(740, 345, 190, 64, ["Full online", "comparison"]),
+    ]
+    arrows = [
+        _svg_arrow(210, 68, 260, 67),
+        _svg_arrow(210, 96, 260, 157),
+        _svg_arrow(350, 99, 350, 125),
+        _svg_arrow(440, 157, 500, 112),
+        _svg_arrow(690, 112, 740, 112),
+        _svg_arrow(930, 112, 980, 112),
+        _svg_arrow(1075, 144, 1075, 220),
+        _svg_arrow(980, 252, 930, 252),
+        _svg_arrow(740, 252, 690, 252),
+        _svg_arrow(500, 252, 440, 252),
+        _svg_arrow(260, 252, 210, 252),
+        _svg_arrow(835, 284, 835, 345),
+    ]
+    return _flow_svg(1210, 455, "Hybrid RAG lifecycle", boxes, arrows)
+
+
+def _flow_svg(width: int, height: int, title: str, boxes: list[str], arrows: list[str]) -> str:
+    return (
+        "<div style='font-family:Segoe UI,Arial,sans-serif; max-width:1180px'>"
+        f"<svg viewBox='0 0 {width} {height}' width='100%' role='img' aria-label='{escape(title)}' "
+        "xmlns='http://www.w3.org/2000/svg'>"
+        "<defs>"
+        "<marker id='arrow' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto' markerUnits='strokeWidth'>"
+        "<path d='M0,0 L0,6 L9,3 z' fill='#475569'/>"
+        "</marker>"
+        "</defs>"
+        f"<rect x='1' y='1' width='{width - 2}' height='{height - 2}' rx='16' fill='#ffffff' stroke='#d0d7de'/>"
+        f"<text x='32' y='34' fill='#0f172a' font-size='20' font-weight='700'>{escape(title)}</text>"
+        + "".join(arrows)
+        + "".join(boxes)
+        + "</svg></div>"
+    )
+
+
+def _svg_box(x: int, y: int, width: int, height: int, lines: list[str]) -> str:
+    line_height = 18
+    first_line_y = y + (height / 2) - ((len(lines) - 1) * line_height / 2) + 6
+    text = "".join(
+        f"<text x='{x + width / 2:.1f}' y='{first_line_y + index * line_height:.1f}' "
+        "text-anchor='middle' fill='#0f172a' font-size='15' font-weight='600'>"
+        f"{escape(line)}</text>"
+        for index, line in enumerate(lines)
+    )
+    return (
+        f"<rect x='{x}' y='{y}' width='{width}' height='{height}' rx='12' fill='#eef2ff' stroke='#818cf8' stroke-width='1.4'/>"
+        + text
+    )
+
+
+def _svg_arrow(x1: int, y1: int, x2: int, y2: int) -> str:
+    return (
+        f"<line x1='{x1}' y1='{y1}' x2='{x2}' y2='{y2}' "
+        "stroke='#475569' stroke-width='1.8' marker-end='url(#arrow)'/>"
+    )
 
 
 def _captioner_comparison_table(blip_queries: list[dict[str, Any]], moondream_queries: list[dict[str, Any]]) -> str:

@@ -2,7 +2,7 @@
   "notebook": "C:/Users/samsonlee/.copilot/chats/322e2b6f-6b83-4c84-9e31-d4e317f2689f/smartxr-hybrid-rag-starter/notebooks/Local-Offline-RAG.ipynb",
   "query_images_indexed": false,
   "indexed_offline_count": 6,
-  "captioner_decision_for_hybrid": "Use BLIP as the fast A10 VM baseline, but select Moondream for the target iOS Hybrid-RAG architecture under the Core ML / MLX optimization assumption.",
+  "captioner_decision_for_hybrid": "Use BLIP as the fast baseline, but select Moondream for the target iOS Hybrid-RAG architecture under the Core ML / MLX optimization assumption.",
   "comparison": [
     {
       "id": "qry_001_water_ingress",
