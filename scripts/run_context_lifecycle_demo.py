@@ -1,15 +1,19 @@
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import shutil
 import sys
+import time
 from pathlib import Path
+
+import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from cv_rag.enriched_dataset import convert_enriched_incident, convert_enriched_incidents
-from cv_rag.models import ClipEmbedder, load_generator
+from cv_rag.models import ClipEmbedder, load_generator, load_image_captioner
 from cv_rag.pipeline import build_prompt, build_query_vector, fuse_vectors
 from cv_rag.store import CvVectorStore
 from cv_rag.synthetic_data import generate_dataset
@@ -21,21 +25,25 @@ INITIAL_OFFLINE_IDS = {"INC-001", "INC-002", "INC-005"}
 
 SEARCH_HISTORY = [
     {
+        "id": "known-concrete-defect",
         "scenario": "Known concrete defect already cached",
         "query": "A column face has honeycombing and exposed aggregate after formwork removal.",
         "online_expected": "INC-002",
     },
     {
+        "id": "water-ingress-electrical",
         "scenario": "Water ingress becomes electrical safety issue",
         "query": "Water seepage is close to a temporary electrical riser in the basement after rain.",
         "online_expected": "ONL-007",
     },
     {
+        "id": "temporary-works-prop",
         "scenario": "Temporary works prop not in local pack",
         "query": "A temporary works prop is visibly bowed and the base plate has shifted under slab load.",
         "online_expected": "ONL-010",
     },
     {
+        "id": "confined-space-gas-alarm",
         "scenario": "Confined space gas alarm not in local pack",
         "query": "A gas detector alarms before manhole drainage inspection and confined space entry.",
         "online_expected": "ONL-011",
@@ -64,6 +72,13 @@ def main() -> None:
     parser.add_argument("--db", default=None)
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda"])
     parser.add_argument("--generator", choices=["template", "phi4"], default="template")
+    parser.add_argument("--scenario-ids", nargs="*", default=None, help="Optional SEARCH_HISTORY IDs to run.")
+    parser.add_argument("--scenario-limit", type=int, default=None, help="Optional limit after scenario filtering.")
+    parser.add_argument("--captioner", choices=["none", "blip", "moondream"], default="none")
+    parser.add_argument("--caption-device", default=None, choices=["auto", "cpu", "cuda"])
+    parser.add_argument("--caption-model", default=None)
+    parser.add_argument("--moondream-revision", default="2025-06-21")
+    parser.add_argument("--caption-prompt", default=None)
     parser.add_argument("--output", default="notebooks/assets/context_lifecycle/context_lifecycle_report.json")
     parser.add_argument("--summary-output", default="notebooks/assets/context_lifecycle/context_lifecycle_summary.json")
     parser.add_argument("--image-source-dir", default="notebooks/assets/cv_rag_enriched/images")
@@ -86,29 +101,35 @@ def main() -> None:
 
     search_client = AzureSearchClient(SearchConfig(args.endpoint, args.key, args.index))
     generator = load_generator(args.generator, device=args.device)
+    search_history = _select_search_history(args)
+    caption_records = _caption_query_images(args, search_history, image_dir, enriched_by_id) if args.captioner != "none" else {}
 
     initial_results = []
     initial_hits_by_query = {}
-    for item in SEARCH_HISTORY:
+    for item in search_history:
         query_image = _query_image_path(item, image_dir, enriched_by_id)
-        query_vector = build_query_vector(embedder, item["query"], query_image=str(query_image))
+        retrieval_query = _retrieval_query(item, caption_records)
+        query_vector = build_query_vector(embedder, retrieval_query, query_image=str(query_image))
         offline_hits = store.search(query_vector, top_k=3)
         initial_hits_by_query[item["query"]] = offline_hits
         initial_results.append(
             {
                 **item,
+                **caption_records.get(item["id"], {}),
                 "query_image": query_image.name,
                 "query_vector_inputs": ["text", "image"],
+                "retrieval_query": retrieval_query,
                 "offline_top3": [_summarize_local_hit(hit, rank) for rank, hit in enumerate(offline_hits, start=1)],
             }
         )
 
     online_resume_results = []
     synced_ids: list[str] = []
-    for item in SEARCH_HISTORY:
+    for item in search_history:
         query_image = _query_image_path(item, image_dir, enriched_by_id)
-        query_vector = build_query_vector(embedder, item["query"], query_image=str(query_image))
-        online_hits = search_client.search(item["query"], query_vector, top=3)
+        retrieval_query = _retrieval_query(item, caption_records)
+        query_vector = build_query_vector(embedder, retrieval_query, query_image=str(query_image))
+        online_hits = search_client.search(retrieval_query, query_vector, top=3)
         selected_ids = _select_delta_ids(online_hits)
         for incident_id in selected_ids:
             if incident_id in synced_ids:
@@ -119,8 +140,10 @@ def main() -> None:
         online_resume_results.append(
             {
                 **item,
+                **caption_records.get(item["id"], {}),
                 "query_image": query_image.name,
                 "query_vector_inputs": ["text", "image"],
+                "retrieval_query": retrieval_query,
                 "online_top3": [_summarize_online_hit(hit, rank) for rank, hit in enumerate(online_hits, start=1)],
                 "synced_ids": selected_ids,
             }
@@ -128,16 +151,19 @@ def main() -> None:
 
     later_offline_results = []
     later_hits_by_query = {}
-    for item in SEARCH_HISTORY:
+    for item in search_history:
         query_image = _query_image_path(item, image_dir, enriched_by_id)
-        query_vector = build_query_vector(embedder, item["query"], query_image=str(query_image))
+        retrieval_query = _retrieval_query(item, caption_records)
+        query_vector = build_query_vector(embedder, retrieval_query, query_image=str(query_image))
         later_hits = store.search(query_vector, top_k=3)
         later_hits_by_query[item["query"]] = later_hits
         later_offline_results.append(
             {
                 **item,
+                **caption_records.get(item["id"], {}),
                 "query_image": query_image.name,
                 "query_vector_inputs": ["text", "image"],
+                "retrieval_query": retrieval_query,
                 "offline_after_sync_top3": [_summarize_local_hit(hit, rank) for rank, hit in enumerate(later_hits, start=1)],
             }
         )
@@ -149,17 +175,21 @@ def main() -> None:
 
     sequence_steps = []
     for item, initial_result, online_result, later_result in zip(
-        SEARCH_HISTORY, initial_results, online_resume_results, later_offline_results, strict=True
+        search_history, initial_results, online_resume_results, later_offline_results, strict=True
     ):
         query_image = str(_query_image_path(item, image_dir, enriched_by_id))
-        initial_prompt = build_prompt(item["query"], initial_hits_by_query[item["query"]], query_image=query_image)
-        later_prompt = build_prompt(item["query"], later_hits_by_query[item["query"]], query_image=query_image)
+        retrieval_query = _retrieval_query(item, caption_records)
+        initial_prompt = build_prompt(retrieval_query, initial_hits_by_query[item["query"]], query_image=query_image)
+        later_prompt = build_prompt(retrieval_query, later_hits_by_query[item["query"]], query_image=query_image)
         sequence_steps.append(
             {
+                "id": item["id"],
                 "scenario": item["scenario"],
                 "query": item["query"],
+                **caption_records.get(item["id"], {}),
                 "query_image": Path(query_image).name,
                 "query_vector_inputs": ["text", "image"],
+                "retrieval_query": retrieval_query,
                 "initial_offline": {
                     "top3": initial_result["offline_top3"],
                     "phi4_evidence_prompt": initial_prompt,
@@ -184,7 +214,7 @@ def main() -> None:
             "evidence_prompt": step["enriched_offline_after_sync"]["phi4_evidence_prompt"],
             "answer": step["enriched_offline_after_sync"]["answer"],
         }
-        for item, step in zip(SEARCH_HISTORY[1:3], sequence_steps[1:3], strict=True)
+        for item, step in zip(search_history[:2], sequence_steps[:2], strict=True)
     ]
 
     report = {
@@ -202,6 +232,10 @@ def main() -> None:
         "sequence_steps": sequence_steps,
         "query_mode": "image-text",
         "query_embedding_model": "openai/clip-vit-base-patch32",
+        "captioner": args.captioner,
+        "caption_model": _default_caption_model(args.captioner, args.caption_model) if args.captioner != "none" else None,
+        "caption_device": args.caption_device or args.device if args.captioner != "none" else None,
+        "moondream_revision": args.moondream_revision if args.captioner == "moondream" else None,
         "answer_generator": args.generator,
         "phi4_role": [
             "Local CLIP embeds the worker text plus query image for retrieval.",
@@ -220,6 +254,70 @@ def main() -> None:
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({"output": str(output_path), "synced_ids": synced_ids, "offline_after_sync_count": store.count()}, indent=2))
+
+
+def _select_search_history(args: argparse.Namespace) -> list[dict]:
+    history = SEARCH_HISTORY
+    if args.scenario_ids:
+        requested = set(args.scenario_ids)
+        history = [item for item in history if item["id"] in requested]
+        missing = requested - {item["id"] for item in history}
+        if missing:
+            raise ValueError(f"Unknown scenario IDs: {sorted(missing)}")
+    if args.scenario_limit is not None:
+        history = history[: args.scenario_limit]
+    if not history:
+        raise ValueError("At least one scenario must be selected.")
+    return history
+
+
+def _caption_query_images(args: argparse.Namespace, search_history: list[dict], image_dir: Path, enriched_by_id: dict) -> dict[str, dict]:
+    caption_device = args.caption_device or args.device
+    caption_model = _default_caption_model(args.captioner, args.caption_model)
+    captioner = load_image_captioner(
+        args.captioner,
+        model_name=caption_model,
+        revision=args.moondream_revision,
+        device=caption_device,
+    )
+    records: dict[str, dict] = {}
+    for item in search_history:
+        query_image = _query_image_path(item, image_dir, enriched_by_id)
+        started = time.perf_counter()
+        if args.caption_prompt is None:
+            caption = captioner.caption(str(query_image))
+        else:
+            caption = captioner.caption(str(query_image), prompt=args.caption_prompt)
+        records[item["id"]] = {
+            "query_image_captioner": args.captioner,
+            "query_image_caption_model": caption_model,
+            "query_image_caption_revision": args.moondream_revision if args.captioner == "moondream" else None,
+            "query_image_caption_device": caption_device,
+            "query_image_caption": caption,
+            "query_image_caption_seconds": round(time.perf_counter() - started, 3),
+        }
+    del captioner
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    return records
+
+
+def _retrieval_query(item: dict, caption_records: dict[str, dict]) -> str:
+    caption = caption_records.get(item["id"], {}).get("query_image_caption")
+    if not caption:
+        return item["query"]
+    return f"{item['query']}\nLocal image caption: {caption}"
+
+
+def _default_caption_model(captioner: str, explicit_model: str | None) -> str:
+    if explicit_model:
+        return explicit_model
+    if captioner == "blip":
+        return "Salesforce/blip-image-captioning-base"
+    if captioner == "moondream":
+        return "vikhyatk/moondream2"
+    raise ValueError(f"Unsupported captioner kind: {captioner}")
 
 
 def _copy_image_pack(source_dir: Path, image_dir: Path, incidents) -> None:

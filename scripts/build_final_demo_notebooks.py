@@ -50,6 +50,10 @@ def _prepare_report_folders() -> None:
 
     _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_report.json", HYBRID_REPORT_DIR / "hybrid_lifecycle_report.json")
     _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_summary.json", HYBRID_REPORT_DIR / "hybrid_lifecycle_summary.json")
+    if (SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_smoke_report.json").exists():
+        _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_smoke_report.json", HYBRID_REPORT_DIR / "moondream_hybrid_smoke_report.json")
+    if (SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_smoke_summary.json").exists():
+        _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_smoke_summary.json", HYBRID_REPORT_DIR / "moondream_hybrid_smoke_summary.json")
 
 
 def _copy_report(source: Path, destination: Path) -> None:
@@ -172,6 +176,7 @@ def build_local_offline_notebook(output_path: Path) -> None:
 def build_hybrid_notebook(output_path: Path) -> None:
     report = _read_json(HYBRID_REPORT_DIR / "hybrid_lifecycle_report.json")
     summary = _read_json(HYBRID_REPORT_DIR / "hybrid_lifecycle_summary.json")
+    moondream_smoke = _read_json_optional(HYBRID_REPORT_DIR / "moondream_hybrid_smoke_report.json")
     selected_captioner = "Moondream"
 
     cells = [
@@ -233,11 +238,13 @@ def build_hybrid_notebook(output_path: Path) -> None:
                 [
                     ["Hybrid lifecycle report", "`notebooks/reports/hybrid_rag/hybrid_lifecycle_report.json`"],
                     ["Hybrid summary", "`notebooks/reports/hybrid_rag/hybrid_lifecycle_summary.json`"],
+                    ["Moondream smoke report", "`notebooks/reports/hybrid_rag/moondream_hybrid_smoke_report.json`" if moondream_smoke else "Not generated in this build"],
                     ["Notebook", "`notebooks/Hybrid-RAG.ipynb`"],
                     ["Images", "`notebooks/assets/cv_rag_enriched/images/`"],
                 ],
             )
         ),
+        *_moondream_smoke_cells(moondream_smoke),
         _markdown(
             "## Context states\n\n"
             + _markdown_table(
@@ -358,6 +365,7 @@ def build_hybrid_notebook(output_path: Path) -> None:
             "initial_offline_ids": report["initial_offline_ids"],
             "synced_ids": report["synced_ids"],
             "comparison": summary["sequence"],
+            "moondream_smoke": _moondream_smoke_summary(moondream_smoke),
         },
     )
 
@@ -385,6 +393,71 @@ def _comparison_row(blip: dict[str, Any], moon: dict[str, Any]) -> dict[str, Any
         "moondream_score": moon["hits"][0]["score"],
         "moondream_caption_seconds": moon["timings_seconds"]["caption"],
         "moondream_caption": moon["query_image_caption"],
+    }
+
+
+def _moondream_smoke_cells(report: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not report:
+        return []
+    caption_seconds = [
+        step.get("query_image_caption_seconds", 0.0)
+        for step in report["sequence_steps"]
+        if step.get("query_image_caption_seconds") is not None
+    ]
+    avg_caption_seconds = sum(caption_seconds) / len(caption_seconds) if caption_seconds else 0.0
+    return [
+        _markdown(
+            "## Moondream 2-scenario hybrid smoke run\n\n"
+            "This smaller run validates the Hybrid-RAG flow with Moondream visual context before paying the full CPU-captioning cost. "
+            "It uses two online-enrichment scenarios, captions each query image once, appends that local visual caption to the worker's text query, "
+            "then compares initial offline, Azure AI Search resume, and later enriched-offline retrieval.\n\n"
+            f"**Captioner:** {report.get('caption_model')} ({report.get('captioner')}, revision {report.get('moondream_revision')})  \n"
+            f"**Caption device on the A10 VM run:** {report.get('caption_device')}  \n"
+            f"**Average caption time:** {avg_caption_seconds:.1f}s/image  \n"
+            f"**Answer generator in this smoke run:** {report.get('answer_generator')}\n\n"
+            + _markdown_table(
+                ["Scenario", "Moondream caption", "Initial offline top", "Online top", "Enriched offline top", "Staged", "Caption time"],
+                [
+                    [
+                        step["scenario"],
+                        _compact(step.get("query_image_caption", ""), 220),
+                        _top_id(step["initial_offline"]["top3"]),
+                        _top_id(step["online_resume"]["top3"]),
+                        _top_id(step["enriched_offline_after_sync"]["top3"]),
+                        ", ".join(step["online_resume"]["synced_ids"]) or "none",
+                        f"{step.get('query_image_caption_seconds', 0.0):.1f}s",
+                    ]
+                    for step in report["sequence_steps"]
+                ],
+            )
+        ),
+        _html_output_cell(
+            "from IPython.display import HTML, display\n"
+            "display(HTML(moondream_hybrid_smoke_html))\n",
+            _hybrid_flow_html(report["sequence_steps"]),
+            execution_count=2,
+        ),
+    ]
+
+
+def _moondream_smoke_summary(report: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not report:
+        return None
+    return {
+        "captioner": report.get("captioner"),
+        "caption_model": report.get("caption_model"),
+        "caption_device": report.get("caption_device"),
+        "scenarios": [
+            {
+                "scenario": step["scenario"],
+                "initial_top": _top_id(step["initial_offline"]["top3"]),
+                "online_top": _top_id(step["online_resume"]["top3"]),
+                "enriched_offline_top": _top_id(step["enriched_offline_after_sync"]["top3"]),
+                "synced_ids": step["online_resume"]["synced_ids"],
+                "caption_seconds": step.get("query_image_caption_seconds"),
+            }
+            for step in report["sequence_steps"]
+        ],
     }
 
 
@@ -558,6 +631,12 @@ def _top_id(hits: list[dict[str, Any]]) -> str:
 
 def _read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _read_json_optional(path: Path) -> Any:
+    if not path.exists():
+        return None
+    return _read_json(path)
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:

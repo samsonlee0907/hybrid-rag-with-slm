@@ -47,5 +47,32 @@
         "ONL-011"
       ]
     }
-  ]
+  ],
+  "moondream_smoke": {
+    "captioner": "moondream",
+    "caption_model": "vikhyatk/moondream2",
+    "caption_device": "cpu",
+    "scenarios": [
+      {
+        "scenario": "Water ingress becomes electrical safety issue",
+        "initial_top": "INC-001",
+        "online_top": "ONL-007",
+        "enriched_offline_top": "ONL-007",
+        "synced_ids": [
+          "ONL-007"
+        ],
+        "caption_seconds": 221.508
+      },
+      {
+        "scenario": "Temporary works prop not in local pack",
+        "initial_top": "INC-002",
+        "online_top": "ONL-010",
+        "enriched_offline_top": "ONL-010",
+        "synced_ids": [
+          "ONL-010"
+        ],
+        "caption_seconds": 219.947
+      }
+    ]
+  }
 }
