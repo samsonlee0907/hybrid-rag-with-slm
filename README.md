@@ -157,7 +157,7 @@ Phi-4-mini-instruct is not a vision model. If the SLM itself must directly inspe
 | `notebooks/Hybrid-RAG.ipynb` | Initial offline search, search-history-driven AI Search sync, later enriched offline search, and full online comparison. Selects Moondream for the target iOS architecture under a clear Core ML / MLX optimization assumption. | `notebooks/reports/hybrid_rag/` |
 
 The hybrid report folder also includes `moondream_hybrid_validation_report.json`, a two-scenario validation run that uses Moondream captions for query images before online sync and later offline reuse.
-The local offline report folder also includes `traditional_chinese_offline_report.json`, which records the TC query, Phi-4-mini normalized retrieval query, local top hit, Traditional Chinese answer, and timings.
+The local offline report folder also includes `traditional_chinese_offline_report.json`, which records the TC query, Phi-4-mini normalized retrieval query, local top hit, Traditional Chinese answer, and timings. The TC runner injects construction terminology through a structured glossary prompt, and can load a project-specific glossary at runtime with `--glossary`.
 
 Rebuild the canonical notebooks and normalized report folders:
 

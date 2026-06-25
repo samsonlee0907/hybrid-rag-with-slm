@@ -22,6 +22,50 @@ DEFAULT_RETRIEVAL_QUERY = (
     "Basement retaining wall construction joint water ingress with damp staining, puddling at the wall base, "
     "possible waterproofing membrane or joint seal failure, requiring similar previous case and next actions."
 )
+DEFAULT_TC_GLOSSARY = [
+    {
+        "source": "offline / disconnected",
+        "target": "離線 / 無網絡",
+        "note": "Do not use 無線.",
+        "forbidden": ["無線", "无线"],
+    },
+    {
+        "source": "active electrical equipment",
+        "target": "帶電設備",
+        "note": "Use for live electrical equipment affected by water.",
+        "forbidden": ["電器設備", "电器设备"],
+    },
+    {
+        "source": "elevation / chainage references",
+        "target": "標高／樁號或位置參考",
+        "note": "Use Hong Kong construction-site wording for location references.",
+        "forbidden": [],
+    },
+    {
+        "source": "tie-hole repairs",
+        "target": "拉桿孔修補",
+        "note": "Use when describing waterproofing penetrations or repairs.",
+        "forbidden": [],
+    },
+    {
+        "source": "sump",
+        "target": "集水井",
+        "note": "Use for drainage/sump operation checks.",
+        "forbidden": [],
+    },
+    {
+        "source": "soil washout",
+        "target": "泥土流失或泥土沖刷",
+        "note": "Use for leakage-related erosion or washout escalation.",
+        "forbidden": ["土壤洗濁"],
+    },
+    {
+        "source": "inspect / check",
+        "target": "檢查",
+        "note": "Use Traditional Chinese script consistently.",
+        "forbidden": ["检查"],
+    },
+]
 
 
 def main() -> None:
@@ -38,6 +82,11 @@ def main() -> None:
     parser.add_argument("--require-phi4", action="store_true")
     parser.add_argument("--max-rewrite-tokens", type=int, default=160)
     parser.add_argument("--max-answer-tokens", type=int, default=520)
+    parser.add_argument(
+        "--glossary",
+        default=None,
+        help="Optional JSON glossary file loaded at runtime. Accepts a list of entries or an object with a `terms` list.",
+    )
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
     args = parser.parse_args()
 
@@ -46,6 +95,8 @@ def main() -> None:
     source_query = _find_query(source_report, args.scenario_id)
     model_dir = Path(args.phi4_onnx_model_dir) if args.phi4_onnx_model_dir else None
     generator = _load_phi4(model_dir, args.phi4_execution_provider, require_phi4=args.require_phi4)
+    glossary = _load_glossary(Path(args.glossary) if args.glossary else None)
+    glossary_prompt = _format_glossary_for_prompt(glossary)
 
     image_body = source_query["query_image_caption"]
     rewrite_prompt = _build_rewrite_prompt(args.traditional_chinese_query, image_body)
@@ -80,6 +131,7 @@ def main() -> None:
         normalized_query=normalized_query,
         hits=source_query["hits"],
         query_image=source_query["query_image"],
+        glossary_prompt=glossary_prompt,
     )
     if generator:
         answer_started = time.perf_counter()
@@ -90,21 +142,22 @@ def main() -> None:
                     "content": (
                         "You are an offline construction field copilot. Answer in Traditional Chinese only. "
                         "Use only the retrieved local evidence. Cite incident IDs exactly, preserve escalation rules, "
-                        "and do not invent approvals, standards, or facts. Use Hong Kong construction-site wording: "
-                        "translate offline/disconnected as 離線 or 無網絡, never as 無線."
+                        "and do not invent approvals, standards, or facts. Apply the supplied glossary exactly. "
+                        "Before finalizing, self-check that the answer uses Traditional Chinese script and contains none of the forbidden terms."
                     ),
                 },
                 {"role": "user", "content": answer_prompt},
             ],
             max_new_tokens=args.max_answer_tokens,
         ).strip()
-        answer_tc = _normalize_traditional_chinese(answer_tc_raw)
+        answer_tc = answer_tc_raw
         timings["answer_generation"] = round(time.perf_counter() - answer_started, 3)
     else:
         answer_tc_raw = _fallback_traditional_chinese_answer(source_query["hits"])
-        answer_tc = _normalize_traditional_chinese(answer_tc_raw)
+        answer_tc = answer_tc_raw
 
     top_hit = source_query["hits"][0] if source_query["hits"] else {}
+    answer_validation_warnings = _validate_answer_against_glossary(answer_tc, glossary)
     report = {
         "mode": "full-offline-traditional-chinese-validation",
         "online_used": False,
@@ -125,6 +178,8 @@ def main() -> None:
         "answer_model": "microsoft/Phi-4-mini-instruct-onnx" if generator else "deterministic-reference-fallback",
         "phi4_model_dir": str(model_dir) if model_dir else "",
         "answer_execution_provider": args.phi4_execution_provider if generator else "",
+        "glossary_source": str(Path(args.glossary)) if args.glossary else "default-construction-tc-glossary",
+        "glossary_terms": glossary,
         "normalized_retrieval_query_en": normalized_query,
         "hits": source_query["hits"],
         "expected_incident_id": source_query.get("expected_incident_id"),
@@ -132,7 +187,8 @@ def main() -> None:
         "matched_expected": bool(source_query.get("expected_incident_id") and top_hit.get("incident_id") == source_query.get("expected_incident_id")),
         "answer_tc": answer_tc,
         "answer_tc_raw": answer_tc_raw,
-        "answer_tc_normalized": answer_tc != answer_tc_raw,
+        "answer_postprocessed": False,
+        "answer_validation_warnings": answer_validation_warnings,
         "timings_seconds": timings,
         "rewrite_prompt": rewrite_prompt,
         "answer_prompt": answer_prompt,
@@ -236,6 +292,7 @@ def _build_answer_prompt(
     normalized_query: str,
     hits: list[dict[str, Any]],
     query_image: str,
+    glossary_prompt: str,
 ) -> str:
     evidence = "\n".join(_hit_evidence_line(hit) for hit in hits)
     return (
@@ -253,13 +310,10 @@ def _build_answer_prompt(
         "- Start with the most relevant incident ID and why it matches.\n"
         "- Provide practical next actions grounded in the retrieved evidence.\n"
         "- Preserve the escalation condition from the evidence.\n"
-        "- State that this is an offline answer from the local case pack.\n\n"
-        "Terminology guidance for Traditional Chinese output:\n"
-        "- offline/disconnected = 離線 or 無網絡\n"
-        "- active electrical equipment = 帶電設備\n"
-        "- elevation/chainage references = 標高／樁號或位置參考\n"
-        "- tie-hole repairs = 拉桿孔修補\n"
-        "- sump = 集水井"
+        "- State that this is an offline answer from the local case pack.\n"
+        "- Use the glossary below exactly; do not use any forbidden terms.\n"
+        "- Before finalizing, check your answer against the glossary and rewrite internally if needed.\n\n"
+        f"{glossary_prompt}"
     )
 
 
@@ -319,30 +373,56 @@ def _tc_action(action: str) -> str:
     return replacements.get(action, action)
 
 
-def _normalize_traditional_chinese(text: str) -> str:
-    replacements = {
-        "检查": "檢查",
-        "标记": "標記",
-        "记录": "記錄",
-        "电器设备": "電氣設備",
-        "電器設備": "電氣設備",
-        "影响": "影響",
-        "无线": "離線",
-        "無線": "離線",
-        "土壤洗濁": "泥土流失或泥土沖刷",
-        "一时性": "臨時",
-        "时": "時",
-        "发": "發",
-        "复": "覆",
-        "应": "應",
-        "该": "該",
-        "处": "處",
-        "断": "斷",
-    }
-    normalized = text
-    for source, target in replacements.items():
-        normalized = normalized.replace(source, target)
-    return normalized
+def _load_glossary(path: Path | None) -> list[dict[str, Any]]:
+    if path is None:
+        return DEFAULT_TC_GLOSSARY
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    terms = payload.get("terms", payload) if isinstance(payload, dict) else payload
+    if not isinstance(terms, list):
+        raise ValueError("Glossary JSON must be a list or an object containing a `terms` list.")
+    normalized_terms = []
+    for index, term in enumerate(terms, start=1):
+        if not isinstance(term, dict):
+            raise ValueError(f"Glossary term {index} must be an object.")
+        if not term.get("source") or not term.get("target"):
+            raise ValueError(f"Glossary term {index} must include `source` and `target`.")
+        forbidden = term.get("forbidden", [])
+        if isinstance(forbidden, str):
+            forbidden = [forbidden]
+        normalized_terms.append(
+            {
+                "source": str(term["source"]),
+                "target": str(term["target"]),
+                "note": str(term.get("note", "")),
+                "forbidden": [str(item) for item in forbidden],
+            }
+        )
+    return normalized_terms
+
+
+def _format_glossary_for_prompt(glossary: list[dict[str, Any]]) -> str:
+    lines = [
+        "Traditional Chinese glossary for this answer:",
+        "| Source concept / English term | Required Traditional Chinese wording | Forbidden terms | Notes |",
+        "| --- | --- | --- | --- |",
+    ]
+    for term in glossary:
+        forbidden = ", ".join(term.get("forbidden", [])) or "-"
+        lines.append(f"| {term['source']} | {term['target']} | {forbidden} | {term.get('note', '')} |")
+    return "\n".join(lines)
+
+
+def _validate_answer_against_glossary(answer: str, glossary: list[dict[str, Any]]) -> list[str]:
+    warnings = []
+    for term in glossary:
+        for forbidden in term.get("forbidden", []):
+            if forbidden and forbidden in answer:
+                warnings.append(
+                    f"Forbidden term `{forbidden}` found; prefer `{term['target']}` for `{term['source']}`."
+                )
+    if re.search(r"[\u4e00-\u9fff]", answer) and re.search(r"检查|无线|电器|土壤洗濁", answer):
+        warnings.append("Potential simplified Chinese or non-preferred construction wording detected.")
+    return warnings
 
 
 def _relative(path: Path) -> str:
