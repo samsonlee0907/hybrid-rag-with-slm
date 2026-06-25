@@ -7,4 +7,5 @@ torch==2.6.0
 transformers>=4.43.0,<5
 accelerate>=0.33.0,<2
 # Optional for Phi-4 ONNX local generation:
-# onnxruntime-genai --pre
+# onnxruntime-genai --pre            # CPU/mobile package
+# onnxruntime-genai-cuda --pre       # CUDA package

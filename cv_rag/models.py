@@ -4,12 +4,15 @@ import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
+import time
 
 import torch
 from PIL import Image
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
+    BlipForConditionalGeneration,
+    BlipProcessor,
     CLIPModel,
     CLIPProcessor,
 )
@@ -90,6 +93,90 @@ class Phi4MiniGenerator:
         )
         generated = outputs[0][inputs["input_ids"].shape[-1] :]
         return self.tokenizer.decode(generated, skip_special_tokens=True).strip()
+
+
+class Phi4MiniOnnxGenerator:
+    def __init__(self, model_dir: str, execution_provider: str = "cuda") -> None:
+        try:
+            import onnxruntime_genai as og
+        except ImportError as exc:
+            raise RuntimeError(
+                "onnxruntime-genai is not installed. Install `onnxruntime-genai-cuda` "
+                "for CUDA or `onnxruntime-genai` for CPU before running the real local demo."
+            ) from exc
+
+        self._og = og
+        self.model_dir = model_dir
+        self.execution_provider = execution_provider
+        config = og.Config(model_dir)
+        if execution_provider not in {"follow_config", "cpu"}:
+            config.clear_providers()
+            config.append_provider(execution_provider)
+        self.model = og.Model(config)
+        self.tokenizer = og.Tokenizer(self.model)
+        self.stream = self.tokenizer.create_stream()
+
+    def generate(self, prompt: str, max_new_tokens: int = 320) -> str:
+        messages = [
+            {
+                "role": "system",
+                "content": "You are an offline construction incident copilot. Answer only from retrieved evidence and cite incident IDs.",
+            },
+            {"role": "user", "content": prompt},
+        ]
+        prompt_text = self._apply_chat_template(messages)
+        input_tokens = self.tokenizer.encode(prompt_text)
+        params = self._og.GeneratorParams(self.model)
+        params.set_search_options(
+            max_length=len(input_tokens) + max_new_tokens,
+            do_sample=False,
+            temperature=0.0,
+            top_p=1.0,
+        )
+        generator = self._og.Generator(self.model, params)
+        generator.append_tokens(input_tokens)
+
+        tokens: list[str] = []
+        started = time.perf_counter()
+        while not generator.is_done():
+            generator.generate_next_token()
+            tokens.append(self.stream.decode(generator.get_next_tokens()[0]))
+        self.last_duration_seconds = time.perf_counter() - started
+        del generator
+        return "".join(tokens).strip()
+
+    def _apply_chat_template(self, messages: list[dict[str, str]]) -> str:
+        try:
+            import json
+
+            template_path = Path(self.model_dir) / "chat_template.jinja"
+            template = template_path.read_text(encoding="utf-8") if template_path.exists() else ""
+            return self.tokenizer.apply_chat_template(
+                messages=json.dumps(messages),
+                add_generation_prompt=True,
+                template_str=template,
+            )
+        except Exception:
+            return f"System: {messages[0]['content']}\nUser: {messages[1]['content']}\nAssistant:"
+
+
+class BlipImageCaptioner:
+    def __init__(self, model_name: str = "Salesforce/blip-image-captioning-base", device: str = "auto") -> None:
+        self.info = resolve_device(device)
+        self.model_name = model_name
+        self.processor = BlipProcessor.from_pretrained(model_name)
+        self.model = BlipForConditionalGeneration.from_pretrained(
+            model_name,
+            torch_dtype=self.info.torch_dtype,
+        ).to(self.info.device)
+        self.model.eval()
+
+    @torch.inference_mode()
+    def caption(self, image_path: str, prompt: str = "a construction site photo of") -> str:
+        image = Image.open(image_path).convert("RGB")
+        inputs = self.processor(image, prompt, return_tensors="pt").to(self.info.device, self.info.torch_dtype)
+        outputs = self.model.generate(**inputs, max_new_tokens=40)
+        return self.processor.decode(outputs[0], skip_special_tokens=True).strip()
 
 
 class EvidenceTemplateGenerator:

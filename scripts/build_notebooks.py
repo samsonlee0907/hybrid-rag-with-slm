@@ -16,18 +16,23 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOKS_DIR = REPO_ROOT / "notebooks"
 OFFLINE_ASSETS = NOTEBOOKS_DIR / "assets" / "cv_rag_enriched"
 CONTEXT_ASSETS = NOTEBOOKS_DIR / "assets" / "context_lifecycle"
+REAL_LOCAL_ASSETS = NOTEBOOKS_DIR / "assets" / "real_local_inference"
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build executed notebooks from CV-RAG report JSON assets.")
     parser.add_argument("--offline-report", default=str(OFFLINE_ASSETS / "offline_eval_report.json"))
     parser.add_argument("--context-report", default=str(CONTEXT_ASSETS / "context_lifecycle_report.json"))
+    parser.add_argument("--real-local-report", default=str(REAL_LOCAL_ASSETS / "real_local_inference_report.json"))
     parser.add_argument("--offline-output", default=str(NOTEBOOKS_DIR / "offline_cv_rag_results.ipynb"))
     parser.add_argument("--context-output", default=str(NOTEBOOKS_DIR / "field_context_lifecycle_hybrid_rag.ipynb"))
+    parser.add_argument("--real-local-output", default=str(NOTEBOOKS_DIR / "real_local_inference_cv_rag.ipynb"))
     args = parser.parse_args()
 
     build_offline_notebook(Path(args.offline_report), Path(args.offline_output))
     build_context_notebook(Path(args.context_report), Path(args.context_output))
+    if Path(args.real_local_report).exists():
+        build_real_local_notebook(Path(args.real_local_report), Path(args.real_local_output))
 
 
 def build_offline_notebook(report_path: Path, output_path: Path) -> None:
@@ -285,6 +290,78 @@ def build_context_notebook(report_path: Path, output_path: Path) -> None:
     _write_notebook(output_path, cells)
 
 
+def build_real_local_notebook(report_path: Path, output_path: Path) -> None:
+    report = _read_json(report_path)
+    top_hit = report["hits"][0]
+
+    cells = [
+        _markdown(
+            "# Real Local CV-RAG Inference on the A10 VM\n\n"
+            "This notebook captures a non-deterministic local inference run on `vm-cvrag-a10-poc`. "
+            "The result is not the template fallback: BLIP captioned the query photo locally, CLIP embedded the "
+            "text + image + caption for SQLite vector search, and Phi-4-mini ONNX generated the final answer from "
+            "retrieved evidence."
+        ),
+        _markdown(
+            "## What ran locally\n\n"
+            + _markdown_table(
+                ["Stage", "Executed model/runtime", "Result"],
+                [
+                    [
+                        "Photo understanding",
+                        f"`{report['query_image_caption_model']}`",
+                        f"Caption: `{report['query_image_caption']}`",
+                    ],
+                    [
+                        "Vector retrieval",
+                        f"`{report['query_embedding_model']}` + {report['vector_store']}",
+                        "Inputs: " + ", ".join(report["query_vector_inputs"]),
+                    ],
+                    [
+                        "Answer drafting",
+                        f"`{report['answer_model']}` via ONNX Runtime GenAI",
+                        f"Provider: `{report['answer_execution_provider']}`; model path: `{report['answer_model_dir']}`",
+                    ],
+                    [
+                        "A10 GPU finding",
+                        "`gpu/gpu-int4-rtn-block-32` downloaded successfully",
+                        "It did not fit in the 4 GB A10-4Q framebuffer, so the successful run used the official CPU/mobile int4 package for Phi-4-mini.",
+                    ],
+                ],
+            )
+        ),
+        _html_output_cell(
+            "from IPython.display import HTML, display\n"
+            "# Executed output below embeds the query photo and retrieval thumbnails.\n"
+            "display(HTML(real_local_result_html))\n",
+            _real_local_result_html(report),
+            execution_count=1,
+        ),
+        _markdown(
+            "## User question and Phi-4-mini response\n\n"
+            f"**User question:** {report['query']}\n\n"
+            f"**Top retrieved case:** `{top_hit['incident_id']}` - {top_hit['title']} "
+            f"(`score={top_hit['score']:.4f}`, severity `{top_hit['severity']}`)\n\n"
+            "**Model response:**\n\n"
+            f"{_quote_block(report['answer'])}"
+        ),
+        _markdown(
+            "## Timing from the VM run\n\n"
+            + _markdown_table(
+                ["Step", "Seconds"],
+                [
+                    ["BLIP image caption", report["timings_seconds"]["caption"]],
+                    ["CLIP retrieval over SQLite", report["timings_seconds"]["retrieval"]],
+                    ["Phi-4-mini load + generation", report["timings_seconds"]["generation"]],
+                    ["Phi-4-mini decode loop only", report["timings_seconds"]["model_decode_loop"]],
+                ],
+            )
+        ),
+    ]
+
+    _write_notebook(output_path, cells)
+
+
 def _read_json(path: Path) -> Any:
     if not path.exists():
         raise FileNotFoundError(f"Required report not found: {path}")
@@ -392,6 +469,34 @@ def _image_gallery_html(items: list[dict[str, Any]], *, title: str) -> str:
             f"<div style='font-weight:600; margin-top:6px'>{escape(item['id'])} - {escape(item['title'])}</div>"
             f"<div><b>Severity:</b> {escape(item.get('severity', ''))}</div>"
             f"<div style='font-size:12px'>{escape(item.get('caption', ''))}</div>"
+            "</div>"
+        )
+    blocks.append("</div></div>")
+    return "\n".join(blocks)
+
+
+def _real_local_result_html(report: dict[str, Any]) -> str:
+    blocks = [
+        "<div style='font-family:Segoe UI,Arial,sans-serif'>",
+        "<h2>Real local inference query and retrieval</h2>",
+        "<div style='display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px'>",
+        "<div style='width:300px; border:2px solid #555; padding:10px; border-radius:8px'>"
+        f"<img src='{_thumbnail_data_uri(REPO_ROOT / report['query_image'])}' style='width:100%; height:190px; object-fit:cover; border-radius:4px'>"
+        "<div style='font-weight:600; margin-top:6px'>Query photo</div>"
+        f"<div><b>BLIP caption:</b> {escape(report['query_image_caption'])}</div>"
+        "</div>",
+        "</div>",
+        "<h3>Top retrieved local evidence</h3>",
+        "<div style='display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px'>",
+    ]
+    for hit in report["hits"]:
+        blocks.append(
+            "<div style='border:1px solid #ddd; padding:10px; border-radius:8px'>"
+            f"<img src='{_thumbnail_data_uri(REPO_ROOT / hit['image_path'])}' style='width:100%; height:155px; object-fit:cover; border-radius:4px'>"
+            f"<div style='font-weight:600; margin-top:6px'>#{hit['rank']} {escape(hit['incident_id'])}</div>"
+            f"<div>{escape(hit['title'])}</div>"
+            f"<div><b>Score:</b> {hit['score']:.4f}</div>"
+            f"<div><b>Severity:</b> {escape(hit['severity'])}</div>"
             "</div>"
         )
     blocks.append("</div></div>")

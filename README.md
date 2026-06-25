@@ -146,7 +146,40 @@ The local image path is handled by CLIP, not by Phi-4-mini-instruct:
 
 Phi-4-mini-instruct is not a vision model. If the SLM itself must directly inspect image + text input, use a vision-capable Phi model such as `microsoft/Phi-4-multimodal-instruct`; Microsoft describes it as processing text, image, and audio inputs and generating text outputs. See the official model cards for [`Phi-4-mini-instruct`](https://huggingface.co/microsoft/Phi-4-mini-instruct) and [`Phi-4-multimodal-instruct`](https://huggingface.co/microsoft/Phi-4-multimodal-instruct).
 
-The committed notebook runs use `--generator template` for deterministic, resource-safe validation on the 4 GB A10 vGPU VM. Use `--generator phi4` only after `microsoft/Phi-4-mini-instruct` is cached and there is enough memory for local text generation.
+The offline and hybrid comparison notebooks use `--generator template` for deterministic, resource-safe validation on the 4 GB A10 vGPU VM. The real local inference notebook below records an actual Phi-4-mini ONNX run.
+
+### Real local inference experiment
+
+For a non-deterministic local run on the A10 VM, use:
+
+- BLIP (`Salesforce/blip-image-captioning-base`) to produce a short local caption from the query photo.
+- CLIP (`openai/clip-vit-base-patch32`) to embed query text + query image + caption for vector search.
+- Phi-4-mini ONNX int4 (`microsoft/Phi-4-mini-instruct-onnx`) through ONNX Runtime GenAI for local text answer drafting.
+
+The 4 GB `NVIDIA A10-4Q` vGPU successfully runs the local BLIP/CLIP stages, but the official Phi-4-mini ONNX GPU int4 package did not fit in that framebuffer. The successful VM run therefore used the official CPU/mobile int4 Phi-4-mini ONNX package for answer drafting while keeping retrieval fully local.
+
+Model setup on the VM:
+
+```bash
+python3 -m pip install --pre onnxruntime-genai-cuda
+python3 -m pip install 'huggingface_hub[hf_xet]>=0.34,<1.0'
+hf download microsoft/Phi-4-mini-instruct-onnx \
+  --include 'cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/*' \
+  --local-dir /opt/models/Phi-4-mini-instruct-onnx
+```
+
+Run the real local demo:
+
+```bash
+python3 scripts/run_real_local_inference_demo.py \
+  --workspace notebooks/assets/cv_rag_enriched \
+  --device cuda \
+  --phi4-onnx-model-dir /opt/models/Phi-4-mini-instruct-onnx/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4 \
+  --phi4-execution-provider follow_config \
+  --query-image notebooks/assets/cv_rag_enriched/images/inc_001_basement_wall_water_ingress_observed_at_cons.png
+```
+
+The recorded VM result is in `notebooks/real_local_inference_cv_rag.ipynb` and `notebooks/assets/real_local_inference/real_local_inference_report.json`. The successful run indexed six local enriched incidents, captioned the query photo as `a construction site photo of a concrete wall`, retrieved `INC-001` as the top visual/text match with score `0.8833`, and generated a grounded Phi-4-mini response in about 49 seconds including model load.
 
 Example image + text retrieval query:
 
