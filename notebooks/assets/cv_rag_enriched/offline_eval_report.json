@@ -106,6 +106,11 @@
       "scenario": "basement water ingress",
       "query": "A photo shows damp staining and active seepage along a basement retaining wall cold joint.",
       "expected": "INC-001",
+      "query_image": "inc_001_basement_wall_water_ingress_observed_at_cons.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-001",
       "matched": true,
       "hits": [
@@ -114,7 +119,7 @@
           "incident_id": "INC-001",
           "title": "Basement wall water ingress observed at construction joint",
           "severity": "high",
-          "score": 0.691,
+          "score": 0.8853,
           "image": "inc_001_basement_wall_water_ingress_observed_at_cons.png"
         },
         {
@@ -122,7 +127,7 @@
           "incident_id": "INC-006",
           "title": "Hairline crack observed near lift core wall opening",
           "severity": "medium",
-          "score": 0.5963,
+          "score": 0.7879,
           "image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png"
         },
         {
@@ -130,7 +135,7 @@
           "incident_id": "INC-002",
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
-          "score": 0.5477,
+          "score": 0.7676,
           "image": "inc_002_concrete_column_honeycombing_detected_after_.png"
         }
       ]
@@ -139,6 +144,11 @@
       "scenario": "column honeycombing",
       "query": "A column face has honeycombing, exposed aggregate, and rough voids after formwork striking.",
       "expected": "INC-002",
+      "query_image": "inc_002_concrete_column_honeycombing_detected_after_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-002",
       "matched": true,
       "hits": [
@@ -147,7 +157,7 @@
           "incident_id": "INC-002",
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
-          "score": 0.6885,
+          "score": 0.8807,
           "image": "inc_002_concrete_column_honeycombing_detected_after_.png"
         },
         {
@@ -155,7 +165,7 @@
           "incident_id": "INC-006",
           "title": "Hairline crack observed near lift core wall opening",
           "severity": "medium",
-          "score": 0.635,
+          "score": 0.8018,
           "image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png"
         },
         {
@@ -163,7 +173,7 @@
           "incident_id": "INC-003",
           "title": "Rebar congestion visible at beam-column joint",
           "severity": "medium",
-          "score": 0.6083,
+          "score": 0.7668,
           "image": "inc_003_rebar_congestion_visible_at_beam_column_join.png"
         }
       ]
@@ -172,6 +182,11 @@
       "scenario": "rebar congestion",
       "query": "Dense rebar at a beam-column joint blocks concrete flow and makes vibrator access difficult.",
       "expected": "INC-003",
+      "query_image": "inc_003_rebar_congestion_visible_at_beam_column_join.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-003",
       "matched": true,
       "hits": [
@@ -180,7 +195,7 @@
           "incident_id": "INC-003",
           "title": "Rebar congestion visible at beam-column joint",
           "severity": "medium",
-          "score": 0.7314,
+          "score": 0.9073,
           "image": "inc_003_rebar_congestion_visible_at_beam_column_join.png"
         },
         {
@@ -188,7 +203,7 @@
           "incident_id": "INC-006",
           "title": "Hairline crack observed near lift core wall opening",
           "severity": "medium",
-          "score": 0.645,
+          "score": 0.7649,
           "image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png"
         },
         {
@@ -196,7 +211,7 @@
           "incident_id": "INC-002",
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
-          "score": 0.6427,
+          "score": 0.764,
           "image": "inc_002_concrete_column_honeycombing_detected_after_.png"
         }
       ]
@@ -205,6 +220,11 @@
       "scenario": "MEP ceiling clash",
       "query": "A duct is installed below the intended ceiling plane and clashes with sprinkler and lighting space.",
       "expected": "INC-004",
+      "query_image": "inc_004_mep_duct_coordination_clash_at_ceiling_void.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-004",
       "matched": true,
       "hits": [
@@ -213,24 +233,24 @@
           "incident_id": "INC-004",
           "title": "MEP duct coordination clash at ceiling void",
           "severity": "medium",
-          "score": 0.7043,
+          "score": 0.893,
           "image": "inc_004_mep_duct_coordination_clash_at_ceiling_void.png"
         },
         {
           "rank": 2,
-          "incident_id": "INC-006",
-          "title": "Hairline crack observed near lift core wall opening",
-          "severity": "medium",
-          "score": 0.5694,
-          "image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png"
-        },
-        {
-          "rank": 3,
           "incident_id": "INC-005",
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
-          "score": 0.5579,
+          "score": 0.7462,
           "image": "inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png"
+        },
+        {
+          "rank": 3,
+          "incident_id": "INC-006",
+          "title": "Hairline crack observed near lift core wall opening",
+          "severity": "medium",
+          "score": 0.7384,
+          "image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png"
         }
       ]
     },
@@ -238,6 +258,11 @@
       "scenario": "open edge hazard",
       "query": "An unprotected slab edge is beside scaffold access with no guardrail or toe board.",
       "expected": "INC-005",
+      "query_image": "inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-005",
       "matched": true,
       "hits": [
@@ -246,7 +271,7 @@
           "incident_id": "INC-005",
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
-          "score": 0.7299,
+          "score": 0.8968,
           "image": "inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png"
         },
         {
@@ -254,7 +279,7 @@
           "incident_id": "INC-006",
           "title": "Hairline crack observed near lift core wall opening",
           "severity": "medium",
-          "score": 0.6256,
+          "score": 0.7798,
           "image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png"
         },
         {
@@ -262,7 +287,7 @@
           "incident_id": "INC-003",
           "title": "Rebar congestion visible at beam-column joint",
           "severity": "medium",
-          "score": 0.595,
+          "score": 0.7338,
           "image": "inc_003_rebar_congestion_visible_at_beam_column_join.png"
         }
       ]
@@ -271,6 +296,11 @@
       "scenario": "lift core crack",
       "query": "There is a crack near the lift core wall opening shortly after concrete placement.",
       "expected": "INC-006",
+      "query_image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-006",
       "matched": true,
       "hits": [
@@ -279,28 +309,30 @@
           "incident_id": "INC-006",
           "title": "Hairline crack observed near lift core wall opening",
           "severity": "medium",
-          "score": 0.7059,
+          "score": 0.8981,
           "image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png"
         },
         {
           "rank": 2,
-          "incident_id": "INC-005",
-          "title": "Unsafe open edge adjacent to scaffold access point",
-          "severity": "critical",
-          "score": 0.6537,
-          "image": "inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png"
-        },
-        {
-          "rank": 3,
           "incident_id": "INC-002",
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
-          "score": 0.6154,
+          "score": 0.798,
           "image": "inc_002_concrete_column_honeycombing_detected_after_.png"
+        },
+        {
+          "rank": 3,
+          "incident_id": "INC-005",
+          "title": "Unsafe open edge adjacent to scaffold access point",
+          "severity": "critical",
+          "score": 0.7903,
+          "image": "inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png"
         }
       ]
     }
   ],
+  "query_mode": "image-text",
+  "query_embedding_model": "openai/clip-vit-base-patch32",
   "top1_accuracy": 1.0,
   "answer_generator": "template",
   "phi4_role": [
@@ -312,14 +344,16 @@
     {
       "scenario": "basement water ingress",
       "query": "A photo shows damp staining and active seepage along a basement retaining wall cold joint.",
-      "phi4_evidence_prompt": "Retrieved evidence:\n[INC-001] score=0.691; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-006] score=0.596; title=Hairline crack observed near lift core wall opening; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_006_hairline_crack_observed_near_lift_core_wall_.png; observation=A narrow crack is visible near the lift core wall, close to an opening or re-entrant corner. At the moment it appears to be a hairline surface condition, but its location warrants monitoring because core walls can attract stress concentrations and construction-stage movement.; action=Measure and mark crack length, width, and orientation using a calibrated gauge.; Check whether the crack is live by monitoring for seasonal or load-related movement.; Review recent pours, stripping sequence, and temporary loading around the core wall.; Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.; Escalate for structural review if the crack widens, propagates, or appears through-thickness.; escalation=Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation.\n[INC-002] score=0.548; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nQuestion:\nA photo shows damp staining and active seepage along a basement retaining wall cold joint.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-      "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A photo shows damp staining and active seepage along a basement retaining wall cold joint.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[INC-001] score=0.691; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-006] score=0.596; title=Hairline crack observed near lift core wall opening; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_006_hairline_crack_observed_near_lift_core_wall_.png; observation=A narrow crack is visible near the lift core wall, close to an opening or re-entrant corner. At the moment it appears to be a hairline surface condition, but its location warrants monitoring because core walls can attract stress concentrations and construction-stage movement.; action=Measure and mark crack length, width, and orientation using a calibrated gauge.; Check whether the crack is live by monitoring for seasonal or load-related movement.; Review recent pours, stripping sequence, and temporary loading around the core wall.; Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.; Escalate for structural review if the crack widens, propagates, or appears through-thickness.; escalation=Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation.\n[INC-002] score=0.548; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+      "query_image": "notebooks/assets/cv_rag_enriched/images/inc_001_basement_wall_water_ingress_observed_at_cons.png",
+      "phi4_evidence_prompt": "Retrieved evidence:\n[INC-001] score=0.885; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; visual_clues=Dark damp streaks on cast wall surface, Visible drips at construction joint, Efflorescence near joint line, Localized puddling at wall base; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; root_cause=Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-006] score=0.788; title=Hairline crack observed near lift core wall opening; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_006_hairline_crack_observed_near_lift_core_wall_.png; visual_clues=Fine line crack near corner, No visible offset between surfaces, Localized around opening or stress concentration, No active leakage or spalling apparent; observation=A narrow crack is visible near the lift core wall, close to an opening or re-entrant corner. At the moment it appears to be a hairline surface condition, but its location warrants monitoring because core walls can attract stress concentrations and construction-stage movement.; root_cause=Possible shrinkage crack, restraint from adjacent pours, temporary load transfer effects, or stress concentration at an opening corner.; action=Measure and mark crack length, width, and orientation using a calibrated gauge.; Check whether the crack is live by monitoring for seasonal or load-related movement.; Review recent pours, stripping sequence, and temporary loading around the core wall.; Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.; Escalate for structural review if the crack widens, propagates, or appears through-thickness.; escalation=Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation.\n[INC-002] score=0.768; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_002_concrete_column_honeycombing_detected_after_.png; visual_clues=Exposed coarse aggregate, Voids and honeycombed surface texture, Minor grout leakage marks, Irregular finish at column corner; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; root_cause=Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nWorker question:\nA photo shows damp staining and active seepage along a basement retaining wall cold joint.\n\nQuery image used for retrieval: notebooks/assets/cv_rag_enriched/images/inc_001_basement_wall_water_ingress_observed_at_cons.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+      "answer": "This looks closest to [INC-001] Basement wall water ingress observed at construction joint (severity: high).\n\nWhat I can ground from the local evidence: Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.\n\nLikely cause to check: Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.\n\nRecommended next actions:\n1. Mark and photograph the full extent of seepage and note elevation/chainage references\n2. Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs\n3. Check adjacent drainage, sump operation, and external water management conditions\n4. Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas\n5. Raise a corrective action for waterproofing specialist review and retesting after repair\n\nEscalate if: Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nAlso compare against [INC-006], [INC-002] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [INC-001]."
     },
     {
       "scenario": "column honeycombing",
       "query": "A column face has honeycombing, exposed aggregate, and rough voids after formwork striking.",
-      "phi4_evidence_prompt": "Retrieved evidence:\n[INC-002] score=0.688; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-006] score=0.635; title=Hairline crack observed near lift core wall opening; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_006_hairline_crack_observed_near_lift_core_wall_.png; observation=A narrow crack is visible near the lift core wall, close to an opening or re-entrant corner. At the moment it appears to be a hairline surface condition, but its location warrants monitoring because core walls can attract stress concentrations and construction-stage movement.; action=Measure and mark crack length, width, and orientation using a calibrated gauge.; Check whether the crack is live by monitoring for seasonal or load-related movement.; Review recent pours, stripping sequence, and temporary loading around the core wall.; Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.; Escalate for structural review if the crack widens, propagates, or appears through-thickness.; escalation=Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation.\n[INC-003] score=0.608; title=Rebar congestion visible at beam-column joint; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_003_rebar_congestion_visible_at_beam_column_join.png; observation=The beam-column joint appears heavily congested, with limited access for concrete placement and vibration. The reinforcement arrangement may still be within design intent, but the visual buildability risk is elevated due to reduced clear spacing and potential cover noncompliance.; action=Compare installed reinforcement against approved shop drawings and bar bending schedules.; Confirm minimum clear spacing, lap locations, and cover compliance before pour.; Coordinate with structural designer on any permissible bar adjustments or coupler alternatives.; Plan concrete placement with smaller aggregate, controlled lift heights, and dedicated vibration access.; Document the joint with pre-pour photos and sign-off before closing forms.; escalation=Escalate if required clear spacing cannot be achieved, if cover blocks cannot be installed correctly, or if the pour is proceeding without engineer approval.\n\nQuestion:\nA column face has honeycombing, exposed aggregate, and rough voids after formwork striking.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-      "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A column face has honeycombing, exposed aggregate, and rough voids after formwork striking.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[INC-002] score=0.688; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-006] score=0.635; title=Hairline crack observed near lift core wall opening; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_006_hairline_crack_observed_near_lift_core_wall_.png; observation=A narrow crack is visible near the lift core wall, close to an opening or re-entrant corner. At the moment it appears to be a hairline surface condition, but its location warrants monitoring because core walls can attract stress concentrations and construction-stage movement.; action=Measure and mark crack length, width, and orientation using a calibrated gauge.; Check whether the crack is live by monitoring for seasonal or load-related movement.; Review recent pours, stripping sequence, and temporary loading around the core wall.; Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.; Escalate for structural review if the crack widens, propagates, or appears through-thickness.; escalation=Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation.\n[INC-003] score=0.608; title=Rebar congestion visible at beam-column joint; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_003_rebar_congestion_visible_at_beam_column_join.png; observation=The beam-column joint appears heavily congested, with limited access for concrete placement and vibration. The reinforcement arrangement may still be within design intent, but the visual buildability risk is elevated due to reduced clear spacing and potential cover noncompliance.; action=Compare installed reinforcement against approved shop drawings and bar bending schedules.; Confirm minimum clear spacing, lap locations, and cover compliance before pour.; Coordinate with structural designer on any permissible bar adjustments or coupler alternatives.; Plan concrete placement with smaller aggregate, controlled lift heights, and dedicated vibration access.; Document the joint with pre-pour photos and sign-off before closing forms.; escalation=Escalate if required clear spacing cannot be achieved, if cover blocks cannot be installed correctly, or if the pour is proceeding without engineer approval.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+      "query_image": "notebooks/assets/cv_rag_enriched/images/inc_002_concrete_column_honeycombing_detected_after_.png",
+      "phi4_evidence_prompt": "Retrieved evidence:\n[INC-002] score=0.881; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/cv_rag_enriched/images/inc_002_concrete_column_honeycombing_detected_after_.png; visual_clues=Exposed coarse aggregate, Voids and honeycombed surface texture, Minor grout leakage marks, Irregular finish at column corner; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; root_cause=Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-006] score=0.802; title=Hairline crack observed near lift core wall opening; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_006_hairline_crack_observed_near_lift_core_wall_.png; visual_clues=Fine line crack near corner, No visible offset between surfaces, Localized around opening or stress concentration, No active leakage or spalling apparent; observation=A narrow crack is visible near the lift core wall, close to an opening or re-entrant corner. At the moment it appears to be a hairline surface condition, but its location warrants monitoring because core walls can attract stress concentrations and construction-stage movement.; root_cause=Possible shrinkage crack, restraint from adjacent pours, temporary load transfer effects, or stress concentration at an opening corner.; action=Measure and mark crack length, width, and orientation using a calibrated gauge.; Check whether the crack is live by monitoring for seasonal or load-related movement.; Review recent pours, stripping sequence, and temporary loading around the core wall.; Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.; Escalate for structural review if the crack widens, propagates, or appears through-thickness.; escalation=Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation.\n[INC-003] score=0.767; title=Rebar congestion visible at beam-column joint; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_003_rebar_congestion_visible_at_beam_column_join.png; visual_clues=Closely spaced longitudinal bars, Crowded stirrups and ties, Reduced clear space for concrete flow, Difficulty aligning cover blocks or spacers; observation=The beam-column joint appears heavily congested, with limited access for concrete placement and vibration. The reinforcement arrangement may still be within design intent, but the visual buildability risk is elevated due to reduced clear spacing and potential cover noncompliance.; root_cause=Likely a combination of design-dense reinforcement at a highly loaded joint and insufficient constructability coordination between structural detailing and placement method.; action=Compare installed reinforcement against approved shop drawings and bar bending schedules.; Confirm minimum clear spacing, lap locations, and cover compliance before pour.; Coordinate with structural designer on any permissible bar adjustments or coupler alternatives.; Plan concrete placement with smaller aggregate, controlled lift heights, and dedicated vibration access.; Document the joint with pre-pour photos and sign-off before closing forms.; escalation=Escalate if required clear spacing cannot be achieved, if cover blocks cannot be installed correctly, or if the pour is proceeding without engineer approval.\n\nWorker question:\nA column face has honeycombing, exposed aggregate, and rough voids after formwork striking.\n\nQuery image used for retrieval: notebooks/assets/cv_rag_enriched/images/inc_002_concrete_column_honeycombing_detected_after_.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+      "answer": "This looks closest to [INC-002] Concrete column honeycombing detected after form removal (severity: high).\n\nWhat I can ground from the local evidence: A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.\n\nLikely cause to check: Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.\n\nRecommended next actions:\n1. Sound the affected area and carry out a depth assessment by engineer or competent inspector\n2. Verify reinforcement cover and determine whether structural repair is required\n3. Review pour sequence, vibration records, and formwork tightness for the affected lift\n4. Protect the area from impact and restrict loading until disposition is confirmed\n5. Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed\n\nEscalate if: Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nAlso compare against [INC-006], [INC-003] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [INC-002]."
     }
   ]
 }

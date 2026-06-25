@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -93,28 +94,38 @@ class Phi4MiniGenerator:
 
 class EvidenceTemplateGenerator:
     def generate(self, prompt: str, max_new_tokens: int = 320) -> str:
-        evidence = prompt.split("Retrieved evidence:", 1)[-1].split("Question:", 1)[0].strip()
-        question = prompt.split("Question:", 1)[-1].strip()
-        lines = [line for line in evidence.splitlines() if line.startswith("[")]
+        evidence = _section_between(prompt, "Retrieved evidence:", "Worker question:")
+        if not evidence:
+            evidence = _section_between(prompt, "Retrieved evidence:", "Question:")
+        question = _section_between(prompt, "Worker question:", "Query image used for retrieval:")
+        if not question:
+            question = _section_between(prompt, "Question:", "Answer requirements:")
+        top_cases = [_parse_evidence_line(line) for line in evidence.splitlines() if line.startswith("[")]
+        top_cases = [case for case in top_cases if case]
+        if not top_cases:
+            return (
+                "I could not find a relevant local case in the offline pack. "
+                "Keep the area safe, capture more photos, and escalate to the responsible supervisor before continuing work."
+            )
+
+        top = top_cases[0]
+        actions = _split_actions(top.get("action", ""))
         response = [
-            "Offline CV-RAG answer from local image vectors and incident records.",
-            f"Question: {question}",
+            f"This looks closest to {top['citation']} {top.get('title', 'the retrieved local case')} "
+            f"(severity: {top.get('severity', 'unknown')}).",
             "",
-            "Phi-4-mini role in production:",
-            "1. Read the compact evidence list returned by local vector search.",
-            "2. Turn the top visual matches into a field-ready checklist with citations.",
-            "3. Keep the answer grounded; do not invent policy or override escalation rules.",
-            "",
-            "Most relevant visual incidents:",
-            *(lines[:3] or ["No incidents retrieved."]),
-            "",
-            "Recommended response:",
-            "1. Compare the current site photo with the cited incident image and observation.",
-            "2. Apply only the corrective action that matches the field condition.",
-            "3. Escalate critical safety or structural issues before work continues.",
-            "",
-            "Offline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation.",
+            f"What I can ground from the local evidence: {top.get('observation', 'the retrieved case has similar visual evidence.')}",
         ]
+        if top.get("root_cause"):
+            response.extend(["", f"Likely cause to check: {top['root_cause']}"])
+        response.append("")
+        response.append("Recommended next actions:")
+        response.extend(f"{index}. {action}" for index, action in enumerate(actions[:5], start=1))
+        response.extend(["", f"Escalate if: {top.get('escalation', 'the condition is safety-critical or outside the cached case evidence.')}"])
+        if len(top_cases) > 1:
+            alternatives = ", ".join(case["citation"] for case in top_cases[1:3])
+            response.extend(["", f"Also compare against {alternatives} if the photo does not match the top case."])
+        response.extend(["", f"Grounding: answered from retrieved local evidence for {top['citation']}."])
         return "\n".join(response)
 
 
@@ -138,3 +149,33 @@ def model_cache_ready(model_names: list[str]) -> bool:
 
 def _normalize(tensor: torch.Tensor) -> torch.Tensor:
     return tensor / tensor.norm(dim=-1, keepdim=True).clamp_min(1e-12)
+
+
+def _section_between(text: str, start: str, end: str) -> str:
+    if start not in text:
+        return ""
+    tail = text.split(start, 1)[1]
+    if end in tail:
+        tail = tail.split(end, 1)[0]
+    return tail.strip()
+
+
+def _parse_evidence_line(line: str) -> dict[str, str] | None:
+    match = re.match(r"\[(?P<id>[^\]]+)\]\s*(?P<body>.*)", line)
+    if not match:
+        return None
+    fields = {"citation": f"[{match.group('id')}]"}
+    for key, value in re.findall(r"([a-z_]+)=(.*?)(?=; [a-z_]+=|$)", match.group("body")):
+        fields[key] = value.strip()
+    return fields
+
+
+def _split_actions(action_text: str) -> list[str]:
+    actions = [item.strip(" .") for item in re.split(r";|\n", action_text) if item.strip()]
+    if actions:
+        return actions
+    return [
+        "Compare the current site photo with the cited incident evidence.",
+        "Apply only the corrective action that matches the field condition.",
+        "Escalate before work continues if the condition is safety-critical.",
+    ]

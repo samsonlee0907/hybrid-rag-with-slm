@@ -115,5 +115,7 @@
         "ONL-011"
       ]
     }
-  ]
+  ],
+  "query_mode": "image-text",
+  "query_embedding_model": "openai/clip-vit-base-patch32"
 }

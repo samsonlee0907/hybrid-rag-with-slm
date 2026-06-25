@@ -41,9 +41,37 @@ def build_offline_notebook(report_path: Path, output_path: Path) -> None:
             "# Offline CV-RAG Results with Photorealistic Incident Context\n\n"
             "This notebook is the full-offline scenario: the device has a local image/text case pack, "
             "photorealistic construction-site image assets, local CLIP embeddings, a SQLite vector store, "
-            "and Phi-4-mini-style answer drafting from retrieved evidence. The incident text was generated "
+            "and local answer drafting from retrieved evidence. The incident text was generated "
             "with the `gpt-5.4-mini` deployment; the current image pack was generated through Azure OpenAI "
             f"`{generation.get('deployment', 'image generation')}` using the official `images/generations` API."
+        ),
+        _markdown(
+            "## Local model path clarification\n\n"
+            + _markdown_table(
+                ["Stage", "Current implementation in this VM POC"],
+                [
+                    [
+                        "Query vectorization",
+                        "`openai/clip-vit-base-patch32` runs locally and embeds both the worker text and the query image when `query_mode=image-text`.",
+                    ],
+                    [
+                        "Vector search",
+                        "SQLite stores fused CLIP image/text vectors for cached cases and returns the closest evidence.",
+                    ],
+                    [
+                        "Answer drafting",
+                        "`Phi-4-mini-instruct` is text-only, so it receives the retrieved evidence as text. It is not directly given pixels.",
+                    ],
+                    [
+                        "Executed notebook generator",
+                        f"`{report.get('answer_generator', 'unknown')}`. Use `--generator phi4` to attempt the actual local Phi-4-mini text model after weights are cached; this VM run used the deterministic fallback when set to `template`.",
+                    ],
+                    [
+                        "Direct image+text SLM option",
+                        "Use `Phi-4-multimodal-instruct` if the SLM itself must inspect the image alongside the text prompt.",
+                    ],
+                ],
+            )
         ),
         _markdown(
             "## What got indexed into the local vector store\n\n"
@@ -104,13 +132,14 @@ def build_offline_notebook(report_path: Path, output_path: Path) -> None:
         ),
         _markdown(
             "## Offline query results\n\n"
-            "Each query is embedded locally, compared against the SQLite vectors, and then passed to Phi-4-mini "
-            "as compact cited evidence. The test below checks whether the expected case is the top visual/text match.\n\n"
+            "Each worker question is paired with a query photo from the test fixture. CLIP embeds the text and image locally, "
+            "compares the fused vector against SQLite, and passes only the retrieved evidence to the answer generator.\n\n"
             + _markdown_table(
-                ["Scenario", "Expected", "Top hit", "Matched", "Top-3 retrieved cases"],
+                ["Scenario", "Query inputs", "Expected", "Top hit", "Matched", "Top-3 retrieved cases"],
                 [
                     [
                         item["scenario"],
+                        ", ".join(item.get("query_vector_inputs", ["text"])),
                         item["expected"],
                         item["top_hit"],
                         "yes" if item["matched"] else "no",
@@ -129,11 +158,9 @@ def build_offline_notebook(report_path: Path, output_path: Path) -> None:
             execution_count=2,
         ),
         _markdown(
-            "## Where Phi-4-mini helps\n\n"
-            "Phi-4-mini is the local reasoning and answer-drafting layer after retrieval; it is not the vector "
-            "database. It receives a compact evidence list with case IDs, visual match scores, action checklists, "
-            "and escalation rules. That keeps the answer grounded while allowing the phone or edge device to work "
-            "without cloud inference.\n\n"
+            "## User question and grounded model response\n\n"
+            "The notebook now presents the response the way the field worker would see it: question first, then a clean grounded answer. "
+            "The evidence prompt is still stored in the JSON report for auditability, but it is not shown as the user-facing response.\n\n"
             + "\n\n".join(_answer_example_md(item) for item in report.get("answer_examples", []))
         ),
     ]
@@ -151,13 +178,15 @@ def build_context_notebook(report_path: Path, output_path: Path) -> None:
             "This notebook shows a query/response sequence rather than only an aggregate result table. "
             "It starts from a deliberately cleaned and limited local vector store, uses connectivity resume "
             "to fetch relevant online cases, caches those cases into an offline delta pack, and then searches "
-            "again locally to show how the offline context has become richer."
+            "again locally to show how the offline context has become richer. Each search-history query is embedded "
+            f"with `{report.get('query_embedding_model', 'openai/clip-vit-base-patch32')}` using `{report.get('query_mode', 'image-text')}` inputs."
         ),
         _markdown(
             "## Information flow\n\n"
             "```mermaid\n"
             "flowchart LR\n"
-            "  Worker[Field worker photo + text query] --> Offline1[Initial offline SQLite pack]\n"
+            "  Worker[Field worker photo + text query] --> CLIP[Local CLIP image+text embedding]\n"
+            "  CLIP --> Offline1[Initial offline SQLite pack]\n"
             "  Offline1 --> Phi1[Phi-4-mini conservative answer]\n"
             "  Offline1 --> History[Search history + missed/specific intent]\n"
             "  History -->|connectivity resumes| Online[Azure AI Search full enriched index]\n"
@@ -241,10 +270,13 @@ def build_context_notebook(report_path: Path, output_path: Path) -> None:
         ),
         _markdown(
             "## Where Phi-4-mini helps in the hybrid scenario\n\n"
-            "Phi-4-mini runs after retrieval in both offline passes. Before sync, it should be conservative: cite "
+            "Local CLIP handles the image+text query embedding. Phi-4-mini-instruct runs after retrieval in both offline passes. "
+            "Because Phi-4-mini-instruct is text-only, it receives cited evidence rather than raw pixels. Before sync, it should be conservative: cite "
             "the limited evidence, explain that the local pack may not contain a specialist case, and escalate. "
             "After sync, it can use the newly cached online-only case to produce a more specific response while "
-            "still operating offline.\n\n"
+            "still operating offline. If direct image+text reasoning inside the SLM is required, replace the answer generator with "
+            "`Phi-4-multimodal-instruct`.\n\n"
+            f"This executed lifecycle report used `{report.get('answer_generator', 'unknown')}` as the answer generator.\n\n"
             "The online path can use Azure AI Search and a larger/cloud model when available, but the key hybrid "
             "behavior is that the useful online result becomes a local evidence record for the next disconnected search."
         ),
@@ -274,14 +306,15 @@ def _sequence_markdown(report: dict[str, Any]) -> str:
         parts.append(
             f"### {idx}. {item['scenario']}\n\n"
             f"**Worker query:** {item['query']}\n\n"
+            f"**Query image:** `{item.get('query_image', 'not captured')}`\n\n"
             "**Initial offline retrieval**\n\n"
             + _markdown_table(
-                ["Top-3 local evidence", "Phi-4-mini local response"],
+                ["Top-3 local evidence", "Model response from initial offline context"],
                 [[_format_local_hits(item["initial_offline"]["top3"]), _compact_answer(item["initial_offline"]["answer"])]],
             )
             + "\n\n**Enriched offline retrieval after connectivity sync**\n\n"
             + _markdown_table(
-                ["Top-3 local evidence after sync", "Phi-4-mini enriched offline response"],
+                ["Top-3 local evidence after sync", "Model response after offline cache enrichment"],
                 [
                     [
                         _format_local_hits(item["enriched_offline_after_sync"]["top3"]),
@@ -322,6 +355,14 @@ def _offline_query_html(queries: list[dict[str, Any]]) -> str:
     for item in queries:
         blocks.append(f"<h3>{escape(item['scenario'])}</h3>")
         blocks.append(f"<p><b>Query:</b> {escape(item['query'])}</p>")
+        if item.get("query_image"):
+            query_image_path = OFFLINE_ASSETS / "images" / item["query_image"]
+            blocks.append(
+                "<div style='width:260px; border:2px solid #666; padding:8px; border-radius:6px; margin-bottom:10px'>"
+                f"<img src='{_thumbnail_data_uri(query_image_path)}' style='width:100%; height:155px; object-fit:cover'>"
+                "<div><b>Query photo embedded by local CLIP</b></div>"
+                "</div>"
+            )
         blocks.append("<div style='display:flex; gap:12px; flex-wrap:wrap'>")
         for hit in item["hits"]:
             image_path = OFFLINE_ASSETS / "images" / hit["image"]
@@ -371,19 +412,25 @@ def _thumbnail_data_uri(path: Path, max_size: tuple[int, int] = (420, 280)) -> s
 
 
 def _answer_example_md(item: dict[str, Any]) -> str:
+    image_line = f"\n\n**Query image:** `{Path(item['query_image']).name}`" if item.get("query_image") else ""
     return (
         f"### {item['scenario']}\n\n"
-        f"**Query:** {item['query']}\n\n"
-        "**Phi-4-mini-style grounded answer:**\n\n"
-        f"> {_compact_answer(item['answer'])}"
+        f"**User question:** {item['query']}"
+        f"{image_line}\n\n"
+        "**Model response:**\n\n"
+        f"{_quote_block(_compact_answer(item['answer'], limit=1400))}"
     )
 
 
 def _compact_answer(answer: str, limit: int = 900) -> str:
-    normalized = " ".join(answer.split())
+    normalized = "\n".join(line.strip() for line in answer.strip().splitlines() if line.strip())
     if len(normalized) <= limit:
         return normalized
     return normalized[: limit - 1].rstrip() + "..."
+
+
+def _quote_block(text: str) -> str:
+    return "\n".join(f"> {line}" for line in text.splitlines() if line.strip())
 
 
 def _format_hits(hits: list[dict[str, Any]]) -> str:

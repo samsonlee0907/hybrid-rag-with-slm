@@ -5,6 +5,11 @@
     {
       "scenario": "basement water ingress",
       "expected": "INC-001",
+      "query_image": "inc_001_basement_wall_water_ingress_observed_at_cons.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-001",
       "top3": [
         "INC-001",
@@ -15,6 +20,11 @@
     {
       "scenario": "column honeycombing",
       "expected": "INC-002",
+      "query_image": "inc_002_concrete_column_honeycombing_detected_after_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-002",
       "top3": [
         "INC-002",
@@ -25,6 +35,11 @@
     {
       "scenario": "rebar congestion",
       "expected": "INC-003",
+      "query_image": "inc_003_rebar_congestion_visible_at_beam_column_join.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-003",
       "top3": [
         "INC-003",
@@ -35,16 +50,26 @@
     {
       "scenario": "MEP ceiling clash",
       "expected": "INC-004",
+      "query_image": "inc_004_mep_duct_coordination_clash_at_ceiling_void.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-004",
       "top3": [
         "INC-004",
-        "INC-006",
-        "INC-005"
+        "INC-005",
+        "INC-006"
       ]
     },
     {
       "scenario": "open edge hazard",
       "expected": "INC-005",
+      "query_image": "inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-005",
       "top3": [
         "INC-005",
@@ -55,11 +80,16 @@
     {
       "scenario": "lift core crack",
       "expected": "INC-006",
+      "query_image": "inc_006_hairline_crack_observed_near_lift_core_wall_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "top_hit": "INC-006",
       "top3": [
         "INC-006",
-        "INC-005",
-        "INC-002"
+        "INC-002",
+        "INC-005"
       ]
     }
   ]

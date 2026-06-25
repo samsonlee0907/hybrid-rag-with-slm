@@ -17,6 +17,7 @@ def main() -> None:
     parser.add_argument("--db", default=None, help="SQLite vector index path.")
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda"], help="Model device.")
     parser.add_argument("--query", default="A site photo shows honeycombing and exposed aggregate after formwork removal. What should we do?")
+    parser.add_argument("--query-image", default=None, help="Optional local field photo to embed with the text query for CLIP retrieval.")
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--generator", choices=["template", "phi4"], default="template")
     parser.add_argument("--offline", action="store_true", help="Use HF/Transformers offline mode after models are cached.")
@@ -33,8 +34,8 @@ def main() -> None:
     else:
         count = -1
 
-    hits = search_cv_index(args.query, db_path, device=args.device, top_k=args.top_k)
-    prompt = build_prompt(args.query, hits)
+    hits = search_cv_index(args.query, db_path, device=args.device, top_k=args.top_k, query_image=args.query_image)
+    prompt = build_prompt(args.query, hits, query_image=args.query_image)
     generator = load_generator(args.generator, device=args.device)
     answer = generator.generate(prompt)
 
@@ -45,6 +46,9 @@ def main() -> None:
         "db_path": db_path,
         "index_count": count,
         "query": args.query,
+        "query_image": args.query_image,
+        "query_vector_model": "openai/clip-vit-base-patch32",
+        "query_vector_inputs": ["text", "image"] if args.query_image else ["text"],
         "hits": [
             {
                 "incident_id": hit.incident.incident_id,
@@ -62,4 +66,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

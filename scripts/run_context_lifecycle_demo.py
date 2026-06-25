@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from cv_rag.enriched_dataset import convert_enriched_incident, convert_enriched_incidents
 from cv_rag.models import ClipEmbedder, load_generator
-from cv_rag.pipeline import build_prompt, fuse_vectors
+from cv_rag.pipeline import build_prompt, build_query_vector, fuse_vectors
 from cv_rag.store import CvVectorStore
 from cv_rag.synthetic_data import generate_dataset
 from online_rag.azure_search import AzureSearchClient, SearchConfig
@@ -90,11 +90,15 @@ def main() -> None:
     initial_results = []
     initial_hits_by_query = {}
     for item in SEARCH_HISTORY:
-        offline_hits = store.search(embedder.embed_text(item["query"]), top_k=3)
+        query_image = _query_image_path(item, image_dir, enriched_by_id)
+        query_vector = build_query_vector(embedder, item["query"], query_image=str(query_image))
+        offline_hits = store.search(query_vector, top_k=3)
         initial_hits_by_query[item["query"]] = offline_hits
         initial_results.append(
             {
                 **item,
+                "query_image": query_image.name,
+                "query_vector_inputs": ["text", "image"],
                 "offline_top3": [_summarize_local_hit(hit, rank) for rank, hit in enumerate(offline_hits, start=1)],
             }
         )
@@ -102,7 +106,9 @@ def main() -> None:
     online_resume_results = []
     synced_ids: list[str] = []
     for item in SEARCH_HISTORY:
-        online_hits = search_client.search(item["query"], embedder.embed_text(item["query"]), top=3)
+        query_image = _query_image_path(item, image_dir, enriched_by_id)
+        query_vector = build_query_vector(embedder, item["query"], query_image=str(query_image))
+        online_hits = search_client.search(item["query"], query_vector, top=3)
         selected_ids = _select_delta_ids(online_hits)
         for incident_id in selected_ids:
             if incident_id in synced_ids:
@@ -113,6 +119,8 @@ def main() -> None:
         online_resume_results.append(
             {
                 **item,
+                "query_image": query_image.name,
+                "query_vector_inputs": ["text", "image"],
                 "online_top3": [_summarize_online_hit(hit, rank) for rank, hit in enumerate(online_hits, start=1)],
                 "synced_ids": selected_ids,
             }
@@ -121,11 +129,15 @@ def main() -> None:
     later_offline_results = []
     later_hits_by_query = {}
     for item in SEARCH_HISTORY:
-        later_hits = store.search(embedder.embed_text(item["query"]), top_k=3)
+        query_image = _query_image_path(item, image_dir, enriched_by_id)
+        query_vector = build_query_vector(embedder, item["query"], query_image=str(query_image))
+        later_hits = store.search(query_vector, top_k=3)
         later_hits_by_query[item["query"]] = later_hits
         later_offline_results.append(
             {
                 **item,
+                "query_image": query_image.name,
+                "query_vector_inputs": ["text", "image"],
                 "offline_after_sync_top3": [_summarize_local_hit(hit, rank) for rank, hit in enumerate(later_hits, start=1)],
             }
         )
@@ -139,12 +151,15 @@ def main() -> None:
     for item, initial_result, online_result, later_result in zip(
         SEARCH_HISTORY, initial_results, online_resume_results, later_offline_results, strict=True
     ):
-        initial_prompt = build_prompt(item["query"], initial_hits_by_query[item["query"]])
-        later_prompt = build_prompt(item["query"], later_hits_by_query[item["query"]])
+        query_image = str(_query_image_path(item, image_dir, enriched_by_id))
+        initial_prompt = build_prompt(item["query"], initial_hits_by_query[item["query"]], query_image=query_image)
+        later_prompt = build_prompt(item["query"], later_hits_by_query[item["query"]], query_image=query_image)
         sequence_steps.append(
             {
                 "scenario": item["scenario"],
                 "query": item["query"],
+                "query_image": Path(query_image).name,
+                "query_vector_inputs": ["text", "image"],
                 "initial_offline": {
                     "top3": initial_result["offline_top3"],
                     "phi4_evidence_prompt": initial_prompt,
@@ -185,10 +200,15 @@ def main() -> None:
         "later_offline_results": later_offline_results,
         "full_online_results": full_online_results,
         "sequence_steps": sequence_steps,
+        "query_mode": "image-text",
+        "query_embedding_model": "openai/clip-vit-base-patch32",
+        "answer_generator": args.generator,
         "phi4_role": [
-            "Phi-4-mini is not the vector database; it is the local reasoning layer after retrieval.",
+            "Local CLIP embeds the worker text plus query image for retrieval.",
+            "Phi-4-mini-instruct is text-only; it is not the vector database and does not directly inspect the image.",
             "Before sync it can only answer from the limited local evidence, so it should expose uncertainty and escalation.",
             "After connectivity resumes and relevant online cases are cached, Phi-4-mini can draft richer offline answers from the updated local evidence.",
+            "Use Phi-4-multimodal-instruct if direct image+text generation is required on the SLM itself.",
         ],
         "phi4_examples": phi4_examples,
     }
@@ -217,6 +237,14 @@ def _index_incidents(store: CvVectorStore, embedder: ClipEmbedder, image_dir: Pa
         image_vector = embedder.embed_image(str(image_path))
         text_vector = embedder.embed_text(incident.searchable_text)
         store.upsert(incident, str(image_path), fuse_vectors(image_vector, text_vector))
+
+
+def _query_image_path(item: dict, image_dir: Path, enriched_by_id: dict) -> Path:
+    incident = convert_enriched_incident(enriched_by_id[item["online_expected"]])
+    image_path = image_dir / incident.image_file
+    if not image_path.exists():
+        raise FileNotFoundError(f"Missing query image for {item['scenario']}: {image_path}")
+    return image_path
 
 
 def _select_delta_ids(online_hits: list[dict]) -> list[str]:
@@ -289,6 +317,8 @@ def _build_summary(report: dict) -> dict:
             }
             for item in report["sequence_steps"]
         ],
+        "query_mode": report.get("query_mode"),
+        "query_embedding_model": report.get("query_embedding_model"),
     }
 
 

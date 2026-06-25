@@ -19,6 +19,11 @@
       "scenario": "Known concrete defect already cached",
       "query": "A column face has honeycombing and exposed aggregate after formwork removal.",
       "online_expected": "INC-002",
+      "query_image": "inc_002_concrete_column_honeycombing_detected_after_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "offline_top3": [
         {
           "rank": 1,
@@ -26,23 +31,23 @@
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.6989
+          "score": 0.8858
         },
         {
           "rank": 2,
-          "id": "INC-005",
-          "title": "Unsafe open edge adjacent to scaffold access point",
-          "severity": "critical",
-          "source_scope": "offline_seed_enriched",
-          "score": 0.5998
-        },
-        {
-          "rank": 3,
           "id": "INC-001",
           "title": "Basement wall water ingress observed at construction joint",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.5863
+          "score": 0.7387
+        },
+        {
+          "rank": 3,
+          "id": "INC-005",
+          "title": "Unsafe open edge adjacent to scaffold access point",
+          "severity": "critical",
+          "source_scope": "offline_seed_enriched",
+          "score": 0.7381
         }
       ]
     },
@@ -50,6 +55,11 @@
       "scenario": "Water ingress becomes electrical safety issue",
       "query": "Water seepage is close to a temporary electrical riser in the basement after rain.",
       "online_expected": "ONL-007",
+      "query_image": "onl_007_water_ingress_approaching_temporary_electric.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "offline_top3": [
         {
           "rank": 1,
@@ -57,7 +67,7 @@
           "title": "Basement wall water ingress observed at construction joint",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.646
+          "score": 0.7836
         },
         {
           "rank": 2,
@@ -65,7 +75,7 @@
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
           "source_scope": "offline_seed_enriched",
-          "score": 0.5656
+          "score": 0.7252
         },
         {
           "rank": 3,
@@ -73,7 +83,7 @@
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.5265
+          "score": 0.7222
         }
       ]
     },
@@ -81,6 +91,11 @@
       "scenario": "Temporary works prop not in local pack",
       "query": "A temporary works prop is visibly bowed and the base plate has shifted under slab load.",
       "online_expected": "ONL-010",
+      "query_image": "onl_010_temporary_works_prop_shows_visible_deformati.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "offline_top3": [
         {
           "rank": 1,
@@ -88,7 +103,7 @@
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
           "source_scope": "offline_seed_enriched",
-          "score": 0.6394
+          "score": 0.7769
         },
         {
           "rank": 2,
@@ -96,7 +111,7 @@
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.5522
+          "score": 0.7552
         },
         {
           "rank": 3,
@@ -104,7 +119,7 @@
           "title": "Basement wall water ingress observed at construction joint",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.5062
+          "score": 0.6973
         }
       ]
     },
@@ -112,6 +127,11 @@
       "scenario": "Confined space gas alarm not in local pack",
       "query": "A gas detector alarms before manhole drainage inspection and confined space entry.",
       "online_expected": "ONL-011",
+      "query_image": "onl_011_confined_space_gas_detector_alarm_triggered_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "offline_top3": [
         {
           "rank": 1,
@@ -119,23 +139,23 @@
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
           "source_scope": "offline_seed_enriched",
-          "score": 0.5902
+          "score": 0.7006
         },
         {
           "rank": 2,
-          "id": "INC-001",
-          "title": "Basement wall water ingress observed at construction joint",
-          "severity": "high",
-          "source_scope": "offline_seed_enriched",
-          "score": 0.506
-        },
-        {
-          "rank": 3,
           "id": "INC-002",
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.5009
+          "score": 0.6784
+        },
+        {
+          "rank": 3,
+          "id": "INC-001",
+          "title": "Basement wall water ingress observed at construction joint",
+          "severity": "high",
+          "source_scope": "offline_seed_enriched",
+          "score": 0.6449
         }
       ]
     }
@@ -145,6 +165,11 @@
       "scenario": "Known concrete defect already cached",
       "query": "A column face has honeycombing and exposed aggregate after formwork removal.",
       "online_expected": "INC-002",
+      "query_image": "inc_002_concrete_column_honeycombing_detected_after_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "online_top3": [
         {
           "rank": 1,
@@ -180,19 +205,19 @@
         },
         {
           "rank": 3,
-          "id": "INC-003",
-          "title": "Rebar congestion visible at beam-column joint",
+          "id": "INC-006",
+          "title": "Hairline crack observed near lift core wall opening",
           "severity": "medium",
           "source_scope": "offline_seed_enriched",
-          "score": 0.0323,
+          "score": 0.0302,
           "action_checklist": [
-            "Compare installed reinforcement against approved shop drawings and bar bending schedules.",
-            "Confirm minimum clear spacing, lap locations, and cover compliance before pour.",
-            "Coordinate with structural designer on any permissible bar adjustments or coupler alternatives.",
-            "Plan concrete placement with smaller aggregate, controlled lift heights, and dedicated vibration access.",
-            "Document the joint with pre-pour photos and sign-off before closing forms."
+            "Measure and mark crack length, width, and orientation using a calibrated gauge.",
+            "Check whether the crack is live by monitoring for seasonal or load-related movement.",
+            "Review recent pours, stripping sequence, and temporary loading around the core wall.",
+            "Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.",
+            "Escalate for structural review if the crack widens, propagates, or appears through-thickness."
           ],
-          "escalation_rule": "Escalate if required clear spacing cannot be achieved, if cover blocks cannot be installed correctly, or if the pour is proceeding without engineer approval."
+          "escalation_rule": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation."
         }
       ],
       "synced_ids": []
@@ -201,6 +226,11 @@
       "scenario": "Water ingress becomes electrical safety issue",
       "query": "Water seepage is close to a temporary electrical riser in the basement after rain.",
       "online_expected": "ONL-007",
+      "query_image": "onl_007_water_ingress_approaching_temporary_electric.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "online_top3": [
         {
           "rank": 1,
@@ -236,19 +266,19 @@
         },
         {
           "rank": 3,
-          "id": "INC-006",
-          "title": "Hairline crack observed near lift core wall opening",
-          "severity": "medium",
-          "source_scope": "offline_seed_enriched",
-          "score": 0.0313,
+          "id": "ONL-010",
+          "title": "Temporary works prop shows visible deformation",
+          "severity": "critical",
+          "source_scope": "online_enriched_only",
+          "score": 0.0323,
           "action_checklist": [
-            "Measure and mark crack length, width, and orientation using a calibrated gauge.",
-            "Check whether the crack is live by monitoring for seasonal or load-related movement.",
-            "Review recent pours, stripping sequence, and temporary loading around the core wall.",
-            "Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.",
-            "Escalate for structural review if the crack widens, propagates, or appears through-thickness."
+            "Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.",
+            "Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.",
+            "Verify the approved temporary works design against actual loading and geometry.",
+            "Install additional supports only under the direction of the temporary works coordinator or engineer.",
+            "Record the defect and do not reinstate use until the system is recertified safe."
           ],
-          "escalation_rule": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation."
+          "escalation_rule": "Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor."
         }
       ],
       "synced_ids": [
@@ -259,6 +289,11 @@
       "scenario": "Temporary works prop not in local pack",
       "query": "A temporary works prop is visibly bowed and the base plate has shifted under slab load.",
       "online_expected": "ONL-010",
+      "query_image": "onl_010_temporary_works_prop_shows_visible_deformati.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "online_top3": [
         {
           "rank": 1,
@@ -278,6 +313,22 @@
         },
         {
           "rank": 2,
+          "id": "INC-006",
+          "title": "Hairline crack observed near lift core wall opening",
+          "severity": "medium",
+          "source_scope": "offline_seed_enriched",
+          "score": 0.032,
+          "action_checklist": [
+            "Measure and mark crack length, width, and orientation using a calibrated gauge.",
+            "Check whether the crack is live by monitoring for seasonal or load-related movement.",
+            "Review recent pours, stripping sequence, and temporary loading around the core wall.",
+            "Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.",
+            "Escalate for structural review if the crack widens, propagates, or appears through-thickness."
+          ],
+          "escalation_rule": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation."
+        },
+        {
+          "rank": 3,
           "id": "INC-005",
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
@@ -291,22 +342,6 @@
             "Record the hazard in the permit or daily safety log and verify closure before restart."
           ],
           "escalation_rule": "Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled."
-        },
-        {
-          "rank": 3,
-          "id": "ONL-008",
-          "title": "Falling object exclusion zone breached beneath overhead work",
-          "severity": "high",
-          "source_scope": "online_enriched_only",
-          "score": 0.0306,
-          "action_checklist": [
-            "Stop overhead work until the drop zone is fully re-established and enforced.",
-            "Remove unnecessary materials, tools, and loose items from elevated workfaces.",
-            "Rebrief all affected workers on exclusion limits and access permissions.",
-            "Assign a spotter or marshal to prevent unauthorized entry into the hazard area.",
-            "Review whether overhead work requires additional netting, tool lanyards, or rigid barricades."
-          ],
-          "escalation_rule": "Escalate to the area supervisor and HSE lead if repeated breaches occur, if overhead lifting is active, or if hard barricading is not feasible."
         }
       ],
       "synced_ids": [
@@ -317,6 +352,11 @@
       "scenario": "Confined space gas alarm not in local pack",
       "query": "A gas detector alarms before manhole drainage inspection and confined space entry.",
       "online_expected": "ONL-011",
+      "query_image": "onl_011_confined_space_gas_detector_alarm_triggered_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "online_top3": [
         {
           "rank": 1,
@@ -336,27 +376,11 @@
         },
         {
           "rank": 2,
-          "id": "ONL-007",
-          "title": "Water ingress approaching temporary electrical riser",
-          "severity": "critical",
-          "source_scope": "online_enriched_only",
-          "score": 0.0323,
-          "action_checklist": [
-            "Isolate the affected temporary electrical circuit and verify de-energization by a competent person.",
-            "Keep personnel away from the wet area and establish a controlled exclusion zone.",
-            "Identify the water source and apply temporary diversion, containment, or pumping as needed.",
-            "Inspect the riser for ingress, damaged insulation, and elevated termination points.",
-            "Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed."
-          ],
-          "escalation_rule": "Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified."
-        },
-        {
-          "rank": 3,
           "id": "ONL-008",
           "title": "Falling object exclusion zone breached beneath overhead work",
           "severity": "high",
           "source_scope": "online_enriched_only",
-          "score": 0.0313,
+          "score": 0.0311,
           "action_checklist": [
             "Stop overhead work until the drop zone is fully re-established and enforced.",
             "Remove unnecessary materials, tools, and loose items from elevated workfaces.",
@@ -365,6 +389,22 @@
             "Review whether overhead work requires additional netting, tool lanyards, or rigid barricades."
           ],
           "escalation_rule": "Escalate to the area supervisor and HSE lead if repeated breaches occur, if overhead lifting is active, or if hard barricading is not feasible."
+        },
+        {
+          "rank": 3,
+          "id": "ONL-010",
+          "title": "Temporary works prop shows visible deformation",
+          "severity": "critical",
+          "source_scope": "online_enriched_only",
+          "score": 0.0309,
+          "action_checklist": [
+            "Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.",
+            "Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.",
+            "Verify the approved temporary works design against actual loading and geometry.",
+            "Install additional supports only under the direction of the temporary works coordinator or engineer.",
+            "Record the defect and do not reinstate use until the system is recertified safe."
+          ],
+          "escalation_rule": "Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor."
         }
       ],
       "synced_ids": [
@@ -377,6 +417,11 @@
       "scenario": "Known concrete defect already cached",
       "query": "A column face has honeycombing and exposed aggregate after formwork removal.",
       "online_expected": "INC-002",
+      "query_image": "inc_002_concrete_column_honeycombing_detected_after_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "offline_after_sync_top3": [
         {
           "rank": 1,
@@ -384,7 +429,7 @@
           "title": "Concrete column honeycombing detected after form removal",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.6989
+          "score": 0.8858
         },
         {
           "rank": 2,
@@ -392,15 +437,15 @@
           "title": "Temporary works prop shows visible deformation",
           "severity": "critical",
           "source_scope": "online_enriched_only",
-          "score": 0.6114
+          "score": 0.779
         },
         {
           "rank": 3,
-          "id": "INC-005",
-          "title": "Unsafe open edge adjacent to scaffold access point",
-          "severity": "critical",
+          "id": "INC-001",
+          "title": "Basement wall water ingress observed at construction joint",
+          "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.5998
+          "score": 0.7387
         }
       ]
     },
@@ -408,6 +453,11 @@
       "scenario": "Water ingress becomes electrical safety issue",
       "query": "Water seepage is close to a temporary electrical riser in the basement after rain.",
       "online_expected": "ONL-007",
+      "query_image": "onl_007_water_ingress_approaching_temporary_electric.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "offline_after_sync_top3": [
         {
           "rank": 1,
@@ -415,7 +465,7 @@
           "title": "Water ingress approaching temporary electrical riser",
           "severity": "critical",
           "source_scope": "online_enriched_only",
-          "score": 0.6943
+          "score": 0.8967
         },
         {
           "rank": 2,
@@ -423,7 +473,7 @@
           "title": "Basement wall water ingress observed at construction joint",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.646
+          "score": 0.7836
         },
         {
           "rank": 3,
@@ -431,7 +481,7 @@
           "title": "Temporary works prop shows visible deformation",
           "severity": "critical",
           "source_scope": "online_enriched_only",
-          "score": 0.6053
+          "score": 0.7708
         }
       ]
     },
@@ -439,6 +489,11 @@
       "scenario": "Temporary works prop not in local pack",
       "query": "A temporary works prop is visibly bowed and the base plate has shifted under slab load.",
       "online_expected": "ONL-010",
+      "query_image": "onl_010_temporary_works_prop_shows_visible_deformati.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "offline_after_sync_top3": [
         {
           "rank": 1,
@@ -446,7 +501,7 @@
           "title": "Temporary works prop shows visible deformation",
           "severity": "critical",
           "source_scope": "online_enriched_only",
-          "score": 0.6514
+          "score": 0.8715
         },
         {
           "rank": 2,
@@ -454,7 +509,7 @@
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
           "source_scope": "offline_seed_enriched",
-          "score": 0.6394
+          "score": 0.7769
         },
         {
           "rank": 3,
@@ -462,7 +517,7 @@
           "title": "Water ingress approaching temporary electrical riser",
           "severity": "critical",
           "source_scope": "online_enriched_only",
-          "score": 0.6057
+          "score": 0.7694
         }
       ]
     },
@@ -470,6 +525,11 @@
       "scenario": "Confined space gas alarm not in local pack",
       "query": "A gas detector alarms before manhole drainage inspection and confined space entry.",
       "online_expected": "ONL-011",
+      "query_image": "onl_011_confined_space_gas_detector_alarm_triggered_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "offline_after_sync_top3": [
         {
           "rank": 1,
@@ -477,7 +537,7 @@
           "title": "Confined-space gas detector alarm triggered during drainage inspection",
           "severity": "critical",
           "source_scope": "online_enriched_only",
-          "score": 0.7391
+          "score": 0.9168
         },
         {
           "rank": 2,
@@ -485,15 +545,15 @@
           "title": "Water ingress approaching temporary electrical riser",
           "severity": "critical",
           "source_scope": "online_enriched_only",
-          "score": 0.613
+          "score": 0.7369
         },
         {
           "rank": 3,
-          "id": "INC-005",
-          "title": "Unsafe open edge adjacent to scaffold access point",
+          "id": "ONL-010",
+          "title": "Temporary works prop shows visible deformation",
           "severity": "critical",
-          "source_scope": "offline_seed_enriched",
-          "score": 0.5902
+          "source_scope": "online_enriched_only",
+          "score": 0.727
         }
       ]
     }
@@ -520,27 +580,11 @@
         },
         {
           "rank": 2,
-          "id": "INC-006",
-          "title": "Hairline crack observed near lift core wall opening",
-          "severity": "medium",
-          "source_scope": "offline_seed_enriched",
-          "score": 0.0323,
-          "action_checklist": [
-            "Measure and mark crack length, width, and orientation using a calibrated gauge.",
-            "Check whether the crack is live by monitoring for seasonal or load-related movement.",
-            "Review recent pours, stripping sequence, and temporary loading around the core wall.",
-            "Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.",
-            "Escalate for structural review if the crack widens, propagates, or appears through-thickness."
-          ],
-          "escalation_rule": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation."
-        },
-        {
-          "rank": 3,
           "id": "INC-001",
           "title": "Basement wall water ingress observed at construction joint",
           "severity": "high",
           "source_scope": "offline_seed_enriched",
-          "score": 0.0164,
+          "score": 0.0325,
           "action_checklist": [
             "Mark and photograph the full extent of seepage and note elevation/chainage references.",
             "Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.",
@@ -549,6 +593,22 @@
             "Raise a corrective action for waterproofing specialist review and retesting after repair."
           ],
           "escalation_rule": "Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout."
+        },
+        {
+          "rank": 3,
+          "id": "INC-005",
+          "title": "Unsafe open edge adjacent to scaffold access point",
+          "severity": "critical",
+          "source_scope": "offline_seed_enriched",
+          "score": 0.0164,
+          "action_checklist": [
+            "Stop access to the affected route until edge protection is installed or alternative safe access is provided.",
+            "Install compliant guardrails, toe boards, and controlled access measures at the perimeter.",
+            "Inspect scaffold tie-ins, landing condition, and opening protections for related defects.",
+            "Brief all nearby crews on the exclusion and safe access route.",
+            "Record the hazard in the permit or daily safety log and verify closure before restart."
+          ],
+          "escalation_rule": "Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled."
         }
       ]
     },
@@ -573,27 +633,11 @@
         },
         {
           "rank": 2,
-          "id": "ONL-010",
-          "title": "Temporary works prop shows visible deformation",
-          "severity": "critical",
-          "source_scope": "online_enriched_only",
-          "score": 0.0325,
-          "action_checklist": [
-            "Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.",
-            "Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.",
-            "Verify the approved temporary works design against actual loading and geometry.",
-            "Install additional supports only under the direction of the temporary works coordinator or engineer.",
-            "Record the defect and do not reinstate use until the system is recertified safe."
-          ],
-          "escalation_rule": "Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor."
-        },
-        {
-          "rank": 3,
           "id": "INC-005",
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
           "source_scope": "offline_seed_enriched",
-          "score": 0.032,
+          "score": 0.0323,
           "action_checklist": [
             "Stop access to the affected route until edge protection is installed or alternative safe access is provided.",
             "Install compliant guardrails, toe boards, and controlled access measures at the perimeter.",
@@ -602,6 +646,22 @@
             "Record the hazard in the permit or daily safety log and verify closure before restart."
           ],
           "escalation_rule": "Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled."
+        },
+        {
+          "rank": 3,
+          "id": "ONL-010",
+          "title": "Temporary works prop shows visible deformation",
+          "severity": "critical",
+          "source_scope": "online_enriched_only",
+          "score": 0.0323,
+          "action_checklist": [
+            "Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.",
+            "Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.",
+            "Verify the approved temporary works design against actual loading and geometry.",
+            "Install additional supports only under the direction of the temporary works coordinator or engineer.",
+            "Record the defect and do not reinstate use until the system is recertified safe."
+          ],
+          "escalation_rule": "Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor."
         }
       ]
     },
@@ -626,19 +686,19 @@
         },
         {
           "rank": 2,
-          "id": "INC-002",
-          "title": "Concrete column honeycombing detected after form removal",
-          "severity": "high",
+          "id": "INC-005",
+          "title": "Unsafe open edge adjacent to scaffold access point",
+          "severity": "critical",
           "source_scope": "offline_seed_enriched",
           "score": 0.0325,
           "action_checklist": [
-            "Sound the affected area and carry out a depth assessment by engineer or competent inspector.",
-            "Verify reinforcement cover and determine whether structural repair is required.",
-            "Review pour sequence, vibration records, and formwork tightness for the affected lift.",
-            "Protect the area from impact and restrict loading until disposition is confirmed.",
-            "Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed."
+            "Stop access to the affected route until edge protection is installed or alternative safe access is provided.",
+            "Install compliant guardrails, toe boards, and controlled access measures at the perimeter.",
+            "Inspect scaffold tie-ins, landing condition, and opening protections for related defects.",
+            "Brief all nearby crews on the exclusion and safe access route.",
+            "Record the hazard in the permit or daily safety log and verify closure before restart."
           ],
-          "escalation_rule": "Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing."
+          "escalation_rule": "Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled."
         },
         {
           "rank": 3,
@@ -646,7 +706,7 @@
           "title": "Hairline crack observed near lift core wall opening",
           "severity": "medium",
           "source_scope": "offline_seed_enriched",
-          "score": 0.032,
+          "score": 0.0318,
           "action_checklist": [
             "Measure and mark crack length, width, and orientation using a calibrated gauge.",
             "Check whether the crack is live by monitoring for seasonal or load-related movement.",
@@ -891,6 +951,22 @@
         },
         {
           "rank": 2,
+          "id": "ONL-009",
+          "title": "Concrete spalling at slab edge after formwork striking",
+          "severity": "high",
+          "source_scope": "online_enriched_only",
+          "score": 0.032,
+          "action_checklist": [
+            "Suspend further aggressive stripping or edge cleaning until the affected area is assessed.",
+            "Check whether reinforcement cover is exposed and whether repair depth is limited to surface concrete.",
+            "Review striking method, curing duration, and concrete strength test results for the pour.",
+            "Document the defect extent and protect the edge from impact or additional loading.",
+            "Complete approved repair and curing measures before reopening the slab edge for use."
+          ],
+          "escalation_rule": "Escalate to the engineer if reinforcement is exposed, if the spall extends beyond a localized patch, or if similar damage is found at multiple edges."
+        },
+        {
+          "rank": 3,
           "id": "INC-005",
           "title": "Unsafe open edge adjacent to scaffold access point",
           "severity": "critical",
@@ -904,22 +980,6 @@
             "Record the hazard in the permit or daily safety log and verify closure before restart."
           ],
           "escalation_rule": "Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled."
-        },
-        {
-          "rank": 3,
-          "id": "ONL-008",
-          "title": "Falling object exclusion zone breached beneath overhead work",
-          "severity": "high",
-          "source_scope": "online_enriched_only",
-          "score": 0.0306,
-          "action_checklist": [
-            "Stop overhead work until the drop zone is fully re-established and enforced.",
-            "Remove unnecessary materials, tools, and loose items from elevated workfaces.",
-            "Rebrief all affected workers on exclusion limits and access permissions.",
-            "Assign a spotter or marshal to prevent unauthorized entry into the hazard area.",
-            "Review whether overhead work requires additional netting, tool lanyards, or rigid barricades."
-          ],
-          "escalation_rule": "Escalate to the area supervisor and HSE lead if repeated breaches occur, if overhead lifting is active, or if hard barricading is not feasible."
         }
       ]
     }
@@ -928,6 +988,11 @@
     {
       "scenario": "Known concrete defect already cached",
       "query": "A column face has honeycombing and exposed aggregate after formwork removal.",
+      "query_image": "inc_002_concrete_column_honeycombing_detected_after_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "initial_offline": {
         "top3": [
           {
@@ -936,27 +1001,27 @@
             "title": "Concrete column honeycombing detected after form removal",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.6989
+            "score": 0.8858
           },
           {
             "rank": 2,
-            "id": "INC-005",
-            "title": "Unsafe open edge adjacent to scaffold access point",
-            "severity": "critical",
-            "source_scope": "offline_seed_enriched",
-            "score": 0.5998
-          },
-          {
-            "rank": 3,
             "id": "INC-001",
             "title": "Basement wall water ingress observed at construction joint",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.5863
+            "score": 0.7387
+          },
+          {
+            "rank": 3,
+            "id": "INC-005",
+            "title": "Unsafe open edge adjacent to scaffold access point",
+            "severity": "critical",
+            "source_scope": "offline_seed_enriched",
+            "score": 0.7381
           }
         ],
-        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-002] score=0.699; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-005] score=0.600; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-001] score=0.586; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nQuestion:\nA column face has honeycombing and exposed aggregate after formwork removal.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-        "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A column face has honeycombing and exposed aggregate after formwork removal.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[INC-002] score=0.699; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-005] score=0.600; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-001] score=0.586; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-002] score=0.886; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; visual_clues=Exposed coarse aggregate, Voids and honeycombed surface texture, Minor grout leakage marks, Irregular finish at column corner; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; root_cause=Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-001] score=0.739; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; visual_clues=Dark damp streaks on cast wall surface, Visible drips at construction joint, Efflorescence near joint line, Localized puddling at wall base; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; root_cause=Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-005] score=0.738; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; visual_clues=Open edge without top rail or mid-rail, Scaffold access ladder or landing nearby, No visible toe board at edge, Exposure to drop zone below; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; root_cause=Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n\nWorker question:\nA column face has honeycombing and exposed aggregate after formwork removal.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+        "answer": "This looks closest to [INC-002] Concrete column honeycombing detected after form removal (severity: high).\n\nWhat I can ground from the local evidence: A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.\n\nLikely cause to check: Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.\n\nRecommended next actions:\n1. Sound the affected area and carry out a depth assessment by engineer or competent inspector\n2. Verify reinforcement cover and determine whether structural repair is required\n3. Review pour sequence, vibration records, and formwork tightness for the affected lift\n4. Protect the area from impact and restrict loading until disposition is confirmed\n5. Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed\n\nEscalate if: Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nAlso compare against [INC-001], [INC-005] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [INC-002]."
       },
       "enriched_offline_after_sync": {
         "top3": [
@@ -966,7 +1031,7 @@
             "title": "Concrete column honeycombing detected after form removal",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.6989
+            "score": 0.8858
           },
           {
             "rank": 2,
@@ -974,19 +1039,19 @@
             "title": "Temporary works prop shows visible deformation",
             "severity": "critical",
             "source_scope": "online_enriched_only",
-            "score": 0.6114
+            "score": 0.779
           },
           {
             "rank": 3,
-            "id": "INC-005",
-            "title": "Unsafe open edge adjacent to scaffold access point",
-            "severity": "critical",
+            "id": "INC-001",
+            "title": "Basement wall water ingress observed at construction joint",
+            "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.5998
+            "score": 0.7387
           }
         ],
-        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-002] score=0.699; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[ONL-010] score=0.611; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-005] score=0.600; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n\nQuestion:\nA column face has honeycombing and exposed aggregate after formwork removal.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-        "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A column face has honeycombing and exposed aggregate after formwork removal.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[INC-002] score=0.699; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[ONL-010] score=0.611; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-005] score=0.600; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-002] score=0.886; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; visual_clues=Exposed coarse aggregate, Voids and honeycombed surface texture, Minor grout leakage marks, Irregular finish at column corner; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; root_cause=Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[ONL-010] score=0.779; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; visual_clues=Bent or bowed prop member, Unseated base or head plate, Signs of overload or misalignment, Temporary support under structural element; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; root_cause=Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-001] score=0.739; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; visual_clues=Dark damp streaks on cast wall surface, Visible drips at construction joint, Efflorescence near joint line, Localized puddling at wall base; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; root_cause=Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nWorker question:\nA column face has honeycombing and exposed aggregate after formwork removal.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+        "answer": "This looks closest to [INC-002] Concrete column honeycombing detected after form removal (severity: high).\n\nWhat I can ground from the local evidence: A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.\n\nLikely cause to check: Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.\n\nRecommended next actions:\n1. Sound the affected area and carry out a depth assessment by engineer or competent inspector\n2. Verify reinforcement cover and determine whether structural repair is required\n3. Review pour sequence, vibration records, and formwork tightness for the affected lift\n4. Protect the area from impact and restrict loading until disposition is confirmed\n5. Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed\n\nEscalate if: Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nAlso compare against [ONL-010], [INC-001] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [INC-002]."
       },
       "online_resume": {
         "top3": [
@@ -1024,19 +1089,19 @@
           },
           {
             "rank": 3,
-            "id": "INC-003",
-            "title": "Rebar congestion visible at beam-column joint",
+            "id": "INC-006",
+            "title": "Hairline crack observed near lift core wall opening",
             "severity": "medium",
             "source_scope": "offline_seed_enriched",
-            "score": 0.0323,
+            "score": 0.0302,
             "action_checklist": [
-              "Compare installed reinforcement against approved shop drawings and bar bending schedules.",
-              "Confirm minimum clear spacing, lap locations, and cover compliance before pour.",
-              "Coordinate with structural designer on any permissible bar adjustments or coupler alternatives.",
-              "Plan concrete placement with smaller aggregate, controlled lift heights, and dedicated vibration access.",
-              "Document the joint with pre-pour photos and sign-off before closing forms."
+              "Measure and mark crack length, width, and orientation using a calibrated gauge.",
+              "Check whether the crack is live by monitoring for seasonal or load-related movement.",
+              "Review recent pours, stripping sequence, and temporary loading around the core wall.",
+              "Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.",
+              "Escalate for structural review if the crack widens, propagates, or appears through-thickness."
             ],
-            "escalation_rule": "Escalate if required clear spacing cannot be achieved, if cover blocks cannot be installed correctly, or if the pour is proceeding without engineer approval."
+            "escalation_rule": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation."
           }
         ],
         "synced_ids": []
@@ -1045,6 +1110,11 @@
     {
       "scenario": "Water ingress becomes electrical safety issue",
       "query": "Water seepage is close to a temporary electrical riser in the basement after rain.",
+      "query_image": "onl_007_water_ingress_approaching_temporary_electric.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "initial_offline": {
         "top3": [
           {
@@ -1053,7 +1123,7 @@
             "title": "Basement wall water ingress observed at construction joint",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.646
+            "score": 0.7836
           },
           {
             "rank": 2,
@@ -1061,7 +1131,7 @@
             "title": "Unsafe open edge adjacent to scaffold access point",
             "severity": "critical",
             "source_scope": "offline_seed_enriched",
-            "score": 0.5656
+            "score": 0.7252
           },
           {
             "rank": 3,
@@ -1069,11 +1139,11 @@
             "title": "Concrete column honeycombing detected after form removal",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.5265
+            "score": 0.7222
           }
         ],
-        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-001] score=0.646; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-005] score=0.566; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-002] score=0.526; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nQuestion:\nWater seepage is close to a temporary electrical riser in the basement after rain.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-        "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: Water seepage is close to a temporary electrical riser in the basement after rain.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[INC-001] score=0.646; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-005] score=0.566; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-002] score=0.526; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-001] score=0.784; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; visual_clues=Dark damp streaks on cast wall surface, Visible drips at construction joint, Efflorescence near joint line, Localized puddling at wall base; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; root_cause=Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-005] score=0.725; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; visual_clues=Open edge without top rail or mid-rail, Scaffold access ladder or landing nearby, No visible toe board at edge, Exposure to drop zone below; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; root_cause=Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-002] score=0.722; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; visual_clues=Exposed coarse aggregate, Voids and honeycombed surface texture, Minor grout leakage marks, Irregular finish at column corner; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; root_cause=Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nWorker question:\nWater seepage is close to a temporary electrical riser in the basement after rain.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+        "answer": "This looks closest to [INC-001] Basement wall water ingress observed at construction joint (severity: high).\n\nWhat I can ground from the local evidence: Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.\n\nLikely cause to check: Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.\n\nRecommended next actions:\n1. Mark and photograph the full extent of seepage and note elevation/chainage references\n2. Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs\n3. Check adjacent drainage, sump operation, and external water management conditions\n4. Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas\n5. Raise a corrective action for waterproofing specialist review and retesting after repair\n\nEscalate if: Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nAlso compare against [INC-005], [INC-002] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [INC-001]."
       },
       "enriched_offline_after_sync": {
         "top3": [
@@ -1083,7 +1153,7 @@
             "title": "Water ingress approaching temporary electrical riser",
             "severity": "critical",
             "source_scope": "online_enriched_only",
-            "score": 0.6943
+            "score": 0.8967
           },
           {
             "rank": 2,
@@ -1091,7 +1161,7 @@
             "title": "Basement wall water ingress observed at construction joint",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.646
+            "score": 0.7836
           },
           {
             "rank": 3,
@@ -1099,11 +1169,11 @@
             "title": "Temporary works prop shows visible deformation",
             "severity": "critical",
             "source_scope": "online_enriched_only",
-            "score": 0.6053
+            "score": 0.7708
           }
         ],
-        "phi4_evidence_prompt": "Retrieved evidence:\n[ONL-007] score=0.694; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[INC-001] score=0.646; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[ONL-010] score=0.605; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nQuestion:\nWater seepage is close to a temporary electrical riser in the basement after rain.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-        "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: Water seepage is close to a temporary electrical riser in the basement after rain.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[ONL-007] score=0.694; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[INC-001] score=0.646; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[ONL-010] score=0.605; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+        "phi4_evidence_prompt": "Retrieved evidence:\n[ONL-007] score=0.897; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; visual_clues=Water pooled close to temporary cabling, Damp streaks on adjacent wall or floor, Temporary electrical riser present, Potential contact between water path and electrical installation; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; root_cause=Likely failed waterproofing, rainwater intrusion, or uncontrolled surface drainage compounded by insufficient protection and routing of temporary electrical infrastructure.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[INC-001] score=0.784; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; visual_clues=Dark damp streaks on cast wall surface, Visible drips at construction joint, Efflorescence near joint line, Localized puddling at wall base; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; root_cause=Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[ONL-010] score=0.771; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; visual_clues=Bent or bowed prop member, Unseated base or head plate, Signs of overload or misalignment, Temporary support under structural element; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; root_cause=Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nWorker question:\nWater seepage is close to a temporary electrical riser in the basement after rain.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+        "answer": "This looks closest to [ONL-007] Water ingress approaching temporary electrical riser (severity: critical).\n\nWhat I can ground from the local evidence: Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.\n\nLikely cause to check: Likely failed waterproofing, rainwater intrusion, or uncontrolled surface drainage compounded by insufficient protection and routing of temporary electrical infrastructure.\n\nRecommended next actions:\n1. Isolate the affected temporary electrical circuit and verify de-energization by a competent person\n2. Keep personnel away from the wet area and establish a controlled exclusion zone\n3. Identify the water source and apply temporary diversion, containment, or pumping as needed\n4. Inspect the riser for ingress, damaged insulation, and elevated termination points\n5. Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed\n\nEscalate if: Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n\nAlso compare against [INC-001], [ONL-010] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [ONL-007]."
       },
       "online_resume": {
         "top3": [
@@ -1141,19 +1211,19 @@
           },
           {
             "rank": 3,
-            "id": "INC-006",
-            "title": "Hairline crack observed near lift core wall opening",
-            "severity": "medium",
-            "source_scope": "offline_seed_enriched",
-            "score": 0.0313,
+            "id": "ONL-010",
+            "title": "Temporary works prop shows visible deformation",
+            "severity": "critical",
+            "source_scope": "online_enriched_only",
+            "score": 0.0323,
             "action_checklist": [
-              "Measure and mark crack length, width, and orientation using a calibrated gauge.",
-              "Check whether the crack is live by monitoring for seasonal or load-related movement.",
-              "Review recent pours, stripping sequence, and temporary loading around the core wall.",
-              "Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.",
-              "Escalate for structural review if the crack widens, propagates, or appears through-thickness."
+              "Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.",
+              "Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.",
+              "Verify the approved temporary works design against actual loading and geometry.",
+              "Install additional supports only under the direction of the temporary works coordinator or engineer.",
+              "Record the defect and do not reinstate use until the system is recertified safe."
             ],
-            "escalation_rule": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation."
+            "escalation_rule": "Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor."
           }
         ],
         "synced_ids": [
@@ -1164,6 +1234,11 @@
     {
       "scenario": "Temporary works prop not in local pack",
       "query": "A temporary works prop is visibly bowed and the base plate has shifted under slab load.",
+      "query_image": "onl_010_temporary_works_prop_shows_visible_deformati.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "initial_offline": {
         "top3": [
           {
@@ -1172,7 +1247,7 @@
             "title": "Unsafe open edge adjacent to scaffold access point",
             "severity": "critical",
             "source_scope": "offline_seed_enriched",
-            "score": 0.6394
+            "score": 0.7769
           },
           {
             "rank": 2,
@@ -1180,7 +1255,7 @@
             "title": "Concrete column honeycombing detected after form removal",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.5522
+            "score": 0.7552
           },
           {
             "rank": 3,
@@ -1188,11 +1263,11 @@
             "title": "Basement wall water ingress observed at construction joint",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.5062
+            "score": 0.6973
           }
         ],
-        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-005] score=0.639; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-002] score=0.552; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-001] score=0.506; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nQuestion:\nA temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-        "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[INC-005] score=0.639; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-002] score=0.552; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-001] score=0.506; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-005] score=0.777; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; visual_clues=Open edge without top rail or mid-rail, Scaffold access ladder or landing nearby, No visible toe board at edge, Exposure to drop zone below; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; root_cause=Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-002] score=0.755; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; visual_clues=Exposed coarse aggregate, Voids and honeycombed surface texture, Minor grout leakage marks, Irregular finish at column corner; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; root_cause=Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-001] score=0.697; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; visual_clues=Dark damp streaks on cast wall surface, Visible drips at construction joint, Efflorescence near joint line, Localized puddling at wall base; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; root_cause=Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nWorker question:\nA temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+        "answer": "This looks closest to [INC-005] Unsafe open edge adjacent to scaffold access point (severity: critical).\n\nWhat I can ground from the local evidence: An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.\n\nLikely cause to check: Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.\n\nRecommended next actions:\n1. Stop access to the affected route until edge protection is installed or alternative safe access is provided\n2. Install compliant guardrails, toe boards, and controlled access measures at the perimeter\n3. Inspect scaffold tie-ins, landing condition, and opening protections for related defects\n4. Brief all nearby crews on the exclusion and safe access route\n5. Record the hazard in the permit or daily safety log and verify closure before restart\n\nEscalate if: Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n\nAlso compare against [INC-002], [INC-001] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [INC-005]."
       },
       "enriched_offline_after_sync": {
         "top3": [
@@ -1202,7 +1277,7 @@
             "title": "Temporary works prop shows visible deformation",
             "severity": "critical",
             "source_scope": "online_enriched_only",
-            "score": 0.6514
+            "score": 0.8715
           },
           {
             "rank": 2,
@@ -1210,7 +1285,7 @@
             "title": "Unsafe open edge adjacent to scaffold access point",
             "severity": "critical",
             "source_scope": "offline_seed_enriched",
-            "score": 0.6394
+            "score": 0.7769
           },
           {
             "rank": 3,
@@ -1218,11 +1293,11 @@
             "title": "Water ingress approaching temporary electrical riser",
             "severity": "critical",
             "source_scope": "online_enriched_only",
-            "score": 0.6057
+            "score": 0.7694
           }
         ],
-        "phi4_evidence_prompt": "Retrieved evidence:\n[ONL-010] score=0.651; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-005] score=0.639; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[ONL-007] score=0.606; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n\nQuestion:\nA temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-        "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[ONL-010] score=0.651; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-005] score=0.639; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[ONL-007] score=0.606; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+        "phi4_evidence_prompt": "Retrieved evidence:\n[ONL-010] score=0.872; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; visual_clues=Bent or bowed prop member, Unseated base or head plate, Signs of overload or misalignment, Temporary support under structural element; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; root_cause=Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-005] score=0.777; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; visual_clues=Open edge without top rail or mid-rail, Scaffold access ladder or landing nearby, No visible toe board at edge, Exposure to drop zone below; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; root_cause=Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[ONL-007] score=0.769; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; visual_clues=Water pooled close to temporary cabling, Damp streaks on adjacent wall or floor, Temporary electrical riser present, Potential contact between water path and electrical installation; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; root_cause=Likely failed waterproofing, rainwater intrusion, or uncontrolled surface drainage compounded by insufficient protection and routing of temporary electrical infrastructure.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n\nWorker question:\nA temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+        "answer": "This looks closest to [ONL-010] Temporary works prop shows visible deformation (severity: critical).\n\nWhat I can ground from the local evidence: A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.\n\nLikely cause to check: Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.\n\nRecommended next actions:\n1. Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement\n2. Inspect all related props, bracing, and bearing conditions for signs of instability or settlement\n3. Verify the approved temporary works design against actual loading and geometry\n4. Install additional supports only under the direction of the temporary works coordinator or engineer\n5. Record the defect and do not reinstate use until the system is recertified safe\n\nEscalate if: Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nAlso compare against [INC-005], [ONL-007] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [ONL-010]."
       },
       "online_resume": {
         "top3": [
@@ -1244,6 +1319,22 @@
           },
           {
             "rank": 2,
+            "id": "INC-006",
+            "title": "Hairline crack observed near lift core wall opening",
+            "severity": "medium",
+            "source_scope": "offline_seed_enriched",
+            "score": 0.032,
+            "action_checklist": [
+              "Measure and mark crack length, width, and orientation using a calibrated gauge.",
+              "Check whether the crack is live by monitoring for seasonal or load-related movement.",
+              "Review recent pours, stripping sequence, and temporary loading around the core wall.",
+              "Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.",
+              "Escalate for structural review if the crack widens, propagates, or appears through-thickness."
+            ],
+            "escalation_rule": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation."
+          },
+          {
+            "rank": 3,
             "id": "INC-005",
             "title": "Unsafe open edge adjacent to scaffold access point",
             "severity": "critical",
@@ -1257,22 +1348,6 @@
               "Record the hazard in the permit or daily safety log and verify closure before restart."
             ],
             "escalation_rule": "Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled."
-          },
-          {
-            "rank": 3,
-            "id": "ONL-008",
-            "title": "Falling object exclusion zone breached beneath overhead work",
-            "severity": "high",
-            "source_scope": "online_enriched_only",
-            "score": 0.0306,
-            "action_checklist": [
-              "Stop overhead work until the drop zone is fully re-established and enforced.",
-              "Remove unnecessary materials, tools, and loose items from elevated workfaces.",
-              "Rebrief all affected workers on exclusion limits and access permissions.",
-              "Assign a spotter or marshal to prevent unauthorized entry into the hazard area.",
-              "Review whether overhead work requires additional netting, tool lanyards, or rigid barricades."
-            ],
-            "escalation_rule": "Escalate to the area supervisor and HSE lead if repeated breaches occur, if overhead lifting is active, or if hard barricading is not feasible."
           }
         ],
         "synced_ids": [
@@ -1283,6 +1358,11 @@
     {
       "scenario": "Confined space gas alarm not in local pack",
       "query": "A gas detector alarms before manhole drainage inspection and confined space entry.",
+      "query_image": "onl_011_confined_space_gas_detector_alarm_triggered_.png",
+      "query_vector_inputs": [
+        "text",
+        "image"
+      ],
       "initial_offline": {
         "top3": [
           {
@@ -1291,27 +1371,27 @@
             "title": "Unsafe open edge adjacent to scaffold access point",
             "severity": "critical",
             "source_scope": "offline_seed_enriched",
-            "score": 0.5902
+            "score": 0.7006
           },
           {
             "rank": 2,
-            "id": "INC-001",
-            "title": "Basement wall water ingress observed at construction joint",
-            "severity": "high",
-            "source_scope": "offline_seed_enriched",
-            "score": 0.506
-          },
-          {
-            "rank": 3,
             "id": "INC-002",
             "title": "Concrete column honeycombing detected after form removal",
             "severity": "high",
             "source_scope": "offline_seed_enriched",
-            "score": 0.5009
+            "score": 0.6784
+          },
+          {
+            "rank": 3,
+            "id": "INC-001",
+            "title": "Basement wall water ingress observed at construction joint",
+            "severity": "high",
+            "source_scope": "offline_seed_enriched",
+            "score": 0.6449
           }
         ],
-        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-005] score=0.590; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-001] score=0.506; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-002] score=0.501; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nQuestion:\nA gas detector alarms before manhole drainage inspection and confined space entry.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-        "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A gas detector alarms before manhole drainage inspection and confined space entry.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[INC-005] score=0.590; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-001] score=0.506; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[INC-002] score=0.501; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+        "phi4_evidence_prompt": "Retrieved evidence:\n[INC-005] score=0.701; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; visual_clues=Open edge without top rail or mid-rail, Scaffold access ladder or landing nearby, No visible toe board at edge, Exposure to drop zone below; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; root_cause=Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-002] score=0.678; title=Concrete column honeycombing detected after form removal; severity=high; image=notebooks/assets/context_lifecycle/images/inc_002_concrete_column_honeycombing_detected_after_.png; visual_clues=Exposed coarse aggregate, Voids and honeycombed surface texture, Minor grout leakage marks, Irregular finish at column corner; observation=A reinforced concrete column shows honeycombing in the lower lift area following formwork removal. The defect is localized but extends over enough surface area to indicate poor consolidation or leakage during casting, requiring assessment of depth and impact on cover.; root_cause=Probable inadequate vibration, congested reinforcement impeding flow, grout loss through formwork joints, or improper concrete placement technique.; action=Sound the affected area and carry out a depth assessment by engineer or competent inspector.; Verify reinforcement cover and determine whether structural repair is required.; Review pour sequence, vibration records, and formwork tightness for the affected lift.; Protect the area from impact and restrict loading until disposition is confirmed.; Prepare a repair method statement if patching, epoxy injection, or breakout and reinstatement is needed.; escalation=Escalate to structural engineer immediately if defect depth approaches reinforcement, cover is compromised, or multiple columns exhibit similar honeycombing.\n[INC-001] score=0.645; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; visual_clues=Dark damp streaks on cast wall surface, Visible drips at construction joint, Efflorescence near joint line, Localized puddling at wall base; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; root_cause=Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n\nWorker question:\nA gas detector alarms before manhole drainage inspection and confined space entry.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/onl_011_confined_space_gas_detector_alarm_triggered_.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+        "answer": "This looks closest to [INC-005] Unsafe open edge adjacent to scaffold access point (severity: critical).\n\nWhat I can ground from the local evidence: An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.\n\nLikely cause to check: Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.\n\nRecommended next actions:\n1. Stop access to the affected route until edge protection is installed or alternative safe access is provided\n2. Install compliant guardrails, toe boards, and controlled access measures at the perimeter\n3. Inspect scaffold tie-ins, landing condition, and opening protections for related defects\n4. Brief all nearby crews on the exclusion and safe access route\n5. Record the hazard in the permit or daily safety log and verify closure before restart\n\nEscalate if: Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n\nAlso compare against [INC-002], [INC-001] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [INC-005]."
       },
       "enriched_offline_after_sync": {
         "top3": [
@@ -1321,7 +1401,7 @@
             "title": "Confined-space gas detector alarm triggered during drainage inspection",
             "severity": "critical",
             "source_scope": "online_enriched_only",
-            "score": 0.7391
+            "score": 0.9168
           },
           {
             "rank": 2,
@@ -1329,19 +1409,19 @@
             "title": "Water ingress approaching temporary electrical riser",
             "severity": "critical",
             "source_scope": "online_enriched_only",
-            "score": 0.613
+            "score": 0.7369
           },
           {
             "rank": 3,
-            "id": "INC-005",
-            "title": "Unsafe open edge adjacent to scaffold access point",
+            "id": "ONL-010",
+            "title": "Temporary works prop shows visible deformation",
             "severity": "critical",
-            "source_scope": "offline_seed_enriched",
-            "score": 0.5902
+            "source_scope": "online_enriched_only",
+            "score": 0.727
           }
         ],
-        "phi4_evidence_prompt": "Retrieved evidence:\n[ONL-011] score=0.739; title=Confined-space gas detector alarm triggered during drainage inspection; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_011_confined_space_gas_detector_alarm_triggered_.png; observation=A gas detector alarm activated during drainage inspection, indicating an unsafe atmosphere in or near the confined space. The condition may involve oxygen deficiency, toxic gas, or flammable gas, and no further entry should continue until the atmosphere is proven safe.; action=Withdraw all personnel from the confined space area and prevent re-entry.; Test atmosphere from outside the space using calibrated equipment at multiple levels.; Implement forced ventilation only if approved and appropriate for the hazard identified.; Confirm rescue arrangements, permit status, and competent supervision before any re-entry.; Investigate source conditions and revise the confined-space entry controls accordingly.; escalation=Escalate immediately to confined-space rescue resources and site management if anyone is inside the space, if gas readings are unstable, or if there is any sign of distress.\n[ONL-007] score=0.613; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[INC-005] score=0.590; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n\nQuestion:\nA gas detector alarms before manhole drainage inspection and confined space entry.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-        "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A gas detector alarms before manhole drainage inspection and confined space entry.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[ONL-011] score=0.739; title=Confined-space gas detector alarm triggered during drainage inspection; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_011_confined_space_gas_detector_alarm_triggered_.png; observation=A gas detector alarm activated during drainage inspection, indicating an unsafe atmosphere in or near the confined space. The condition may involve oxygen deficiency, toxic gas, or flammable gas, and no further entry should continue until the atmosphere is proven safe.; action=Withdraw all personnel from the confined space area and prevent re-entry.; Test atmosphere from outside the space using calibrated equipment at multiple levels.; Implement forced ventilation only if approved and appropriate for the hazard identified.; Confirm rescue arrangements, permit status, and competent supervision before any re-entry.; Investigate source conditions and revise the confined-space entry controls accordingly.; escalation=Escalate immediately to confined-space rescue resources and site management if anyone is inside the space, if gas readings are unstable, or if there is any sign of distress.\n[ONL-007] score=0.613; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[INC-005] score=0.590; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+        "phi4_evidence_prompt": "Retrieved evidence:\n[ONL-011] score=0.917; title=Confined-space gas detector alarm triggered during drainage inspection; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_011_confined_space_gas_detector_alarm_triggered_.png; visual_clues=Open manhole or access chamber, Gas detector alarm indication, Drainage inspection activity, Potential confined-space entry setup; observation=A gas detector alarm activated during drainage inspection, indicating an unsafe atmosphere in or near the confined space. The condition may involve oxygen deficiency, toxic gas, or flammable gas, and no further entry should continue until the atmosphere is proven safe.; root_cause=Likely accumulation of sewer gas, inadequate ventilation, residual biological decay, or disturbed sediment releasing hazardous vapors.; action=Withdraw all personnel from the confined space area and prevent re-entry.; Test atmosphere from outside the space using calibrated equipment at multiple levels.; Implement forced ventilation only if approved and appropriate for the hazard identified.; Confirm rescue arrangements, permit status, and competent supervision before any re-entry.; Investigate source conditions and revise the confined-space entry controls accordingly.; escalation=Escalate immediately to confined-space rescue resources and site management if anyone is inside the space, if gas readings are unstable, or if there is any sign of distress.\n[ONL-007] score=0.737; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; visual_clues=Water pooled close to temporary cabling, Damp streaks on adjacent wall or floor, Temporary electrical riser present, Potential contact between water path and electrical installation; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; root_cause=Likely failed waterproofing, rainwater intrusion, or uncontrolled surface drainage compounded by insufficient protection and routing of temporary electrical infrastructure.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[ONL-010] score=0.727; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; visual_clues=Bent or bowed prop member, Unseated base or head plate, Signs of overload or misalignment, Temporary support under structural element; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; root_cause=Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nWorker question:\nA gas detector alarms before manhole drainage inspection and confined space entry.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/onl_011_confined_space_gas_detector_alarm_triggered_.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+        "answer": "This looks closest to [ONL-011] Confined-space gas detector alarm triggered during drainage inspection (severity: critical).\n\nWhat I can ground from the local evidence: A gas detector alarm activated during drainage inspection, indicating an unsafe atmosphere in or near the confined space. The condition may involve oxygen deficiency, toxic gas, or flammable gas, and no further entry should continue until the atmosphere is proven safe.\n\nLikely cause to check: Likely accumulation of sewer gas, inadequate ventilation, residual biological decay, or disturbed sediment releasing hazardous vapors.\n\nRecommended next actions:\n1. Withdraw all personnel from the confined space area and prevent re-entry\n2. Test atmosphere from outside the space using calibrated equipment at multiple levels\n3. Implement forced ventilation only if approved and appropriate for the hazard identified\n4. Confirm rescue arrangements, permit status, and competent supervision before any re-entry\n5. Investigate source conditions and revise the confined-space entry controls accordingly\n\nEscalate if: Escalate immediately to confined-space rescue resources and site management if anyone is inside the space, if gas readings are unstable, or if there is any sign of distress.\n\nAlso compare against [ONL-007], [ONL-010] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [ONL-011]."
       },
       "online_resume": {
         "top3": [
@@ -1363,27 +1443,11 @@
           },
           {
             "rank": 2,
-            "id": "ONL-007",
-            "title": "Water ingress approaching temporary electrical riser",
-            "severity": "critical",
-            "source_scope": "online_enriched_only",
-            "score": 0.0323,
-            "action_checklist": [
-              "Isolate the affected temporary electrical circuit and verify de-energization by a competent person.",
-              "Keep personnel away from the wet area and establish a controlled exclusion zone.",
-              "Identify the water source and apply temporary diversion, containment, or pumping as needed.",
-              "Inspect the riser for ingress, damaged insulation, and elevated termination points.",
-              "Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed."
-            ],
-            "escalation_rule": "Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified."
-          },
-          {
-            "rank": 3,
             "id": "ONL-008",
             "title": "Falling object exclusion zone breached beneath overhead work",
             "severity": "high",
             "source_scope": "online_enriched_only",
-            "score": 0.0313,
+            "score": 0.0311,
             "action_checklist": [
               "Stop overhead work until the drop zone is fully re-established and enforced.",
               "Remove unnecessary materials, tools, and loose items from elevated workfaces.",
@@ -1392,6 +1456,22 @@
               "Review whether overhead work requires additional netting, tool lanyards, or rigid barricades."
             ],
             "escalation_rule": "Escalate to the area supervisor and HSE lead if repeated breaches occur, if overhead lifting is active, or if hard barricading is not feasible."
+          },
+          {
+            "rank": 3,
+            "id": "ONL-010",
+            "title": "Temporary works prop shows visible deformation",
+            "severity": "critical",
+            "source_scope": "online_enriched_only",
+            "score": 0.0309,
+            "action_checklist": [
+              "Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.",
+              "Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.",
+              "Verify the approved temporary works design against actual loading and geometry.",
+              "Install additional supports only under the direction of the temporary works coordinator or engineer.",
+              "Record the defect and do not reinstate use until the system is recertified safe."
+            ],
+            "escalation_rule": "Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor."
           }
         ],
         "synced_ids": [
@@ -1400,23 +1480,28 @@
       }
     }
   ],
+  "answer_generator": "template",
   "phi4_role": [
-    "Phi-4-mini is not the vector database; it is the local reasoning layer after retrieval.",
+    "Local CLIP embeds the worker text plus query image for retrieval.",
+    "Phi-4-mini-instruct is text-only; it is not the vector database and does not directly inspect the image.",
     "Before sync it can only answer from the limited local evidence, so it should expose uncertainty and escalation.",
-    "After connectivity resumes and relevant online cases are cached, Phi-4-mini can draft richer offline answers from the updated local evidence."
+    "After connectivity resumes and relevant online cases are cached, Phi-4-mini can draft richer offline answers from the updated local evidence.",
+    "Use Phi-4-multimodal-instruct if direct image+text generation is required on the SLM itself."
   ],
   "phi4_examples": [
     {
       "scenario": "Water ingress becomes electrical safety issue",
       "query": "Water seepage is close to a temporary electrical riser in the basement after rain.",
-      "evidence_prompt": "Retrieved evidence:\n[ONL-007] score=0.694; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[INC-001] score=0.646; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[ONL-010] score=0.605; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nQuestion:\nWater seepage is close to a temporary electrical riser in the basement after rain.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-      "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: Water seepage is close to a temporary electrical riser in the basement after rain.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[ONL-007] score=0.694; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[INC-001] score=0.646; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[ONL-010] score=0.605; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+      "evidence_prompt": "Retrieved evidence:\n[ONL-007] score=0.897; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; visual_clues=Water pooled close to temporary cabling, Damp streaks on adjacent wall or floor, Temporary electrical riser present, Potential contact between water path and electrical installation; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; root_cause=Likely failed waterproofing, rainwater intrusion, or uncontrolled surface drainage compounded by insufficient protection and routing of temporary electrical infrastructure.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n[INC-001] score=0.784; title=Basement wall water ingress observed at construction joint; severity=high; image=notebooks/assets/context_lifecycle/images/inc_001_basement_wall_water_ingress_observed_at_cons.png; visual_clues=Dark damp streaks on cast wall surface, Visible drips at construction joint, Efflorescence near joint line, Localized puddling at wall base; observation=Active water ingress is visible at the basement wall joint, with staining extending below the suspect construction joint and moisture tracking toward the floor slab edge. No immediate structural distress is evident, but the leakage suggests a compromised waterproofing detail or joint seal failure.; root_cause=Likely discontinuity in waterproofing membrane, inadequate joint preparation, or failed waterstop/sealant at a construction joint combined with hydrostatic pressure.; action=Mark and photograph the full extent of seepage and note elevation/chainage references.; Inspect the joint detailing, membrane continuity, and any penetrations or tie-hole repairs.; Check adjacent drainage, sump operation, and external water management conditions.; Implement temporary water control measures and isolate any affected electrical or finish-sensitive areas.; Raise a corrective action for waterproofing specialist review and retesting after repair.; escalation=Escalate immediately if leakage increases, reaches active electrical equipment, or shows signs of wall movement, cracking, or soil washout.\n[ONL-010] score=0.771; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; visual_clues=Bent or bowed prop member, Unseated base or head plate, Signs of overload or misalignment, Temporary support under structural element; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; root_cause=Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nWorker question:\nWater seepage is close to a temporary electrical riser in the basement after rain.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+      "answer": "This looks closest to [ONL-007] Water ingress approaching temporary electrical riser (severity: critical).\n\nWhat I can ground from the local evidence: Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.\n\nLikely cause to check: Likely failed waterproofing, rainwater intrusion, or uncontrolled surface drainage compounded by insufficient protection and routing of temporary electrical infrastructure.\n\nRecommended next actions:\n1. Isolate the affected temporary electrical circuit and verify de-energization by a competent person\n2. Keep personnel away from the wet area and establish a controlled exclusion zone\n3. Identify the water source and apply temporary diversion, containment, or pumping as needed\n4. Inspect the riser for ingress, damaged insulation, and elevated termination points\n5. Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed\n\nEscalate if: Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n\nAlso compare against [INC-001], [ONL-010] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [ONL-007]."
     },
     {
       "scenario": "Temporary works prop not in local pack",
       "query": "A temporary works prop is visibly bowed and the base plate has shifted under slab load.",
-      "evidence_prompt": "Retrieved evidence:\n[ONL-010] score=0.651; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-005] score=0.639; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[ONL-007] score=0.606; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n\nQuestion:\nA temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.",
-      "answer": "Offline CV-RAG answer from local image vectors and incident records.\nQuestion: A temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nWrite a concise construction incident response. Include top visual match, action steps, escalation condition, and citations.\n\nPhi-4-mini role in production:\n1. Read the compact evidence list returned by local vector search.\n2. Turn the top visual matches into a field-ready checklist with citations.\n3. Keep the answer grounded; do not invent policy or override escalation rules.\n\nMost relevant visual incidents:\n[ONL-010] score=0.651; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-005] score=0.639; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[ONL-007] score=0.606; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n\nRecommended response:\n1. Compare the current site photo with the cited incident image and observation.\n2. Apply only the corrective action that matches the field condition.\n3. Escalate critical safety or structural issues before work continues.\n\nOffline limitation: no cloud search, no remote standards lookup, and no supervisor approval automation."
+      "evidence_prompt": "Retrieved evidence:\n[ONL-010] score=0.872; title=Temporary works prop shows visible deformation; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png; visual_clues=Bent or bowed prop member, Unseated base or head plate, Signs of overload or misalignment, Temporary support under structural element; observation=A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.; root_cause=Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.; action=Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement.; Inspect all related props, bracing, and bearing conditions for signs of instability or settlement.; Verify the approved temporary works design against actual loading and geometry.; Install additional supports only under the direction of the temporary works coordinator or engineer.; Record the defect and do not reinstate use until the system is recertified safe.; escalation=Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n[INC-005] score=0.777; title=Unsafe open edge adjacent to scaffold access point; severity=critical; image=notebooks/assets/context_lifecycle/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; visual_clues=Open edge without top rail or mid-rail, Scaffold access ladder or landing nearby, No visible toe board at edge, Exposure to drop zone below; observation=An open edge is present immediately adjacent to scaffold access, creating a high-risk fall exposure for workers transitioning between the scaffold and the slab. The hazard is uncontrolled and requires immediate protection or access restriction.; root_cause=Likely removal or omission of edge protection during sequencing, inadequate supervision, or incomplete scaffold-to-structure interface controls.; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[ONL-007] score=0.769; title=Water ingress approaching temporary electrical riser; severity=critical; image=notebooks/assets/context_lifecycle/images/onl_007_water_ingress_approaching_temporary_electric.png; visual_clues=Water pooled close to temporary cabling, Damp streaks on adjacent wall or floor, Temporary electrical riser present, Potential contact between water path and electrical installation; observation=Water ingress is occurring close to a temporary electrical riser, creating an immediate risk of electrical shock, short circuit, and service interruption. The condition is time-sensitive because the seepage path may reach live distribution components if not isolated.; root_cause=Likely failed waterproofing, rainwater intrusion, or uncontrolled surface drainage compounded by insufficient protection and routing of temporary electrical infrastructure.; action=Isolate the affected temporary electrical circuit and verify de-energization by a competent person.; Keep personnel away from the wet area and establish a controlled exclusion zone.; Identify the water source and apply temporary diversion, containment, or pumping as needed.; Inspect the riser for ingress, damaged insulation, and elevated termination points.; Restore power only after the area is dry, the source is controlled, and electrical integrity is confirmed.; escalation=Escalate immediately to electrical supervisor and site safety if live equipment is threatened, if any arc/odor/heat is observed, or if isolation cannot be verified.\n\nWorker question:\nA temporary works prop is visibly bowed and the base plate has shifted under slab load.\n\nQuery image used for retrieval: notebooks/assets/context_lifecycle/images/onl_010_temporary_works_prop_shows_visible_deformati.png\n\nAnswer requirements:\n- Answer the worker directly in natural language.\n- Ground every recommendation in the retrieved evidence.\n- Cite the most relevant incident ID.\n- Preserve escalation rules and do not invent policy.",
+      "answer": "This looks closest to [ONL-010] Temporary works prop shows visible deformation (severity: critical).\n\nWhat I can ground from the local evidence: A temporary works prop is visibly deformed, indicating possible overload, instability, or foundation settlement. This is a critical condition because failure of temporary support could trigger partial collapse or sudden load redistribution.\n\nLikely cause to check: Possible overload from premature loading, inadequate bracing, incorrect prop capacity selection, or base settlement on an insufficient bearing surface.\n\nRecommended next actions:\n1. Immediately clear personnel from the supported area and prohibit loading on the temporary arrangement\n2. Inspect all related props, bracing, and bearing conditions for signs of instability or settlement\n3. Verify the approved temporary works design against actual loading and geometry\n4. Install additional supports only under the direction of the temporary works coordinator or engineer\n5. Record the defect and do not reinstate use until the system is recertified safe\n\nEscalate if: Escalate immediately to the temporary works coordinator, construction manager, and safety lead; treat as a potential collapse precursor.\n\nAlso compare against [INC-005], [ONL-007] if the photo does not match the top case.\n\nGrounding: answered from retrieved local evidence for [ONL-010]."
     }
-  ]
+  ],
+  "query_mode": "image-text",
+  "query_embedding_model": "openai/clip-vit-base-patch32"
 }

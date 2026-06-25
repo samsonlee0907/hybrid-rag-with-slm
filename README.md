@@ -134,10 +134,31 @@ The CV-RAG POC uses:
 
 - `openai/clip-vit-base-patch32` for local image/text embeddings.
 - SQLite as the local vector store prototype.
-- `microsoft/Phi-4-mini-instruct` as the optional local answer generator.
+- `microsoft/Phi-4-mini-instruct` as the optional local text answer generator.
 - A template generator as a deterministic fallback for resource-constrained/offline smoke tests.
 
-See `notebooks/offline_cv_rag_results.ipynb` for a documented enriched six-scenario run, regenerated images, local vector-store contents, retrieval results, and a Phi-4-mini-style grounded answer.
+The local image path is handled by CLIP, not by Phi-4-mini-instruct:
+
+1. A worker text query is embedded locally with CLIP.
+2. If `--query-image` is provided, the query photo is also embedded locally with CLIP and fused with the text vector.
+3. SQLite returns the closest cached incident evidence.
+4. Phi-4-mini-instruct receives the retrieved evidence as text and drafts the response.
+
+Phi-4-mini-instruct is not a vision model. If the SLM itself must directly inspect image + text input, use a vision-capable Phi model such as `microsoft/Phi-4-multimodal-instruct`; Microsoft describes it as processing text, image, and audio inputs and generating text outputs. See the official model cards for [`Phi-4-mini-instruct`](https://huggingface.co/microsoft/Phi-4-mini-instruct) and [`Phi-4-multimodal-instruct`](https://huggingface.co/microsoft/Phi-4-multimodal-instruct).
+
+The committed notebook runs use `--generator template` for deterministic, resource-safe validation on the 4 GB A10 vGPU VM. Use `--generator phi4` only after `microsoft/Phi-4-mini-instruct` is cached and there is enough memory for local text generation.
+
+Example image + text retrieval query:
+
+```bash
+python scripts/run_cv_rag_poc.py \
+  --workspace data/cv-rag \
+  --device cuda \
+  --query "A column face has honeycombing and exposed aggregate after formwork removal. What should we do?" \
+  --query-image data/cv-rag/images/inc_002_honeycombing.png
+```
+
+See `notebooks/offline_cv_rag_results.ipynb` for a documented enriched six-scenario run, regenerated images, local vector-store contents, retrieval results, and clean grounded answer examples.
 
 ## Hybrid online/offline comparison POC
 
@@ -180,6 +201,7 @@ python scripts\run_enriched_offline_eval.py `
   --workspace notebooks\assets\cv_rag_enriched `
   --device cuda `
   --generator template `
+  --query-mode image-text `
   --preserve-images
 
 python scripts\build_notebooks.py

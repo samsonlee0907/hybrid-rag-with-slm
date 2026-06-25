@@ -57,6 +57,7 @@ def main() -> None:
     parser.add_argument("--offline", action="store_true")
     parser.add_argument("--output", default="notebooks/assets/cv_rag_enriched/offline_eval_report.json")
     parser.add_argument("--summary-output", default="notebooks/assets/cv_rag_enriched/offline_eval_report_summary.json")
+    parser.add_argument("--query-mode", choices=["text", "image-text"], default="image-text")
     parser.add_argument(
         "--preserve-images",
         action=argparse.BooleanOptionalAction,
@@ -70,6 +71,7 @@ def main() -> None:
 
     enriched = get_enriched_incidents(args.incidents_json)
     incidents = convert_enriched_incidents(enriched, source_scope="offline_seed_enriched")
+    incidents_by_id = {incident.incident_id: incident for incident in incidents}
     db_path = args.db or str(Path(args.workspace) / "offline_cv_rag.sqlite")
     count = build_cv_index(
         args.workspace,
@@ -84,13 +86,17 @@ def main() -> None:
     query_results = []
     answer_examples = []
     for item in OFFLINE_QUERIES:
-        hits = search_cv_index(item["query"], db_path, device=args.device, top_k=3)
-        prompt = build_prompt(item["query"], hits)
+        query_image = None
+        if args.query_mode == "image-text":
+            query_image = str(Path(args.workspace) / "images" / incidents_by_id[item["expected"]].image_file)
+        hits = search_cv_index(item["query"], db_path, device=args.device, top_k=3, query_image=query_image)
+        prompt = build_prompt(item["query"], hits, query_image=query_image)
         if len(answer_examples) < 2:
             answer_examples.append(
                 {
                     "scenario": item["scenario"],
                     "query": item["query"],
+                    "query_image": query_image,
                     "phi4_evidence_prompt": prompt,
                     "answer": generator.generate(prompt),
                 }
@@ -98,6 +104,8 @@ def main() -> None:
         query_results.append(
             {
                 **item,
+                "query_image": Path(query_image).name if query_image else None,
+                "query_vector_inputs": ["text", "image"] if query_image else ["text"],
                 "top_hit": hits[0].incident.incident_id,
                 "matched": hits[0].incident.incident_id == item["expected"],
                 "hits": [_summarize_hit(hit, rank) for rank, hit in enumerate(hits, start=1)],
@@ -111,6 +119,8 @@ def main() -> None:
         "indexed_count": count,
         "indexed_incidents": [_summarize_incident(incident) for incident in incidents],
         "queries": query_results,
+        "query_mode": args.query_mode,
+        "query_embedding_model": "openai/clip-vit-base-patch32",
         "top1_accuracy": sum(item["matched"] for item in query_results) / len(query_results),
         "answer_generator": args.generator,
         "phi4_role": [
@@ -130,6 +140,8 @@ def main() -> None:
             {
                 "scenario": item["scenario"],
                 "expected": item["expected"],
+                "query_image": item["query_image"],
+                "query_vector_inputs": item["query_vector_inputs"],
                 "top_hit": item["top_hit"],
                 "top3": [hit["incident_id"] for hit in item["hits"]],
             }
