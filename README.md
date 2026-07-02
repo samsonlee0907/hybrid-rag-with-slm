@@ -343,9 +343,28 @@ The verified VM run showed:
 
 See `notebooks/Hybrid-RAG.ipynb` for the context-lifecycle run and `notebooks/reports/hybrid_rag/` for normalized machine-readable result summaries, including `moondream_hybrid_validation_report.json`.
 
+### Delta sync from online to offline
+
+The recommended online-to-offline sync pattern is documented in [`docs/delta-sync-flow.md`](docs/delta-sync-flow.md). Azure AI Search is used for full-corpus retrieval, security-trimmed delta candidate discovery, and sync metadata; Blob Storage or a mobile backend should serve compressed pack artifacts and images.
+
+Generate a reviewable local delta manifest without Azure credentials:
+
+```powershell
+python scripts\build_delta_sync_manifest.py `
+  --last-sync-sequence 6 `
+  --max-bytes 4000000 `
+  --requested-asset-tier review768 `
+  --output notebooks\assets\context_lifecycle\delta_sync_manifest_demo.json
+```
+
+The manifest planner stages safety-critical and high-priority cases first, syncs metadata/vectors before images, and respects a per-request byte budget so weak networks do not trigger full-corpus downloads. The FastAPI BFF exposes the same flow through `POST /sync/delta`, keeping Azure AI Search credentials off the mobile device.
+
 ## Directory layout
 
 ```text
+docs/
+  delta-sync-flow.md
+                    Azure AI Search plus Blob Storage delta sync design, sizing method, and manifest flow.
 edge_runtime/
   config.py          Runtime settings.
   embeddings.py      Development embedder plus extension seam for ONNX embedding models.
@@ -371,7 +390,9 @@ scripts/
   run_enriched_offline_eval.py
                     Runs the full offline enriched CV-RAG evaluation.
   build_online_index.py
-                    Builds the Azure AI Search online vector/hybrid index.
+                    Builds the Azure AI Search online vector/hybrid index with delta-sync metadata.
+  build_delta_sync_manifest.py
+                    Builds a local review/demo delta manifest from enriched cases without Azure credentials.
   run_offline_online_comparison.py
                     Compares offline seed retrieval, online enriched retrieval, and synced offline delta retrieval.
   run_context_lifecycle_demo.py
@@ -389,8 +410,9 @@ cv_rag/
   pipeline.py        Index and query orchestration.
 online_rag/
   enriched_data.py   Built-in enriched incident corpus plus generated JSON loader.
-  azure_search.py    Azure AI Search vector index schema and query client.
-  sync_store.py      SQLite delta store for online cases retained for later offline search.
+  azure_search.py    Azure AI Search vector index schema, retrieval query, and delta-candidate query client.
+  delta_sync.py      Delta manifest planner, hash helpers, asset tiers, and byte-budget selection.
+  sync_store.py      SQLite delta store for online cases retained for later offline search with sync sequence/hash tracking.
 notebooks/
   Local-Offline-RAG.ipynb
                     Offline-only held-out photo queries, BLIP vs Moondream comparison, and Phi-4-mini grounded answers.

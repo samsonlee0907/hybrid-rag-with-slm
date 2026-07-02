@@ -42,3 +42,15 @@ class AzureSettings:
         if missing:
             raise RuntimeError(f"Missing Azure configuration: {', '.join(missing)}")
 
+    def validate_for_search(self) -> None:
+        missing = [
+            name
+            for name, value in {
+                "AZURE_SEARCH_ENDPOINT": self.search_endpoint,
+                "AZURE_SEARCH_INDEX": self.search_index,
+                "AZURE_SEARCH_API_KEY": self.search_api_key,
+            }.items()
+            if not value
+        ]
+        if missing:
+            raise RuntimeError(f"Missing Azure Search configuration: {', '.join(missing)}")
