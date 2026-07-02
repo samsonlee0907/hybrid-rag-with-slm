@@ -1,0 +1,117 @@
+{
+  "mode": "offline-safety-warning-demo",
+  "online_used": false,
+  "purpose": "Demonstrate the safety-warning policy gate with one image that should issue an immediate warning and one image that should not issue an immediate safety warning.",
+  "a10_simulation_boundary": "This remains a batch photo-based A10/edge-style simulation. It does not perform real-time video monitoring, autonomous stop-work enforcement, or competent-person approval.",
+  "source_stack": {
+    "positive_case": "Recorded A10 offline Moondream + CLIP image/text/caption retrieval replayed from local report.",
+    "negative_case": "Controlled non-immediate-safety image from the same local case pack used to exercise the safety policy gate.",
+    "answer_generator": "Phi-4-mini ONNX CPU/mobile int4",
+    "model_dir_supplied": true,
+    "execution_provider": "follow_config"
+  },
+  "scenarios": [
+    {
+      "id": "safety-warning-open-edge",
+      "label": "Safety issue detected: open slab edge beside scaffold access",
+      "expected_warning_required": true,
+      "query": "A field photo shows an open slab edge beside scaffold access with incomplete guardrails and a fall exposure. What similar case should we use and what immediate controls are needed?",
+      "query_image": "notebooks/assets/real_local_inference/query_images/qry_003_scaffold_edge_protection_heldout.png",
+      "query_image_indexed": false,
+      "image_body": "A hole in the concrete surface is visible, likely caused by excavation work.  The site appears unfinished and under construction, with exposed metal scaffolding and exposed concrete.",
+      "retrieval_source": "recorded-a10-offline-cv-rag",
+      "hits": [
+        {
+          "rank": 1,
+          "incident_id": "INC-005",
+          "title": "Unsafe open edge adjacent to scaffold access point",
+          "severity": "critical",
+          "score": 0.8029,
+          "image_path": "notebooks/assets/cv_rag_enriched/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png",
+          "recommended_action": "Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.",
+          "escalation": "Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled."
+        },
+        {
+          "rank": 2,
+          "incident_id": "INC-006",
+          "title": "Hairline crack observed near lift core wall opening",
+          "severity": "medium",
+          "score": 0.7555,
+          "image_path": "notebooks/assets/cv_rag_enriched/images/inc_006_hairline_crack_observed_near_lift_core_wall_.png",
+          "recommended_action": "Measure and mark crack length, width, and orientation using a calibrated gauge.; Check whether the crack is live by monitoring for seasonal or load-related movement.; Review recent pours, stripping sequence, and temporary loading around the core wall.; Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.; Escalate for structural review if the crack widens, propagates, or appears through-thickness.",
+          "escalation": "Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation."
+        },
+        {
+          "rank": 3,
+          "incident_id": "INC-003",
+          "title": "Rebar congestion visible at beam-column joint",
+          "severity": "medium",
+          "score": 0.7543,
+          "image_path": "notebooks/assets/cv_rag_enriched/images/inc_003_rebar_congestion_visible_at_beam_column_join.png",
+          "recommended_action": "Compare installed reinforcement against approved shop drawings and bar bending schedules.; Confirm minimum clear spacing, lap locations, and cover compliance before pour.; Coordinate with structural designer on any permissible bar adjustments or coupler alternatives.; Plan concrete placement with smaller aggregate, controlled lift heights, and dedicated vibration access.; Document the joint with pre-pour photos and sign-off before closing forms.",
+          "escalation": "Escalate if required clear spacing cannot be achieved, if cover blocks cannot be installed correctly, or if the pour is proceeding without engineer approval."
+        }
+      ],
+      "expected_top_hit": "INC-005",
+      "policy_decision": {
+        "warning_required": true,
+        "risk_level": "critical",
+        "top_hit": "INC-005",
+        "severity": "critical",
+        "keyword_matches": [
+          "fall hazard",
+          "fall exposure",
+          "edge protection",
+          "scaffold",
+          "stop access"
+        ],
+        "policy_action": "Issue safety warning and require escalation/controls before work continues."
+      },
+      "prompt": "Safety policy decision:\n- warning_required: True\n- risk_level: critical\n- required_policy_action: Issue safety warning and require escalation/controls before work continues.\n- matched_keywords: fall hazard, fall exposure, edge protection, scaffold, stop access\n\nRetrieved local evidence:\n[INC-005] score=0.803; title=Unsafe open edge adjacent to scaffold access point; category=; severity=critical; image=notebooks/assets/cv_rag_enriched/images/inc_005_unsafe_open_edge_adjacent_to_scaffold_access.png; observation=; action=Stop access to the affected route until edge protection is installed or alternative safe access is provided.; Install compliant guardrails, toe boards, and controlled access measures at the perimeter.; Inspect scaffold tie-ins, landing condition, and opening protections for related defects.; Brief all nearby crews on the exclusion and safe access route.; Record the hazard in the permit or daily safety log and verify closure before restart.; escalation=Escalate immediately to site management and safety leadership; work in the area must remain stopped until the fall hazard is fully controlled.\n[INC-006] score=0.755; title=Hairline crack observed near lift core wall opening; category=; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_006_hairline_crack_observed_near_lift_core_wall_.png; observation=; action=Measure and mark crack length, width, and orientation using a calibrated gauge.; Check whether the crack is live by monitoring for seasonal or load-related movement.; Review recent pours, stripping sequence, and temporary loading around the core wall.; Inspect for associated moisture ingress, spalling, or adjacent cracking patterns.; Escalate for structural review if the crack widens, propagates, or appears through-thickness.; escalation=Escalate to structural engineer if crack width exceeds project tolerance, shows displacement, or is accompanied by leakage or progressive propagation.\n[INC-003] score=0.754; title=Rebar congestion visible at beam-column joint; category=; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_003_rebar_congestion_visible_at_beam_column_join.png; observation=; action=Compare installed reinforcement against approved shop drawings and bar bending schedules.; Confirm minimum clear spacing, lap locations, and cover compliance before pour.; Coordinate with structural designer on any permissible bar adjustments or coupler alternatives.; Plan concrete placement with smaller aggregate, controlled lift heights, and dedicated vibration access.; Document the joint with pre-pour photos and sign-off before closing forms.; escalation=Escalate if required clear spacing cannot be achieved, if cover blocks cannot be installed correctly, or if the pour is proceeding without engineer approval.\n\nWorker/image context:\n- query: A field photo shows an open slab edge beside scaffold access with incomplete guardrails and a fall exposure. What similar case should we use and what immediate controls are needed?\n- local image body: A hole in the concrete surface is visible, likely caused by excavation work.  The site appears unfinished and under construction, with exposed metal scaffolding and exposed concrete.\n- query image: notebooks/assets/real_local_inference/query_images/qry_003_scaffold_edge_protection_heldout.png\n\nResponse requirements:\n- Use the exact heading `SAFETY WARNING` when warning_required is true.\n- Use the exact heading `NO IMMEDIATE SAFETY WARNING` when warning_required is false.\n- Output exactly these sections after the heading: Hazard/status, Evidence match, Required action, Escalation, Offline limitation.\n- In `Evidence match`, cite the top incident ID and title; do not describe match quality as high/medium/low.\n- For `Offline limitation`, write exactly one sentence: `Offline advisory only; competent-person inspection remains required before work proceeds.`\n- Keep the response under 160 words.\n- Do not mention prompt instructions, legal disclaimers, certification, approval, or invented rules.",
+      "safety_response": "SAFETY WARNING\n\nHazard/status: Critical fall exposure risk identified.\nEvidence match: [INC-005] Unsafe open edge adjacent to scaffold access point.\nRequired action: Stop access to the affected route and install compliant guardrails and toe boards. Inspect scaffold ties and landing conditions. Inform nearby crews and document the hazard before restart.\nEscalation: Immediate escalation to site management and safety leadership. Work in the area must remain stopped until the hazard is fully mitigated.\nOffline limitation: Offline advisory only; competent-person inspection remains required before work proceeds.",
+      "timings_seconds": {
+        "safety_generation": 63.278
+      },
+      "answer_model": "microsoft/Phi-4-mini-instruct-onnx"
+    },
+    {
+      "id": "no-immediate-safety-mep-clash",
+      "label": "No immediate safety warning: MEP coordination clash",
+      "expected_warning_required": false,
+      "query": "The image shows a ductwork and service coordination clash in a ceiling void. Should this trigger an immediate safety warning?",
+      "query_image": "notebooks/assets/cv_rag_enriched/images/inc_004_mep_duct_coordination_clash_at_ceiling_void.png",
+      "query_image_indexed": true,
+      "image_body": "A large rectangular duct intersects the planned ceiling service zone, with nearby pipework and cable tray creating a tight coordination conflict.",
+      "retrieval_source": "controlled-local-case-pack-negative",
+      "hits": [
+        {
+          "rank": 1,
+          "incident_id": "INC-004",
+          "title": "MEP duct coordination clash at ceiling void",
+          "severity": "medium",
+          "score": 1.0,
+          "image_path": "notebooks/assets/cv_rag_enriched/images/inc_004_mep_duct_coordination_clash_at_ceiling_void.png",
+          "recommended_action": "Verify current coordinated shop drawing against installed service positions.; Identify the conflicting elements and quantify the clearance shortfall.; Hold the affected trade install and route the clash to coordination review.; Confirm access requirements for dampers, valves, and future maintenance before finalizing layout.; Issue revised setting-out instructions and record any approved deviations.",
+          "escalation": "Escalate to project coordination lead if ceiling closure is imminent, access to critical maintenance components is blocked, or multiple trade clashes are present.",
+          "category": "MEP Coordination / Clashes",
+          "observation": "The ceiling coordination area shows a clear clash between ductwork and other services, reducing available clearance for ceilings and maintenance access. The condition appears to be a coordination issue rather than an immediate safety hazard, but it may drive rework if unresolved."
+        }
+      ],
+      "expected_top_hit": "INC-004",
+      "policy_decision": {
+        "warning_required": false,
+        "risk_level": "no-immediate-safety-warning",
+        "top_hit": "INC-004",
+        "severity": "medium",
+        "keyword_matches": [],
+        "policy_action": "Do not issue an immediate safety warning; route as QA/coordination follow-up with normal escalation triggers."
+      },
+      "prompt": "Safety policy decision:\n- warning_required: False\n- risk_level: no-immediate-safety-warning\n- required_policy_action: Do not issue an immediate safety warning; route as QA/coordination follow-up with normal escalation triggers.\n- matched_keywords: none\n\nRetrieved local evidence:\n[INC-004] score=1.000; title=MEP duct coordination clash at ceiling void; category=MEP Coordination / Clashes; severity=medium; image=notebooks/assets/cv_rag_enriched/images/inc_004_mep_duct_coordination_clash_at_ceiling_void.png; observation=The ceiling coordination area shows a clear clash between ductwork and other services, reducing available clearance for ceilings and maintenance access. The condition appears to be a coordination issue rather than an immediate safety hazard, but it may drive rework if unresolved.; action=Verify current coordinated shop drawing against installed service positions.; Identify the conflicting elements and quantify the clearance shortfall.; Hold the affected trade install and route the clash to coordination review.; Confirm access requirements for dampers, valves, and future maintenance before finalizing layout.; Issue revised setting-out instructions and record any approved deviations.; escalation=Escalate to project coordination lead if ceiling closure is imminent, access to critical maintenance components is blocked, or multiple trade clashes are present.\n\nWorker/image context:\n- query: The image shows a ductwork and service coordination clash in a ceiling void. Should this trigger an immediate safety warning?\n- local image body: A large rectangular duct intersects the planned ceiling service zone, with nearby pipework and cable tray creating a tight coordination conflict.\n- query image: notebooks/assets/cv_rag_enriched/images/inc_004_mep_duct_coordination_clash_at_ceiling_void.png\n\nResponse requirements:\n- Use the exact heading `SAFETY WARNING` when warning_required is true.\n- Use the exact heading `NO IMMEDIATE SAFETY WARNING` when warning_required is false.\n- Output exactly these sections after the heading: Hazard/status, Evidence match, Required action, Escalation, Offline limitation.\n- In `Evidence match`, cite the top incident ID and title; do not describe match quality as high/medium/low.\n- For `Offline limitation`, write exactly one sentence: `Offline advisory only; competent-person inspection remains required before work proceeds.`\n- Keep the response under 160 words.\n- Do not mention prompt instructions, legal disclaimers, certification, approval, or invented rules.",
+      "safety_response": "NO IMMEDIATE SAFETY WARNING\n\nHazard/status: Medium coordination risk\nEvidence match: [INC-004] MEP duct coordination clash at ceiling void\nRequired action: Do not issue an immediate safety warning; QA/coordination follow-up with escalation triggers.\nEscalation: Escalate to project coordination lead if ceiling closure is imminent, access to critical maintenance components is blocked, or multiple trade clashes are present.\nOffline limitation: Offline advisory only; competent-person inspection remains required before work proceeds.",
+      "timings_seconds": {
+        "safety_generation": 43.277
+      },
+      "answer_model": "microsoft/Phi-4-mini-instruct-onnx"
+    }
+  ]
+}

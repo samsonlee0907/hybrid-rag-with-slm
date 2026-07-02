@@ -146,7 +146,7 @@ The local image path is handled before Phi-4-mini-instruct:
 
 Phi-4-mini-instruct is not a vision model. If the SLM itself must directly inspect image + text input, use a vision-capable Phi model such as `microsoft/Phi-4-multimodal-instruct`; Microsoft describes it as processing text, image, and audio inputs and generating text outputs. See the official model cards for [`Phi-4-mini-instruct`](https://huggingface.co/microsoft/Phi-4-mini-instruct) and [`Phi-4-multimodal-instruct`](https://huggingface.co/microsoft/Phi-4-multimodal-instruct).
 
-`Local-Offline-RAG.ipynb` records the real local Phi-4-mini ONNX CPU/mobile answer path. `Local-Offline-RAG-tc.ipynb` adds a Traditional Chinese offline-language validation for the same pattern. `Hybrid-RAG.ipynb` uses deterministic answer generation for the lifecycle comparison so the notebook focuses on offline context, online sync, and later offline enrichment.
+`Local-Offline-RAG.ipynb` records the real local Phi-4-mini ONNX CPU/mobile answer path. `Local-Offline-RAG-tc.ipynb` adds a Traditional Chinese offline-language validation for the same pattern. `Safety-Warning-RAG.ipynb` extends the same offline stack to safety-warning advisory. `Hybrid-RAG.ipynb` uses deterministic answer generation for the lifecycle comparison so the notebook focuses on offline context, online sync, and later offline enrichment.
 
 ### Canonical final demo notebooks
 
@@ -154,10 +154,12 @@ Phi-4-mini-instruct is not a vision model. If the SLM itself must directly inspe
 | --- | --- | --- |
 | `notebooks/Local-Offline-RAG.ipynb` | Offline-only held-out image queries, BLIP vs Moondream semantic comparison, and Phi-4-mini grounded local answers. | `notebooks/reports/local_offline_rag/` |
 | `notebooks/Local-Offline-RAG-tc.ipynb` | Traditional Chinese full-offline validation: Phi-4-mini normalizes a Traditional Chinese field question plus local image body into an English retrieval query and returns the grounded answer in Traditional Chinese. | `notebooks/reports/local_offline_rag/` |
+| `notebooks/Safety-Warning-RAG.ipynb` | Offline safety-warning advisory: one open-edge/scaffold-access image triggers a policy-gated warning, while one MEP coordination image remains a non-immediate safety follow-up. | `notebooks/reports/safety_warning_rag/` |
 | `notebooks/Hybrid-RAG.ipynb` | Initial offline search, search-history-driven AI Search sync, later enriched offline search, and full online comparison. Selects Moondream for the target iOS architecture under a clear Core ML / MLX optimization assumption. | `notebooks/reports/hybrid_rag/` |
 
 The hybrid report folder also includes `moondream_hybrid_validation_report.json`, a two-scenario validation run that uses Moondream captions for query images before online sync and later offline reuse.
 The local offline report folder also includes `traditional_chinese_offline_report.json`, which records the TC query, Phi-4-mini normalized retrieval query, local top hit, Traditional Chinese answer, and timings. The TC runner injects construction terminology through a structured glossary prompt, and can load a project-specific glossary at runtime with `--glossary`.
+The safety-warning report folder records the two-image advisory test, deterministic policy gate result, Phi-4-mini response, and the A10/edge-style batch-photo simulation boundary. It is not a real-time video monitoring or autonomous stop-work system.
 
 Rebuild the canonical notebooks and normalized report folders:
 
@@ -374,8 +376,10 @@ scripts/
                     Compares offline seed retrieval, online enriched retrieval, and synced offline delta retrieval.
   run_context_lifecycle_demo.py
                     Demonstrates limited offline context, Moondream-caption validation runs, online resume, selective sync, and later offline search.
+  run_safety_warning_demo.py
+                    Demonstrates a two-image offline safety-warning advisory gate using the same local evidence and Phi-4-mini answer path.
   build_final_demo_notebooks.py
-                    Builds the two canonical notebooks and normalized report folders.
+                    Builds the canonical notebooks and normalized report folders.
 cv_rag/
   enriched_dataset.py
                     Converts enriched online incident records into local CV-RAG incident records and image names.
@@ -390,6 +394,10 @@ online_rag/
 notebooks/
   Local-Offline-RAG.ipynb
                     Offline-only held-out photo queries, BLIP vs Moondream comparison, and Phi-4-mini grounded answers.
+  Local-Offline-RAG-tc.ipynb
+                    Traditional Chinese full-offline query normalization and grounded answer validation.
+  Safety-Warning-RAG.ipynb
+                    Offline safety-warning advisory demo with one warning case and one non-immediate-safety control.
   Hybrid-RAG.ipynb
                     Hybrid lifecycle: initial offline, online sync, enriched offline, full online comparison, and Moondream validation run.
   reports/

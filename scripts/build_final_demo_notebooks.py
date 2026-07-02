@@ -19,6 +19,7 @@ ASSETS_DIR = NOTEBOOKS_DIR / "assets"
 REPORTS_DIR = NOTEBOOKS_DIR / "reports"
 LOCAL_REPORT_DIR = REPORTS_DIR / "local_offline_rag"
 HYBRID_REPORT_DIR = REPORTS_DIR / "hybrid_rag"
+SAFETY_REPORT_DIR = REPORTS_DIR / "safety_warning_rag"
 
 SOURCE_LOCAL_DIR = ASSETS_DIR / "real_local_inference"
 SOURCE_CONTEXT_DIR = ASSETS_DIR / "context_lifecycle"
@@ -26,20 +27,22 @@ SOURCE_CASE_DIR = ASSETS_DIR / "cv_rag_enriched"
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build final Local-Offline-RAG and Hybrid-RAG notebooks.")
+    parser = argparse.ArgumentParser(description="Build final Local-Offline-RAG, Hybrid-RAG, and Safety-Warning-RAG notebooks.")
     parser.add_argument("--local-output", default=str(NOTEBOOKS_DIR / "Local-Offline-RAG.ipynb"))
     parser.add_argument("--local-tc-output", default=str(NOTEBOOKS_DIR / "Local-Offline-RAG-tc.ipynb"))
     parser.add_argument("--hybrid-output", default=str(NOTEBOOKS_DIR / "Hybrid-RAG.ipynb"))
+    parser.add_argument("--safety-output", default=str(NOTEBOOKS_DIR / "Safety-Warning-RAG.ipynb"))
     args = parser.parse_args()
 
     _prepare_report_folders()
     build_local_offline_notebook(Path(args.local_output))
     build_local_offline_tc_notebook(Path(args.local_tc_output))
     build_hybrid_notebook(Path(args.hybrid_output))
+    build_safety_warning_notebook(Path(args.safety_output))
 
 
 def _prepare_report_folders() -> None:
-    for path in (LOCAL_REPORT_DIR, HYBRID_REPORT_DIR):
+    for path in (LOCAL_REPORT_DIR, HYBRID_REPORT_DIR, SAFETY_REPORT_DIR):
         if path.exists():
             shutil.rmtree(path)
         path.mkdir(parents=True, exist_ok=True)
@@ -58,6 +61,8 @@ def _prepare_report_folders() -> None:
         _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_validation_report.json", HYBRID_REPORT_DIR / "moondream_hybrid_validation_report.json")
     if (SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_validation_summary.json").exists():
         _copy_report(SOURCE_CONTEXT_DIR / "context_lifecycle_moondream_validation_summary.json", HYBRID_REPORT_DIR / "moondream_hybrid_validation_summary.json")
+
+    _copy_report(SOURCE_LOCAL_DIR / "safety_warning_demo_report.json", SAFETY_REPORT_DIR / "safety_warning_demo_report.json")
 
 
 def _copy_report(source: Path, destination: Path) -> None:
@@ -245,6 +250,105 @@ def build_local_offline_tc_notebook(output_path: Path) -> None:
         ),
     ]
     _write_notebook(output_path, cells)
+
+
+def build_safety_warning_notebook(output_path: Path) -> None:
+    report = _read_json(SAFETY_REPORT_DIR / "safety_warning_demo_report.json")
+    scenarios = report["scenarios"]
+
+    cells = [
+        _markdown(
+            "# Safety-Warning-RAG\n\n"
+            "This notebook extends the offline CV-RAG pattern from troubleshooting to safety-warning advisory. "
+            "It demonstrates one image that should trigger an immediate safety warning and one image that should remain a QA/coordination follow-up.\n\n"
+            f"**Scope boundary:** {report['a10_simulation_boundary']}"
+        ),
+        _markdown(
+            "## Offline safety-warning execution path\n\n"
+            "The safety-warning flow stays within the same A10/edge-style simulation used by the local notebook: local visual context, "
+            "local retrieval, a deterministic policy gate, and Phi-4-mini ONNX CPU/mobile for the final advisory wording. "
+            "The policy gate decides whether to issue a warning; the SLM drafts a concise, evidence-cited message."
+        ),
+        _html_output_cell(
+            "",
+            _safety_warning_flow_html(),
+            execution_count=1,
+        ),
+        _markdown(
+            "## Clean report locations\n\n"
+            + _markdown_table(
+                ["Artifact", "Path"],
+                [
+                    ["Safety warning report", "`notebooks/reports/safety_warning_rag/safety_warning_demo_report.json`"],
+                    ["Notebook", "`notebooks/Safety-Warning-RAG.ipynb`"],
+                    ["Positive held-out query image", "`notebooks/assets/real_local_inference/query_images/`"],
+                    ["Indexed case images", "`notebooks/assets/cv_rag_enriched/images/`"],
+                ],
+            )
+        ),
+        _markdown(
+            "## Scenario setup and policy gate\n\n"
+            + _markdown_table(
+                [
+                    "Scenario",
+                    "Top local evidence",
+                    "Severity",
+                    "Matched policy keywords",
+                    "Warning required",
+                    "Expected",
+                ],
+                [
+                    [
+                        scenario["label"],
+                        _safety_top_hit_label(scenario),
+                        scenario["policy_decision"].get("severity", ""),
+                        ", ".join(scenario["policy_decision"].get("keyword_matches", [])) or "none",
+                        str(scenario["policy_decision"]["warning_required"]),
+                        str(scenario["expected_warning_required"]),
+                    ]
+                    for scenario in scenarios
+                ],
+            )
+        ),
+        _html_output_cell(
+            "from IPython.display import HTML, display\n"
+            "display(HTML(safety_warning_demo_html))\n",
+            _safety_warning_demo_html(report),
+            execution_count=2,
+        ),
+        _markdown(
+            "## Generated advisory responses\n\n"
+            + "\n\n".join(_safety_response_block(scenario) for scenario in scenarios)
+        ),
+        _markdown(
+            "## Safety-warning conclusion\n\n"
+            "- The open-edge/scaffold access image maps to `INC-005` and triggers the deterministic safety-warning gate.\n"
+            "- The MEP coordination-clash image maps to `INC-004` and is intentionally held as a coordination follow-up rather than an immediate safety warning.\n"
+            "- Phi-4-mini produces the final advisory text from retrieved evidence and the policy decision; it does not decide site safety by itself.\n"
+            "- This is suitable for batch/photo-based field advisory and escalation support, not real-time video monitoring or autonomous stop-work enforcement."
+        ),
+    ]
+
+    _write_notebook(output_path, cells)
+    _write_summary(
+        SAFETY_REPORT_DIR / "safety_warning_summary.json",
+        {
+            "notebook": output_path.as_posix(),
+            "online_used": report["online_used"],
+            "source_stack": report["source_stack"],
+            "scenario_count": len(scenarios),
+            "policy_results": [
+                {
+                    "id": scenario["id"],
+                    "top_hit": scenario["policy_decision"].get("top_hit"),
+                    "warning_required": scenario["policy_decision"]["warning_required"],
+                    "expected_warning_required": scenario["expected_warning_required"],
+                    "matched_expected": scenario["policy_decision"]["warning_required"] == scenario["expected_warning_required"],
+                }
+                for scenario in scenarios
+            ],
+        },
+    )
 
 
 def build_hybrid_notebook(output_path: Path) -> None:
@@ -612,6 +716,32 @@ def _hybrid_execution_flow_html() -> str:
     return _flow_svg(1210, 455, "Hybrid RAG lifecycle", boxes, arrows)
 
 
+def _safety_warning_flow_html() -> str:
+    boxes = [
+        _svg_box(40, 60, 175, 68, ["Worker photo", "+ question"]),
+        _svg_box(265, 45, 185, 68, ["Local visual", "caption/body"]),
+        _svg_box(265, 145, 185, 68, ["CLIP image/text", "embedding"]),
+        _svg_box(500, 95, 190, 68, ["Local vector", "case retrieval"]),
+        _svg_box(740, 95, 190, 68, ["Retrieved evidence", "with severity"]),
+        _svg_box(980, 95, 190, 68, ["Deterministic", "safety gate"]),
+        _svg_box(740, 250, 190, 68, ["Phi-4-mini", "advisory wording"]),
+        _svg_box(980, 250, 190, 68, ["Human escalation", "and inspection"]),
+        _svg_box(500, 250, 190, 68, ["QA / coordination", "follow-up path"]),
+    ]
+    arrows = [
+        _svg_arrow(215, 80, 265, 79),
+        _svg_arrow(215, 108, 265, 179),
+        _svg_arrow(450, 79, 500, 112),
+        _svg_arrow(450, 179, 500, 128),
+        _svg_arrow(690, 129, 740, 129),
+        _svg_arrow(930, 129, 980, 129),
+        _svg_arrow(1075, 163, 835, 250),
+        _svg_arrow(930, 284, 980, 284),
+        _svg_arrow(980, 144, 690, 284),
+    ]
+    return _flow_svg(1210, 370, "Offline safety-warning advisory path", boxes, arrows)
+
+
 def _flow_svg(width: int, height: int, title: str, boxes: list[str], arrows: list[str]) -> str:
     return (
         "<div style='font-family:Segoe UI,Arial,sans-serif; max-width:1180px'>"
@@ -763,6 +893,51 @@ def _traditional_chinese_offline_html(report: dict[str, Any]) -> str:
     return "\n".join(blocks)
 
 
+def _safety_warning_demo_html(report: dict[str, Any]) -> str:
+    blocks = [
+        "<div style='font-family:Segoe UI,Arial,sans-serif'>",
+        f"<p style='margin:0 0 12px 0'><b>Source stack:</b> {escape(report['source_stack']['positive_case'])} "
+        f"Negative control: {escape(report['source_stack']['negative_case'])} "
+        f"Answer generator: {escape(report['source_stack']['answer_generator'])}.</p>",
+    ]
+    for scenario in report["scenarios"]:
+        top_hit = scenario["hits"][0]
+        warning_required = scenario["policy_decision"]["warning_required"]
+        accent = "#dc2626" if warning_required else "#16a34a"
+        status = "Safety warning issued" if warning_required else "No immediate safety warning"
+        blocks.extend(
+            [
+                "<div style='border:1px solid #ddd; border-radius:10px; padding:14px; margin:14px 0'>",
+                f"<div style='font-size:18px; font-weight:700; color:{accent}; margin-bottom:8px'>{escape(status)}</div>",
+                f"<div style='font-weight:700; margin-bottom:10px'>{escape(scenario['label'])}</div>",
+                "<div style='display:flex; flex-wrap:wrap; gap:14px; margin-bottom:12px'>",
+                _image_card(
+                    REPO_ROOT / scenario["query_image"],
+                    "Field/query image",
+                    "Held-out image" if not scenario["query_image_indexed"] else "Controlled local case image",
+                ),
+                _image_card(
+                    REPO_ROOT / top_hit["image_path"],
+                    f"Top local evidence: {top_hit['incident_id']}",
+                    f"{top_hit['title']} | score={top_hit['score']:.4f}",
+                ),
+                "</div>",
+                "<table style='border-collapse:collapse; width:100%; margin-bottom:12px'>",
+                "<tr><th style='text-align:left;border:1px solid #ddd;padding:6px'>Policy field</th>"
+                "<th style='text-align:left;border:1px solid #ddd;padding:6px'>Value</th></tr>",
+                f"<tr><td style='border:1px solid #ddd;padding:6px'>Warning required</td><td style='border:1px solid #ddd;padding:6px'>{warning_required}</td></tr>",
+                f"<tr><td style='border:1px solid #ddd;padding:6px'>Risk level</td><td style='border:1px solid #ddd;padding:6px'>{escape(scenario['policy_decision']['risk_level'])}</td></tr>",
+                f"<tr><td style='border:1px solid #ddd;padding:6px'>Matched keywords</td><td style='border:1px solid #ddd;padding:6px'>{escape(', '.join(scenario['policy_decision']['keyword_matches']) or 'none')}</td></tr>",
+                f"<tr><td style='border:1px solid #ddd;padding:6px'>Policy action</td><td style='border:1px solid #ddd;padding:6px'>{escape(scenario['policy_decision']['policy_action'])}</td></tr>",
+                "</table>",
+                f"<pre style='white-space:pre-wrap; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px'>{escape(scenario['safety_response'])}</pre>",
+                "</div>",
+            ]
+        )
+    blocks.append("</div>")
+    return "\n".join(blocks)
+
+
 def _hybrid_hit_card(hit: dict[str, Any], label: str) -> str:
     return (
         "<div style='width:245px; border:1px solid #ddd; border-radius:8px; padding:10px'>"
@@ -783,6 +958,19 @@ def _image_card(path: Path, title: str, subtitle: str) -> str:
         f"<div style='font-weight:700; margin-top:6px'>{escape(title)}</div>"
         f"<div style='font-size:12px'>{escape(subtitle)}</div>"
         "</div>"
+    )
+
+
+def _safety_top_hit_label(scenario: dict[str, Any]) -> str:
+    top_hit = scenario["hits"][0]
+    return f"{top_hit['incident_id']} - {top_hit['title']} (`{top_hit['score']:.4f}`)"
+
+
+def _safety_response_block(scenario: dict[str, Any]) -> str:
+    return (
+        f"### {scenario['label']}\n\n"
+        f"**Answer model:** {scenario['answer_model']}\n\n"
+        f"{_quote(_compact(scenario['safety_response'], 1200))}"
     )
 
 

@@ -1,0 +1,28 @@
+{
+  "notebook": "C:/Users/samsonlee/.copilot/chats/322e2b6f-6b83-4c84-9e31-d4e317f2689f/smartxr-hybrid-rag-starter/notebooks/Safety-Warning-RAG.ipynb",
+  "online_used": false,
+  "source_stack": {
+    "positive_case": "Recorded A10 offline Moondream + CLIP image/text/caption retrieval replayed from local report.",
+    "negative_case": "Controlled non-immediate-safety image from the same local case pack used to exercise the safety policy gate.",
+    "answer_generator": "Phi-4-mini ONNX CPU/mobile int4",
+    "model_dir_supplied": true,
+    "execution_provider": "follow_config"
+  },
+  "scenario_count": 2,
+  "policy_results": [
+    {
+      "id": "safety-warning-open-edge",
+      "top_hit": "INC-005",
+      "warning_required": true,
+      "expected_warning_required": true,
+      "matched_expected": true
+    },
+    {
+      "id": "no-immediate-safety-mep-clash",
+      "top_hit": "INC-004",
+      "warning_required": false,
+      "expected_warning_required": false,
+      "matched_expected": true
+    }
+  ]
+}
